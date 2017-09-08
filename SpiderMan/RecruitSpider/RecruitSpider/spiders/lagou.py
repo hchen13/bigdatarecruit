@@ -3,7 +3,7 @@ import scrapy
 from scrapy.http import Request
 from urllib import parse
 from scrapy import FormRequest
-
+from SpiderMan.RecruitSpider.RecruitSpider.items import LagouItem,LagouItemLoader
 class LagouSpider(scrapy.Spider):
     name = 'lagou'
     allowed_domains = ['www.lagou.com']
@@ -25,27 +25,40 @@ class LagouSpider(scrapy.Spider):
             for city_part in city_initial_part :
                 city_name = city_part.xpath('a/text()').extract_first()
                 url = city_part.xpath('input/@value').extract_first()
-                yield Request(url=parse.urljoin(response.url,url),headers=self.headers,meta={'city_name':city_name,'city_initial':city_initial},callback=self.positionList)
+                yield Request(url=parse.urljoin(response.url,url), meta={'city_name':city_name,'city_initial':city_initial,'curNum':1}, callback=self.positionList)
 
     # 进入职位列表页
     def positionList(self,response):
+
         # 调拉钩自己的接口
         import requests
+        import json
         # 组装接口链接
         city_str = {"city":response.meta.get('city_name')}
         url_city_str = parse.urlencode(city_str)
         url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
         # 获取当前页的页码
-        curNum = response.xpath('//span[contains(@class,"curNum")]/text()').extract_first()
+        # curNum = response.xpath('//span[contains(@class,"curNum")]/text()').extract_first()
+        curNum = response.meta.get("curNum",1)
         query_data = {'first':False,'pn':curNum,'kd':''}
-        res = requests.post(url=url,headers=self.headers,data=query_data)
-        print(res.body)
-        # 解析当前页面信息
-        print(1234)
-        # 获取下一页
+        res = requests.post(url=url, headers=self.headers, data=query_data).json()
 
-        pass
+        hrInfoMap = res['content']['hrInfoMap']
+        positionResult = res['content']['positionResult']['result']
+        totalNum = res['content']['positionResult']['totalCount']
+        for item in positionResult:
+            url = parse.urljoin("https://www.lagou.com/jobs", str(item["positionId"]) + '.html')
+            yield Request(url=url, meta={"hrInfoMap": hrInfoMap}, callback=self.positionDetail)
+
+        # 获取下一页
+        yield Request()
 
     # 职位详情页
     def positionDetail(self,response):
-        pass
+
+        item_loader = LagouItemLoader(item=LagouItem,response=response)
+
+
+
+        lagou_item = item_loader.load_item()
+        yield lagou_item

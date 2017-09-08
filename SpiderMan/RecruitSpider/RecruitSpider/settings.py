@@ -27,7 +27,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1.5
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -43,6 +43,7 @@ DEFAULT_REQUEST_HEADERS = {
   # 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
   # 'Accept-Language': 'en',
     "Referer": "https://www.lagou.com/jobs/list_",
+    "cookie":"Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1504850195;Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1504850192;_ga=GA1.2.1169007339.1504850192;_gat=1;showExpriedCompanyHome=1;showExpriedIndex=1;PRE_UTM=;JSESSIONID=ABAAABAACBHABBI3934EE2F1FA97677EB6459A948D77F55;hasDeliver=32;unick=%E6%AD%A6%E6%99%93%E5%9D%A4;LGUID=20170908135632-76decf24-945a-11e7-9139-5254005c3644;login=true;_putrc=8F0B15F565452CFB;PRE_LAND=https%3A%2F%2Fpassport.lagou.com%2Flogin%2Flogin.html%3Fservice%3Dhttps%253a%252f%252fwww.lagou.com%252f;LGRID=20170908135634-788fcf2b-945a-11e7-8abe-525400f775ce;_gid=GA1.2.207976112.1504850192;index_location_city=%E6%88%90%E9%83%BD;showExpriedMyPublish=1;PRE_HOST=;PRE_SITE=;X_HTTP_TOKEN=429027a4583e02a86151e9572eb67d20;LGSID=20170908135632-76decd3d-945a-11e7-9139-5254005c3644;user_trace_token=20170908135631-7fa777d9-8d08-4452-ad75-5bfe82a5b151"
 }
 
 # USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36"
