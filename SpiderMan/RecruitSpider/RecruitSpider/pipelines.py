@@ -9,7 +9,7 @@ import MySQLdb
 import MySQLdb.cursors
 from twisted.enterprise import adbapi
 
-class RecruitspiderPipeline(object):
+class RecruitSpiderPipeline(object):
 
     def __init__(self,dbpool):
         self.dbpool = dbpool
