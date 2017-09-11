@@ -77,7 +77,7 @@ class LagouSpider(scrapy.Spider):
 
         item_loader.add_value('positionName',positionInfo['positionName'])
         item_loader.add_value('positionId', positionInfo['positionId'])
-        item_loader.add_value('positionLables', positionInfo['positionLables'])
+        item_loader.add_value('positionLabels', positionInfo['positionLables'])
         item_loader.add_value('salary', positionInfo['salary'])
         item_loader.add_value('workYear', positionInfo['workYear'])
         item_loader.add_value('education', positionInfo['education'])
@@ -107,6 +107,6 @@ class LagouSpider(scrapy.Spider):
         item_loader.add_value('hrRealName', hrInfo['realName'])
         item_loader.add_xpath('hrActiveTime', "//div[@class='publisher_data']/div[3]/span[3]/text()")
         hr_connect_url = "https://www.lagou.com/scanCode/positionChat.html?positionId={0}&publishUserId={1}".format(positionInfo['positionId'],positionInfo['publisherId'])
-        item_loader.add_value('hrConnectionLago', hr_connect_url)
+        item_loader.add_value('hrConnectionLagou', hr_connect_url)
         lagou_item = item_loader.load_item()
         yield lagou_item

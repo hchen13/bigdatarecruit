@@ -23,7 +23,7 @@ class LagouItemLoader(ItemLoader):
 class LagouItem(scrapy.Item):
     position = scrapy.Field()
     positionID = scrapy.Field()
-    positionLables = scrapy.Field(
+    positionLabels = scrapy.Field(
         output_processor=Join(",")
     )
     salary = scrapy.Field()
@@ -40,7 +40,9 @@ class LagouItem(scrapy.Item):
     companyShortName = scrapy.Field()
     companySize = scrapy.Field()
     companyLogo = scrapy.Field()
-    industryField = scrapy.Field()
+    industryField = scrapy.Field(
+        output_processor=Join(",")
+    )
     financeStage = scrapy.Field()
 
     publisherId = scrapy.Field()
@@ -61,13 +63,44 @@ class LagouItem(scrapy.Item):
 
     def get_company_insert_sql(self):
         insert_sql = """
-            insert into lagou_company
+            insert into lagou_company(
+            company_id,
+            full_name,
+            short_name,
+            size,
+            logo,
+            industry,
+            finance_stage
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE content=VALUES(fav_nums)
+        """
+        params = ()
+        return insert_sql
+
+    def get_hr_insert_sql(self):
+        insert_sql = """
+            insert into lagou_company(
+            company_id,
+            full_name,
+            short_name,
+            size,
+            logo,
+            industry,
+            finance_stage
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE content=VALUES(fav_nums)
         """
         pass
 
-    def get_hr_insert_sql(self):
-        pass
-
     def get_recruit_day_insert_sql(self):
+        insert_sql = """
+            insert into lagou_company(
+            position_id,
+            position_name,
+            position_labels,
+
+            ) 
+            values() ON DUPLICATE KEY UPDATE content=VALUES(fav_nums)
+        """
         pass
 
