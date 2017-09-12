@@ -23,20 +23,14 @@ class LagouSpider(scrapy.Spider):
     def parse(self, response):
         city_parent = response.xpath("//table[contains(@class,'word_list')]/tr")
 
-        n = 1
-        m = 1
         for city_node in city_parent:
             city_initial = city_node.xpath("td[1]/div/span/text()").extract_first()
             city_initial_part = city_node.xpath("td[2]/ul/li")
+            city_total_num = len(city_parent.xpath("td[2]/ul/li"))
             for city_part in city_initial_part :
                 city_name = city_part.xpath('a/text()').extract_first()
-
-                print(str(len(city_parent)) + "/" + str(n) + '    ' +str(len(city_initial_part)) + "/" + str(m) + "   "+ city_initial + ' : ' + city_name)
-
                 url = city_part.xpath('input/@value').extract_first()
-                yield Request(url=parse.urljoin(response.url,url), meta={'city_name':city_name,'city_initial':city_initial,'curNum':1}, callback=self.positionList)
-                m += 1
-            n += 1
+                yield Request(url=parse.urljoin(response.url,url), meta={'city_name':city_name,'city_initial':city_initial,'curNum':1,'city_total_num':city_total_num}, callback=self.positionList)
 
     # 进入职位列表页
     def positionList(self,response):
@@ -58,11 +52,22 @@ class LagouSpider(scrapy.Spider):
             hrInfoMap = res['content']['hrInfoMap']
             positionResult = res['content']['positionResult']['result']
             totalNum = res['content']['positionResult']['totalCount']
+
+            print(response.meta.get('city_name') + " 职位总数：" + str(totalNum))
+
+            m = 1
             for item in positionResult:
-                url = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
-                positionId = str(item["positionId"])
-                hrInfo = hrInfoMap[positionId]
-                yield Request(url=url, meta={"hrInfoMap": hrInfo,'positionInfo':item}, callback=self.positionDetail)
+                # 如果不是今天发布的，则跳过
+                t = time.strptime(item['createTime'], "%Y-%m-%d %H:%M:%S")
+                date_cur = t[0] *10000 + t[1] * 100 + t[2]
+                date_cur_comp = int(time.strftime('%Y%m%d', time.localtime()))
+                print("发布日期：" + str(date_cur) + "进度： " + str((res['content']['pageNo'] - 1) * res['content']['pageSize'] + m) + "／" + str(totalNum))
+                m += 1
+                if date_cur == date_cur_comp:
+                    url = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
+                    positionId = str(item["positionId"])
+                    hrInfo = hrInfoMap[positionId]
+                    yield Request(url=url, meta={"hrInfoMap": hrInfo,'positionInfo':item, 'city_initial':response.meta.get('city_initial')}, callback=self.positionDetail)
 
             # # 获取下一页
             # if res['content']['pageNo'] != 0:
@@ -71,10 +76,13 @@ class LagouSpider(scrapy.Spider):
     # 职位详情页
     def positionDetail(self,response):
 
-        item_loader = LagouItemLoader(item=LagouItem,response=response)
+        item_loader = LagouItemLoader(item=LagouItem(),response=response)
         positionInfo = response.meta.get('positionInfo')
         hrInfo = response.meta.get('hrInfoMap')
 
+        item_loader.add_value('cityInitial',response.meta.get('city_initial'))
+
+        item_loader.add_value('url', response.url)
         item_loader.add_value('positionName',positionInfo['positionName'])
         item_loader.add_value('positionId', positionInfo['positionId'])
         item_loader.add_value('positionLabels', positionInfo['positionLables'])
@@ -91,14 +99,14 @@ class LagouSpider(scrapy.Spider):
         item_loader.add_value('companyFullName', positionInfo['companyFullName'])
         item_loader.add_value('companyShortName', positionInfo['companyShortName'])
         item_loader.add_value('companySize', positionInfo['companySize'])
-        item_loader.add_value('companyLogo', positionInfo['companyLogo'])
+        item_loader.add_value('companyLogo', 'https://www.lagou.com/' + positionInfo['companyLogo'])
         item_loader.add_value('industryField', positionInfo['industryField'])
         item_loader.add_value('financeStage', positionInfo['financeStage'])
 
         item_loader.add_value('publisherId', positionInfo['publisherId'])
         item_loader.add_value('publishTime', positionInfo['createTime'])
         item_loader.add_value('positionAdvantage', positionInfo['positionAdvantage'])
-        item_loader.add_xpath('location', "//div[@class='work_addr']/a/text()")
+        item_loader.add_value('location', response.xpath("//div[@class='work_addr']").xpath('string(.)').extract_first())
         item_loader.add_xpath('department', "//div[@class='company']/text()")
         item_loader.add_css('describe', '.job_bt div')
 
