@@ -9,7 +9,7 @@ import scrapy
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose , Join
 import time
-
+import re
 
 class RecruitspiderItem(scrapy.Item):
     # define the fields for your item here like:
@@ -22,7 +22,7 @@ class LagouItemLoader(ItemLoader):
 
 
 def RemoveBlankCharacter(value):
-    return value.replace("\r","").replace("\t","").replace("\n","").replace(" ","")
+    return re.sub(r'\s+', '', value)
 
 
 def locationDeal(value):
@@ -36,6 +36,7 @@ def KeyJudge(value):
 class LagouItem(scrapy.Item):
 
     cityInitial = scrapy.Field()
+    cityTotalNum = scrapy.Field()
     url = scrapy.Field()
     positionName = scrapy.Field()
     positionId = scrapy.Field()
@@ -76,11 +77,8 @@ class LagouItem(scrapy.Item):
     hrConnectionLagou = scrapy.Field()
     hrPositionName = scrapy.Field()
 
-
     def get_company_insert_sql(self):
-        financeStage = vars().get("self['financeStage']", 'NULL')
-        industryField = vars().get("self['industryField']", 'NULL')
-        companySize = vars().get("self['companySize']", 'NULL')
+
         insert_sql = """
             insert into lagou_company(
             company_id,
@@ -95,13 +93,15 @@ class LagouItem(scrapy.Item):
             ) 
             values(%s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
         """
-        params = (self['companyId'], self['companyFullName'], self['companyShortName'], companySize,self['companyLogo'],industryField,financeStage,int(time.time()),1)
+        params = (self['companyId'], self['companyFullName'], self['companyShortName'], self['companySize'],self['companyLogo'],self['industryField'],self['financeStage'],int(time.time()),1)
         return insert_sql,params
 
     def get_hr_insert_sql(self):
-        hrActiveTime = vars().get("self['hrActiveTime']",'NULL')
-        hrPositionName = vars().get("self['hrPositionName']",'NULL')
-        hrPortrait = vars().get("self['hrPortrait']",'NULL')
+
+        try:
+            hrActiveTime = self['hrActiveTime']
+        except Exception as e:
+            hrActiveTime = None
 
         insert_sql = """
             insert into lagou_hr(
@@ -117,13 +117,10 @@ class LagouItem(scrapy.Item):
             ) 
             values(%s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
         """
-        params = (self['publisherId'], hrPositionName, hrPortrait, self['hrRealName'], self['positionId'],hrActiveTime, self['hrConnectionLagou'], int(time.time()),1)
+        params = (self['publisherId'], self['hrPositionName'], self['hrPortrait'], self['hrRealName'], self['positionId'],hrActiveTime, self['hrConnectionLagou'], int(time.time()),1)
         return insert_sql, params
 
     def get_recruit_day_insert_sql(self):
-
-        positionLabels = vars().get("self['positionLabels']",'NULL')
-        district = vars().get("self['district']", 'NULL')
 
         insert_sql = """
             insert into lagou_recruit_day(
@@ -150,7 +147,7 @@ class LagouItem(scrapy.Item):
             ) 
             values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
         """
-        params = (self['positionId'], self['url'] , self['positionName'], positionLabels, self['salary'], self['workYear'], self['education'], self['jobNature'], self['firstType'], self['secondType'],self['city'], district, self['companyId'], self['positionAdvantage'], self['location'], self['publisherId'], self['publishTime'], self['department'], self['describe'], int(time.time()))
+        params = (self['positionId'], self['url'] , self['positionName'], self['positionLabels'], self['salary'], self['workYear'], self['education'], self['jobNature'], self['firstType'], self['secondType'],self['city'], self['district'], self['companyId'], self['positionAdvantage'], self['location'], self['publisherId'], self['publishTime'], self['department'], self['describe'], int(time.time()))
         return insert_sql, params
 
     def get_city_insert_sql(self):
@@ -161,9 +158,10 @@ class LagouItem(scrapy.Item):
             city_name,
             name_initial,
             created_at,
-            num
+            num,
+            total_num
             ) 
-            values(%s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
+            values(%s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
         """
-        params = (self['city'], self['cityInitial'], int(time.time()),1)
+        params = (self['city'], self['cityInitial'], int(time.time()),1,self['cityTotalNum'])
         return insert_sql, params
