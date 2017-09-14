@@ -58,6 +58,7 @@ USER_AGENT_TYPE = 'random'
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
    'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
+    # 'RecruitSpider.middlewares.MyProxiesSpiderMiddleware': 542,
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
 }
 

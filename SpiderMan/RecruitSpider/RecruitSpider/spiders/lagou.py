@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapy.http import Request
+from scrapy.http import Request,FormRequest
 from urllib import parse
 from SpiderMan.RecruitSpider.RecruitSpider.items import LagouItem,LagouItemLoader
 from SpiderMan.RecruitSpider.tools.seleniumTest import lagouLogin
+import json
 import requests
 import time
 
@@ -33,8 +34,8 @@ class LagouSpider(scrapy.Spider):
             for city_part in city_initial_part :
                 city_name = city_part.xpath('a/text()').extract_first()
                 url = city_part.xpath('input/@value').extract_first()
-                if city_name == "北京":
-                    yield Request(url=parse.urljoin(response.url,url), meta={'city_name':city_name,'city_initial':city_initial,'city_total_num':city_total_num}, callback=self.positionList)
+                if city_name == "上海":
+                    yield Request(url=parse.urljoin(response.url,url), meta={'city_name':city_name,'city_initial':city_initial,'city_total_num':city_total_num,'curNum':1}, callback=self.positionList)
 
     # 进入职位列表页
     def positionList(self,response):
@@ -43,27 +44,20 @@ class LagouSpider(scrapy.Spider):
         url_city_str = parse.urlencode(city_str)
         url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
 
-        # 城市列表api请求最多第332页
-        for i in range(1, 9):
-            query_data = {'first': 'false', 'pn': i, 'kd': ''}
+        curNum = response.meta.get('curNum')
+        query_data = {'first': 'false', 'pn': curNum, 'kd': ''}
 
-            res = requests.post(url=url, headers=self.headers, data=query_data)
+        if curNum == 1:
+            res = requests.post(url=url, headers=self.headers, data=query_data).json()
+        else:
+            res = json.loads(response.body)
+        if res["success"] and res['content']['pageNo'] != 0:
+            hrInfoMap = res['content']['hrInfoMap']
+            positionResult = res['content']['positionResult']['result']
+            totalNum = res['content']['positionResult']['totalCount']
 
-            if i % 5 == 0:
-                time.sleep(5)
-            else:
-                time.sleep(1)
-            print(i,res.text)
-            # if res['success'] == False or res['content']['pageNo'] == 0:
-            #     break
-            #
-            # hrInfoMap = res['content']['hrInfoMap']
-            # positionResult = res['content']['positionResult']['result']
-            # totalNum = res['content']['positionResult']['totalCount']
-            #
-            # print(response.meta.get('city_name') + " 职位总数：" + str(totalNum))
-            # print("当前页数：" + str(i))
-            #
+            print(response.meta.get('city_name') + " 职位总数：" + str(totalNum))
+
             # for item in positionResult:
             #     # 如果不是今天发布的，则跳过
             #     t = time.strptime(item['createTime'], "%Y-%m-%d %H:%M:%S")
@@ -72,10 +66,14 @@ class LagouSpider(scrapy.Spider):
             #     # 2为当天 1为全部
             #     status = 2 if date_cur == date_cur_comp else 1
             #     if status:
-            #         url = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
+            #         url_detail = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
             #         positionId = str(item["positionId"])
             #         hrInfo = hrInfoMap[positionId]
-            #         yield Request(url=url, meta={"hrInfoMap": hrInfo,'positionInfo':item, 'city_initial':response.meta.get('city_initial'), 'total_num':totalNum}, callback=self.positionDetail)
+            #         yield Request(url=url_detail, meta={"hrInfoMap": hrInfo,'positionInfo':item, 'city_initial':response.meta.get('city_initial'), 'total_num':totalNum}, callback=self.positionDetail)
+            curNum = res['content']['pageNo'] + 1
+            query_data = {'first': 'false', 'pn': str(curNum), 'kd': ''}
+            return FormRequest(url=url,callback=self.positionList,formdata=query_data,method="POST",meta={"curNum":curNum,'city_name':response.meta.get('city_name')})
+
 
     # 职位详情页
     def positionDetail(self,response):

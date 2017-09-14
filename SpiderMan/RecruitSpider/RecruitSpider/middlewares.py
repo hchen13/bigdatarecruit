@@ -73,4 +73,7 @@ class RandomUserAgentMiddleware(object):
             return getattr(self.ua,self.ua_type)
 
         request.headers.setdefault('User-Agent',get_ua())
-        # request.meta['proxy'] = "http://47.52.89.72:3128"
+
+class MyProxiesSpiderMiddleware(object):
+    def process_request(self, request, spider):
+        request.meta["proxy"] = "http://47.52.89.72:3128"
