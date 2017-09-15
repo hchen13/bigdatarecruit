@@ -33,4 +33,5 @@ def lagouLogin(type = 'str'):
     cookies_dict = dict(zip(cookie_name,cookie_value))
 
     browser.close()
-    return cookies_str if type == "str" else cookies_dict
+    cookies = cookies_str if type == "str" else cookies_dict
+    return cookies,browser

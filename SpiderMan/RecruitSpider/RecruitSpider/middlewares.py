@@ -6,8 +6,13 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.http import HtmlResponse
 from fake_useragent import UserAgent
-
+import random
+from selenium import webdriver
+import time
+import re
+import os
 
 class RecruitspiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -76,4 +81,23 @@ class RandomUserAgentMiddleware(object):
 
 class MyProxiesSpiderMiddleware(object):
     def process_request(self, request, spider):
-        request.meta["proxy"] = "http://47.52.89.72:3128"
+        key = random.randint(1,2)
+        if key:
+            request.meta["proxy"] = "http://47.52.89.72:3128"
+
+class JsPageMiddleware(object):
+    def __init__(self):
+        super(JsPageMiddleware,self).__init__()
+        # 谷歌浏览器
+        chrome_opt = webdriver.ChromeOptions()
+        prefs = {"profile.managed_default_content_sttings.images": 2}
+        chrome_opt.add_experimental_option("prefs", prefs)
+        self.browser = webdriver.Chrome('/Users/monstar/Downloads/chromedriver', chrome_options=chrome_opt)
+
+    def process_request(self, request, spider):
+        regx = re.compile(r'\d+.html')
+        res = re.findall(regx,request.url)
+        if spider.name == 'lagou' and res and request.meta.get('curNum') != 1:
+            self.browser.get(request.url)
+            time.sleep(1)
+            return HtmlResponse(url=self.browser.current_url,body=self.browser.page_source,encoding="utf-8")

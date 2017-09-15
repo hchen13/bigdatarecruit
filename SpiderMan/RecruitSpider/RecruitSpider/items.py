@@ -122,6 +122,11 @@ class LagouItem(scrapy.Item):
 
     def get_recruit_day_insert_sql(self):
 
+        try:
+            department = self['department']
+        except Exception as e:
+            department = None
+
         insert_sql = """
             insert into lagou_recruit_day(
             position_id,
@@ -147,7 +152,7 @@ class LagouItem(scrapy.Item):
             ) 
             values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
         """
-        params = (self['positionId'], self['url'] , self['positionName'], self['positionLabels'], self['salary'], self['workYear'], self['education'], self['jobNature'], self['firstType'], self['secondType'],self['city'], self['district'], self['companyId'], self['positionAdvantage'], self['location'], self['publisherId'], self['publishTime'], self['department'], self['describe'], int(time.time()))
+        params = (self['positionId'], self['url'] , self['positionName'], self['positionLabels'], self['salary'], self['workYear'], self['education'], self['jobNature'], self['firstType'], self['secondType'],self['city'], self['district'], self['companyId'], self['positionAdvantage'], self['location'], self['publisherId'], self['publishTime'], department, self['describe'], int(time.time()))
         return insert_sql, params
 
     def get_city_insert_sql(self):
