@@ -1,0 +1,630 @@
+2017-09-15 14:28:04
+[Failure instance: Traceback: <class 'KeyError'>: 'cityInitial'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:53:do_insert_city
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:166:get_city_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:04
+[Failure instance: Traceback: <class 'KeyError'>: 'location'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:14
+[Failure instance: Traceback: <class 'KeyError'>: 'cityInitial'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:53:do_insert_city
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:166:get_city_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:14
+[Failure instance: Traceback: <class 'KeyError'>: 'location'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:20
+[Failure instance: Traceback: <class 'KeyError'>: 'cityInitial'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:53:do_insert_city
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:166:get_city_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:20
+[Failure instance: Traceback: <class 'KeyError'>: 'location'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:25
+[Failure instance: Traceback: <class 'KeyError'>: 'cityInitial'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:53:do_insert_city
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:166:get_city_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:25
+[Failure instance: Traceback: <class 'KeyError'>: 'location'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:41
+[Failure instance: Traceback: <class 'KeyError'>: 'cityInitial'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:53:do_insert_city
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:166:get_city_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:28:41
+[Failure instance: Traceback: <class 'KeyError'>: 'location'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:47:18
+[Failure instance: Traceback: <class 'KeyError'>: 'department'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:47:21
+[Failure instance: Traceback: <class 'KeyError'>: 'department'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:47:23
+[Failure instance: Traceback: <class 'KeyError'>: 'department'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:47:24
+[Failure instance: Traceback: <class 'KeyError'>: 'department'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:47:25
+[Failure instance: Traceback: <class 'KeyError'>: 'department'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:47:26
+[Failure instance: Traceback: <class 'KeyError'>: 'department'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:47:27
+[Failure instance: Traceback: <class 'KeyError'>: 'department'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:150:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:49:54
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:49:57
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:49:58
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:00
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:01
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:03
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:04
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:06
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:07
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:09
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:11
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:12
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:13
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:15
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:16
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:18
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:21
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:22
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:24
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]2017-09-15 14:50:25
+[Failure instance: Traceback: <class 'KeyError'>: 'describe'
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:916:_bootstrap_inner
+/usr/local/Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/threading.py:864:run
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_threadworker.py:46:work
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/_threads/_team.py:190:doWork
+--- <exception caught here> ---
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:250:inContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/threadpool.py:266:<lambda>
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:122:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/context.py:85:callWithContext
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:477:_runInteraction
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/python/compat.py:477:reraise
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/twisted/enterprise/adbapi.py:467:_runInteraction
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/pipelines.py:65:do_insert_recruit_day
+/Users/monstar/Desktop/ProjectCode/bigdatarecruit/SpiderMan/RecruitSpider/RecruitSpider/items.py:155:get_recruit_day_insert_sql
+/Users/monstar/Envs/Spider/lib/python3.6/site-packages/scrapy/item.py:59:__getitem__
+]
