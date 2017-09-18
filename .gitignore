@@ -106,3 +106,4 @@ ENV/
 # MacFile
 .DS_Store
 .idea
+/SpiderMan/RecruitSpider/.idea
