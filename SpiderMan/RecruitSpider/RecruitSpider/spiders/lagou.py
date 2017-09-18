@@ -26,7 +26,7 @@ class LagouSpider(scrapy.Spider):
     }
 
     def start_requests(self):
-        cookies,browser = lagouLogin('dict')
+        cookies, browser = lagouLogin('dict')
         yield Request('https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC',cookies=cookies,meta={'browser':browser})
 
     # 进入城市列表
@@ -58,7 +58,7 @@ class LagouSpider(scrapy.Spider):
 
         if curNum == 1:
             UserAgent = response.request.headers['User-Agent']
-            res = requests.post(url=url, headers={"User-Agent": UserAgent,'Referer': 'https://www.lagou.com/jobs/list_',}, data=query_data).json()
+            res = requests.post(url=url, headers={"User-Agent": UserAgent, 'Referer': 'https://www.lagou.com/jobs/list_'}, data=query_data).json()
         else:
             res = json.loads(response.body)
 
@@ -82,12 +82,12 @@ class LagouSpider(scrapy.Spider):
                     url_detail = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
                     positionId = str(item["positionId"])
                     hrInfo = hrInfoMap[positionId]
-                    yield Request(url=url_detail, meta={"curNum":curNum,"hrInfoMap": hrInfo,'positionInfo':item, 'city_initial':response.meta.get('city_initial'), 'total_num':totalNum}, callback=self.positionDetail)
+                    yield Request(url=url_detail, meta={"curNum": curNum, "hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num':totalNum}, callback=self.positionDetail)
             # 如果下一页还有职位
-            if totalNum > 15 * curNum:
+            if totalNum > 15 * curNum and status:
                 curNum = res['content']['pageNo'] + 1
                 query_data = {'first': 'false', 'pn': str(curNum), 'kd': ''}
-                yield FormRequest(url=url,headers=self.headers,callback=self.positionList,formdata=query_data,method="POST",meta={"curNum":curNum,'city_name':response.meta.get('city_name')})
+                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={"curNum": curNum, 'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
 
 
     # 职位详情页
