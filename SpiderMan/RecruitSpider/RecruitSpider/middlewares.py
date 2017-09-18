@@ -12,6 +12,7 @@ import random
 from selenium import webdriver
 import time
 import re
+from SpiderMan.RecruitSpider.tools.seleniumTest import platformJudge
 import os
 
 class RecruitspiderSpiderMiddleware(object):
@@ -92,7 +93,8 @@ class JsPageMiddleware(object):
         chrome_opt = webdriver.ChromeOptions()
         prefs = {"profile.managed_default_content_sttings.images": 2}
         chrome_opt.add_experimental_option("prefs", prefs)
-        self.browser = webdriver.Chrome('/Users/monstar/Downloads/chromedriver', chrome_options=chrome_opt)
+        driver_path = platformJudge()
+        self.browser = webdriver.Chrome(driver_path, chrome_options=chrome_opt)
 
     def process_request(self, request, spider):
         regx = re.compile(r'\d+.html')
