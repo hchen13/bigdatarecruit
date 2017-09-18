@@ -12,7 +12,7 @@ import random
 from selenium import webdriver
 import time
 import re
-from SpiderMan.RecruitSpider.tools.seleniumTest import platformJudge
+from tools.seleniumTest import platformJudge
 import os
 
 class RecruitspiderSpiderMiddleware(object):

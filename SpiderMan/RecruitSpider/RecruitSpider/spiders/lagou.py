@@ -2,8 +2,8 @@
 import scrapy
 from scrapy.http import Request,FormRequest
 from urllib import parse
-from SpiderMan.RecruitSpider.RecruitSpider.items import LagouItem,LagouItemLoader
-from SpiderMan.RecruitSpider.tools.seleniumTest import lagouLogin
+from RecruitSpider.items import LagouItem,LagouItemLoader
+from tools.seleniumTest import lagouLogin
 import json
 import requests
 import time
