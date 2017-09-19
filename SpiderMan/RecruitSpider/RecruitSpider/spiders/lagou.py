@@ -41,7 +41,7 @@ class LagouSpider(scrapy.Spider):
                 city_name = city_part.xpath('a/text()').extract_first()
                 url = city_part.xpath('input/@value').extract_first()
                 n += 1
-                yield Request(url=url, meta={'city_name':city_name,'city_initial':city_initial,'city_total_num':city_total_num,'curNum':1}, callback=self.positionList)
+                yield Request(url=url, meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num, 'curNum': 1}, callback=self.positionList)
 
     # 进入职位列表页
     def positionList(self,response):
@@ -58,7 +58,7 @@ class LagouSpider(scrapy.Spider):
 
         if curNum == 1:
             UserAgent = response.request.headers['User-Agent']
-            res = requests.post(url=url, headers={"User-Agent": UserAgent,'Referer': 'https://www.lagou.com/jobs/list_',}, data=query_data).json()
+            res = requests.post(url=url, headers={"User-Agent":UserAgent,'Referer':'https://www.lagou.com/jobs/list_',},data=query_data).json()
         else:
             res = json.loads(response.body)
 
@@ -74,20 +74,20 @@ class LagouSpider(scrapy.Spider):
             for item in positionResult:
                 # 如果不是今天发布的，则跳过
                 t = time.strptime(item['createTime'], "%Y-%m-%d %H:%M:%S")
-                date_cur = t[0] *10000 + t[1] * 100 + t[2]
+                date_cur = t[0] * 10000 + t[1] * 100 + t[2]
                 date_cur_comp = int(time.strftime('%Y%m%d', time.localtime()))
-                # 2为当天 1为全部
+                # 2为当天 1为非当天
                 status = 2 if date_cur == date_cur_comp else 1
                 if status:
                     url_detail = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
                     positionId = str(item["positionId"])
                     hrInfo = hrInfoMap[positionId]
-                    yield Request(url=url_detail, meta={"curNum":curNum,"hrInfoMap": hrInfo,'positionInfo':item, 'city_initial':response.meta.get('city_initial'), 'total_num':totalNum}, callback=self.positionDetail)
+                    yield Request(url=url_detail, meta={"curNum": curNum, "hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
             # 如果下一页还有职位
             if totalNum > 15 * curNum:
                 curNum = res['content']['pageNo'] + 1
                 query_data = {'first': 'false', 'pn': str(curNum), 'kd': ''}
-                yield FormRequest(url=url,headers=self.headers,callback=self.positionList,formdata=query_data,method="POST",meta={"curNum":curNum,'city_name':response.meta.get('city_name')})
+                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={"curNum": curNum, 'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
 
 
     # 职位详情页
