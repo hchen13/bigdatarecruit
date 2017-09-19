@@ -102,3 +102,9 @@ ENV/
 
 # PyCharmFile
 /.idea
+
+# MacFile
+.DS_Store
+.idea
+/SpiderMan/RecruitSpider/.idea
+/SpiderMan/RecruitSpider/errLog.txt
