@@ -62,7 +62,8 @@ class LagouSpider(scrapy.Spider):
         else:
             res = json.loads(response.body)
 
-        print( 'Yes: ' + str(res))
+        if res['msg']:
+            print( 'Yes: ' + str(res))
 
         if res["success"] and res['content']['pageNo'] != 0:
             hrInfoMap = res['content']['hrInfoMap']
