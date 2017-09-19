@@ -101,4 +101,5 @@ class JsPageMiddleware(object):
         res = re.findall(regx, request.url)
         if spider.name == 'lagou' and res and request.meta.get('curNum') != 1:
             self.browser.get(request.url)
+            time.sleep(1)
             return HtmlResponse(url=self.browser.current_url,body=self.browser.page_source,encoding="utf-8")
