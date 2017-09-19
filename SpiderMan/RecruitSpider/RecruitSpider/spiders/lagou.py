@@ -76,15 +76,15 @@ class LagouSpider(scrapy.Spider):
                 t = time.strptime(item['createTime'], "%Y-%m-%d %H:%M:%S")
                 date_cur = t[0] *10000 + t[1] * 100 + t[2]
                 date_cur_comp = int(time.strftime('%Y%m%d', time.localtime()))
-                # 2为当天 1为全部
+                # 2为当天 1为非当天
                 status = 2 if date_cur == date_cur_comp else 1
-                if status:
+                if status == 1:
                     url_detail = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
                     positionId = str(item["positionId"])
                     hrInfo = hrInfoMap[positionId]
                     yield Request(url=url_detail, meta={"curNum": curNum, "hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num':totalNum}, callback=self.positionDetail)
             # 如果下一页还有职位
-            if totalNum > 15 * curNum and status:
+            if totalNum > 15 * curNum and status == 1:
                 curNum = res['content']['pageNo'] + 1
                 query_data = {'first': 'false', 'pn': str(curNum), 'kd': ''}
                 yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={"curNum": curNum, 'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
