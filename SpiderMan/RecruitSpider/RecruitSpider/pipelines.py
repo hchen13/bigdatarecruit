@@ -32,15 +32,19 @@ class RecruitSpiderPipeline(object):
 
     def process_item(self, item, spider):
         # 异步插入
-        query_recruit_day = self.dbpool.runInteraction(self.do_insert_recruit_day,item)
-        query_city = self.dbpool.runInteraction(self.do_insert_city,item)
-        query_hr = self.dbpool.runInteraction(self.do_insert_hr,item)
-        query_company = self.dbpool.runInteraction(self.do_insert_company,item)
+        try:
+            query_recruit_day = self.dbpool.runInteraction(self.do_insert_recruit_day,item)
+        except Exception as e:
+            pass
+        else:
+            query_city = self.dbpool.runInteraction(self.do_insert_city,item)
+            query_hr = self.dbpool.runInteraction(self.do_insert_hr,item)
+            query_company = self.dbpool.runInteraction(self.do_insert_company,item)
         # 处理异常
         query_city.addErrback(self.handle_error, item, spider)
         query_company.addErrback(self.handle_error, item, spider)
         query_hr.addErrback(self.handle_error, item, spider)
-        query_recruit_day.addErrback(self.handle_error, item, spider)
+        # query_recruit_day.addErrback(self.handle_error, item, spider)
 
     def handle_error(self,failure,item,spider):
         print(failure)
