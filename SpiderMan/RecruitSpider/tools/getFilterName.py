@@ -1,7 +1,5 @@
 from sqlalchemy import create_engine
 
-engine = create_engine('mysql://root:@localhost:3306/spider',echo=False)
-conn = engine.connect()
 
 # 获取招聘职位少于15的城市
 def getNicheCity():
@@ -16,6 +14,8 @@ def getAllCatchCity():
     return res
 
 def sqlExecute(sql_str):
+    engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
+    conn = engine.connect()
     res = conn.execute(sql_str)
     res_arr = res.fetchall()
     conn.close()
