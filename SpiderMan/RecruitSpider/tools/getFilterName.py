@@ -23,3 +23,7 @@ def sqlExecute(sql_str):
     for item in res_arr:
         res_deal.append(item[0])
     return res_deal
+
+if __name__ == "__main__":
+    res = getAllCatchCity()
+    print(res)
