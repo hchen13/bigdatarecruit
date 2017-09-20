@@ -4,6 +4,7 @@ from scrapy.http import Request,FormRequest
 from urllib import parse
 from RecruitSpider.items import LagouItem,LagouItemLoader
 from tools.seleniumTest import lagouLogin
+from tools.getFilterName import getNicheCity,getAllCatchCity
 import json
 import requests
 import time
@@ -27,12 +28,14 @@ class LagouSpider(scrapy.Spider):
 
     def start_requests(self):
         cookies,browser = lagouLogin('dict')
-        yield Request('https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC',cookies=cookies,meta={'browser':browser})
+        city_niche = getNicheCity()
+        city_all_catch = getAllCatchCity()
+        yield Request('https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC',cookies=cookies,meta={'browser':browser,'city_niche': city_niche, 'city_all_catch': city_all_catch})
 
     # 进入城市列表
     def parse(self, response):
         city_parent = response.xpath("//table[contains(@class,'word_list')]/tr")
-        n = 1
+
         for city_node in city_parent:
             city_initial = city_node.xpath("td[1]/div/span/text()").extract_first()
             city_initial_part = city_node.xpath("td[2]/ul/li")
@@ -40,8 +43,8 @@ class LagouSpider(scrapy.Spider):
             for city_part in city_initial_part :
                 city_name = city_part.xpath('a/text()').extract_first()
                 url = city_part.xpath('input/@value').extract_first()
-                n += 1
-                yield Request(url=url, meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num, 'curNum': 1}, callback=self.positionList)
+                if city_name not in response.meta.get('city_all_catch'):
+                    yield Request(url=url, meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num, 'curNum': 1}, callback=self.positionList)
 
     # 进入职位列表页
     def positionList(self,response):
