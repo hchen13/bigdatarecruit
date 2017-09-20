@@ -96,10 +96,16 @@ class JsPageMiddleware(object):
         driver_path = platformJudge()
         self.browser = webdriver.Chrome(driver_path, chrome_options=chrome_opt)
 
+
     def process_request(self, request, spider):
         regx = re.compile(r'\d+.html')
         res = re.findall(regx, request.url)
+        # self.browser.set_page_load_timeout(20)
+        # self.browser.set_script_timeout(20)
         if spider.name == 'lagou' and res and request.meta.get('curNum') != 1:
-            self.browser.get(request.url)
-            time.sleep(0.8)
+            try:
+                self.browser.get(request.url)
+                time.sleep(0.5)
+            except Exception as e:
+                self.browser.refresh()
             return HtmlResponse(url=self.browser.current_url,body=self.browser.page_source,encoding="utf-8")
