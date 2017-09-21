@@ -166,7 +166,7 @@ class LagouItem(scrapy.Item):
             num,
             total_num
             ) 
-            values(%s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
+            values(%s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1,total_num=VALUES(total_num)
         """
         params = (self['city'], self['cityInitial'], int(time.time()),1,self['cityTotalNum'])
         return insert_sql, params
