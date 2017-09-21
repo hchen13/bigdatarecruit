@@ -14,7 +14,7 @@ def getAllCatchCity():
     return res
 
 def getSickCity():
-    sql_str = "select city_name from lagou_city where total_num > 400 and (num < total_num / 2) and city_name in ('厦门','珠海')"
+    sql_str = "select city_name from lagou_city where total_num > 400 and (num < total_num / 2)"
     res = sqlExecute(sql_str)
     return res
 
