@@ -1,15 +1,20 @@
 from sqlalchemy import create_engine
 
 
-# 获取招聘职位少于15的城市
-def getNicheCity():
-    sql_str ="select city_name from lagou_city where num <= 15"
+# 获取招聘职位大于400的城市
+def getHotCity():
+    sql_str ="select city_name from lagou_city where num > 400"
     res = sqlExecute(sql_str)
     return res
 
 # 获取已抓取的全部城市
 def getAllCatchCity():
     sql_str = "select city_name from lagou_city"
+    res = sqlExecute(sql_str)
+    return res
+
+def getSickCity():
+    sql_str = "select city_name from lagou_city where total_num > 400 and (num < total_num / 2) and city_name in ('厦门','珠海')"
     res = sqlExecute(sql_str)
     return res
 
@@ -25,5 +30,5 @@ def sqlExecute(sql_str):
     return res_deal
 
 if __name__ == "__main__":
-    res = getAllCatchCity()
+    res = getSickCity()
     print(res)

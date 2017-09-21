@@ -15,6 +15,8 @@ def lagouLogin(type = 'str'):
     prefs = {"profile.managed_default_content_sttings.images":2}
     chrome_opt.add_experimental_option("prefs",prefs)
     browser = webdriver.Chrome(driver_path,chrome_options=chrome_opt)
+    # browser.set_page_load_timeout(20)
+    # browser.set_script_timeout(20)
     login_url = "https://passport.lagou.com/login/login.html?service=https%3a%2f%2fwww.lagou.com%2f"
     browser.get(login_url)
     elem_username = browser.find_element_by_xpath("//form[@class='active']/div[@data-propertyname='username']/input")
