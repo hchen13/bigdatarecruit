@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 from scrapy.selector import Selector
 import time
 import sys
@@ -11,7 +12,7 @@ def lagouLogin(type = 'str'):
     driver_path = platformJudge()
 
     # 谷歌浏览器
-    chrome_opt = webdriver.ChromeOptions()
+    chrome_opt = Options()
     prefs = {"profile.managed_default_content_sttings.images":2}
     chrome_opt.add_experimental_option("prefs",prefs)
     chrome_opt.add_argument("--no-sandbox")

@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.http import Request,FormRequest
-from urllib import parse
-from RecruitSpider.items import LagouItem,LagouItemLoader
+from scrapy.xlib.pydispatch import dispatcher
+from scrapy import signals
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from tools.seleniumTest import lagouLogin
 from tools.getFilterName import getHotCity,getAllCatchCity,getSickCity
 from tools.seleniumTest import platformJudge
-from selenium import webdriver
+from RecruitSpider.items import LagouItem,LagouItemLoader
+from urllib import parse
 import json
 import requests
 import time
-from scrapy.xlib.pydispatch import dispatcher
-from scrapy import signals
+import sys
 
 class LagouSpider(scrapy.Spider):
     name = 'lagou'
@@ -33,7 +35,12 @@ class LagouSpider(scrapy.Spider):
     def __init__(self):
         super(LagouSpider,self).__init__()
         # 谷歌浏览器
-        chrome_opt = webdriver.ChromeOptions()
+        # 如果是linux环境 则开启无界面
+        if 'linux' in sys.platform:
+            from pyvirtualdisplay import Display
+            self.display = Display(visible=0,size=(1024,768))
+            self.display.start()
+        chrome_opt = Options()
         prefs = {"profile.managed_default_content_sttings.images": 2}
         chrome_opt.add_experimental_option("prefs", prefs)
         chrome_opt.add_argument("--no-sandbox")
@@ -46,6 +53,8 @@ class LagouSpider(scrapy.Spider):
     def spider_close(self, spider):
         print('spider close')
         self.browser.quit()
+        if 'linux' in sys.platform:
+            self.display.stop()
 
     def start_requests(self):
         cookies,browser = lagouLogin('dict')
