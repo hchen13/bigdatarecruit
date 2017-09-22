@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from scrapy.selector import Selector
 import time
-import platform
+import sys
 import os
 
 
@@ -14,6 +14,8 @@ def lagouLogin(type = 'str'):
     chrome_opt = webdriver.ChromeOptions()
     prefs = {"profile.managed_default_content_sttings.images":2}
     chrome_opt.add_experimental_option("prefs",prefs)
+    chrome_opt.add_argument("--no-sandbox")
+    chrome_opt.add_argument("--disable-setuid-sandbox")
     browser = webdriver.Chrome(driver_path,chrome_options=chrome_opt)
     # browser.set_page_load_timeout(20)
     # browser.set_script_timeout(20)
@@ -43,10 +45,13 @@ def lagouLogin(type = 'str'):
 
 def platformJudge():
     file_dir_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    com_platform = platform.uname().system
-    if com_platform == "Windows":
+    com_platform = sys.platform
+    if 'win32' in com_platform:
         driver_name = "chromedriver.exe"
-    elif com_platform == "Darwin":
+        file_path = os.path.join(file_dir_path, 'seleniumDriver', driver_name)
+    elif "darwin" in com_platform:
         driver_name = "chromedriver"
-    file_path = os.path.join(file_dir_path, 'seleniumDriver', driver_name)
+        file_path = os.path.join(file_dir_path, 'seleniumDriver', driver_name)
+    elif "linux" in com_platform:
+        file_path = "/usr/local/bin/chromedriver"
     return file_path

@@ -36,6 +36,9 @@ class LagouSpider(scrapy.Spider):
         chrome_opt = webdriver.ChromeOptions()
         prefs = {"profile.managed_default_content_sttings.images": 2}
         chrome_opt.add_experimental_option("prefs", prefs)
+        chrome_opt.add_argument("--no-sandbox")
+        chrome_opt.add_argument("--disable-setuid-sandbox")
+
         driver_path = platformJudge()
         self.browser = webdriver.Chrome(driver_path, chrome_options=chrome_opt)
         dispatcher.connect(self.spider_close,signals.spider_closed)
@@ -80,6 +83,7 @@ class LagouSpider(scrapy.Spider):
         query_data = {'first': 'false', 'pn': curNum, 'kd': ''}
 
         if curNum == 1:
+            print(curNum)
             UserAgent = response.request.headers['User-Agent']
             res = requests.post(url=url, headers={"User-Agent":UserAgent,'Referer':'https://www.lagou.com/jobs/list_',},data=query_data).json()
         else:

@@ -104,6 +104,7 @@ class JsPageMiddleware(object):
         # self.browser.set_script_timeout(20)
         if spider.name == 'lagou' and res and request.meta.get('curNum') != 1:
             spider.browser.get(request.url)
+            time.sleep(0.8)
             # try:
             #     self.browser.get(request.url)
             #     time.sleep(0.5)
