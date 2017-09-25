@@ -16,7 +16,7 @@ def getAllCatchCity():
 def getSickCity():
     sql_str = "select city_name from lagou_city where total_num > 400 and (num < total_num / 2) order by total_num desc limit 3"
     res = sqlExecute(sql_str)
-    return res
+    return ['成都','深圳']
 
 def sqlExecute(sql_str):
     engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
