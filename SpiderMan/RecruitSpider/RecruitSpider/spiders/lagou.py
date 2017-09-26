@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.http import Request,FormRequest
-from scrapy.xlib.pydispatch import dispatcher
 from scrapy import signals
+from scrapy import Spider
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from tools.seleniumTest import lagouLogin
@@ -15,7 +15,7 @@ import requests
 import time
 import sys
 
-class LagouSpider(scrapy.Spider):
+class LagouSpider(Spider):
     name = 'lagou'
     allowed_domains = ['www.lagou.com']
     start_urls = ['https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC']
@@ -40,6 +40,7 @@ class LagouSpider(scrapy.Spider):
             from pyvirtualdisplay import Display
             self.display = Display(visible=0,size=(1024,768))
             self.display.start()
+
         chrome_opt = Options()
         prefs = {"profile.managed_default_content_sttings.images": 2}
         chrome_opt.add_experimental_option("prefs", prefs)
@@ -48,7 +49,13 @@ class LagouSpider(scrapy.Spider):
 
         driver_path = platformJudge()
         self.browser = webdriver.Chrome(driver_path, chrome_options=chrome_opt)
-        dispatcher.connect(self.spider_close,signals.spider_closed)
+
+    # 爬虫信号绑定
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(LagouSpider, cls).from_crawler(crawler, *args, **kwargs)
+        crawler.signals.connect(spider.spider_close, signals.spider_closed)
+        return spider
 
     def spider_close(self, spider):
         print('spider close')
@@ -57,16 +64,17 @@ class LagouSpider(scrapy.Spider):
             self.display.stop()
 
     def start_requests(self):
-        cookies,browser = lagouLogin('dict')
+        cookies = lagouLogin('dict', self.browser)
         # city_hot = getHotCity()
         # city_all_catch = getAllCatchCity()
         city_sick = getSickCity()
-        yield Request('https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC',cookies=cookies,meta={'browser':browser, 'city_filter': city_sick })
+        yield Request('https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC',cookies=cookies,meta={'city_filter': city_sick })
 
     # 进入城市列表
     def parse(self, response):
         city_parent = response.xpath("//table[contains(@class,'word_list')]/tr")
 
+        n = 0
         for city_node in city_parent:
             city_initial = city_node.xpath("td[1]/div/span/text()").extract_first()
             city_initial_part = city_node.xpath("td[2]/ul/li")
@@ -74,9 +82,10 @@ class LagouSpider(scrapy.Spider):
             for city_part in city_initial_part :
                 city_name = city_part.xpath('a/text()').extract_first()
                 url = city_part.xpath('input/@value').extract_first()
-                # if city_name in response.meta.get('city_filter'):
                 if city_name in response.meta.get('city_filter'):
                     yield Request(url=url, meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num, 'curNum': 1}, callback=self.positionList)
+                    n += 1
+                    print(n)
 
     # 进入职位列表页
     def positionList(self,response):
@@ -124,7 +133,7 @@ class LagouSpider(scrapy.Spider):
             if totalNum > 15 * curNum:
                 curNum = res['content']['pageNo'] + 1
                 query_data = {'first': 'false', 'pn': str(curNum), 'kd': ''}
-                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={"curNum": curNum, 'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
+                yield FormRequest(url=url, headers=response.headers, callback=self.positionList, formdata=query_data, method="POST", meta={"curNum": curNum, 'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
 
 
     # 职位详情页

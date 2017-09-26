@@ -14,6 +14,7 @@ import re
 from tools.seleniumTest import platformJudge
 from selenium import webdriver
 import os
+from selenium.webdriver.support.ui import  WebDriverWait
 
 class RecruitspiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -104,10 +105,10 @@ class JsPageMiddleware(object):
         # self.browser.set_script_timeout(20)
         if spider.name == 'lagou' and res and request.meta.get('curNum') != 1:
             spider.browser.get(request.url)
-            time.sleep(0.8)
-            # try:
-            #     self.browser.get(request.url)
-            #     time.sleep(0.5)
-            # except Exception as e:
-            #     self.browser.refresh()
+            # 找到元素就停止加载，否则刷新
+            try:
+                WebDriverWait(driver=spider.browser, timeout=5).until(lambda x: x.find_element_by_id('container'))
+            except Exception as e:
+                spider.browser.refresh()
+            # 不经过downloader 直接返回结果
             return HtmlResponse(url=spider.browser.current_url,body=spider.browser.page_source,encoding="utf-8")
