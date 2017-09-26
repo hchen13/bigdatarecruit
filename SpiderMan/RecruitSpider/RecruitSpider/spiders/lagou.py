@@ -97,7 +97,7 @@ class LagouSpider(Spider):
         url_city_str = parse.urlencode(city_str)
         url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
 
-        res = json.loads(response.body)
+        res = json.loads(response.body.decode('utf-8'))
 
         if res['msg']:
             print( 'Yes: ' + str(res))
