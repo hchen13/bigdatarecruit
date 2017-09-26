@@ -112,7 +112,7 @@ RETRY_ENABLED = False
 # 设置下载超时时间
 DOWNLOAD_TIMEOUT = 10
 
-import sys
-import os
-BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-sys.path.insert(0, os.path.join(BASE_DIR, 'RecruitSpider'))
+# import sys
+# import os
+# BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+# sys.path.insert(0, os.path.join(BASE_DIR, 'RecruitSpider'))
