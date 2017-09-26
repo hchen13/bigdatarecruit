@@ -20,7 +20,6 @@ class LagouSpider(Spider):
     allowed_domains = ['www.lagou.com']
     start_urls = ['https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC']
     number = 0
-    number_catch = 0
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
         'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
@@ -74,7 +73,6 @@ class LagouSpider(Spider):
     def parse(self, response):
         city_parent = response.xpath("//table[contains(@class,'word_list')]/tr")
 
-        n = 0
         for city_node in city_parent:
             city_initial = city_node.xpath("td[1]/div/span/text()").extract_first()
             city_initial_part = city_node.xpath("td[2]/ul/li")
@@ -82,30 +80,25 @@ class LagouSpider(Spider):
             for city_part in city_initial_part :
                 city_name = city_part.xpath('a/text()').extract_first()
                 url = city_part.xpath('input/@value').extract_first()
-                if city_name in response.meta.get('city_filter'):
-                    yield Request(url=url, meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num, 'curNum': 1}, callback=self.positionList)
-                    n += 1
-                    print(n)
+                # 组装接口链接
+                city_str = {"city": city_name}
+                url_city_str = parse.urlencode(city_str)
+                url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
+                query_data = {'first': 'false', 'pn': '1', 'kd': ''}
+                # if city_name in response.meta.get('city_filter'):
+                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num})
 
     # 进入职位列表页
     def positionList(self,response):
         self.number += 1
-        self.number_catch += 1
         print(str(self.number) + ': ' + response.meta.get('city_name'))
+        print(response.body)
         # 组装接口链接
         city_str = {"city": response.meta.get('city_name')}
         url_city_str = parse.urlencode(city_str)
         url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
 
-        curNum = response.meta.get('curNum')
-        query_data = {'first': 'false', 'pn': curNum, 'kd': ''}
-
-        if curNum == 1:
-            print(curNum)
-            UserAgent = response.request.headers['User-Agent']
-            res = requests.post(url=url, headers={"User-Agent":UserAgent,'Referer':'https://www.lagou.com/jobs/list_',},data=query_data).json()
-        else:
-            res = json.loads(response.body)
+        res = json.loads(response.body)
 
         if res['msg']:
             print( 'Yes: ' + str(res))
@@ -128,12 +121,13 @@ class LagouSpider(Spider):
                     url_detail = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
                     positionId = str(item["positionId"])
                     hrInfo = hrInfoMap[positionId]
-                    yield Request(url=url_detail, meta={"curNum": curNum, "hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
+                    yield Request(url=url_detail, meta={"hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
             # 如果下一页还有职位
-            if totalNum > 15 * curNum:
+            if totalNum > 15 * int(res['content']['pageNo']):
+                print('进入下一页')
                 curNum = res['content']['pageNo'] + 1
                 query_data = {'first': 'false', 'pn': str(curNum), 'kd': ''}
-                yield FormRequest(url=url, headers=response.headers, callback=self.positionList, formdata=query_data, method="POST", meta={"curNum": curNum, 'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
+                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
 
 
     # 职位详情页
@@ -142,6 +136,7 @@ class LagouSpider(Spider):
         positionInfo = response.meta.get('positionInfo')
         hrInfo = response.meta.get('hrInfoMap')
 
+        print("抓取职位详情页面")
         print(positionInfo['city'] + '： ' + positionInfo['positionName'])
 
         item_loader.add_value('cityInitial',response.meta.get('city_initial') if response.meta.get('city_initial') else 'NULL')

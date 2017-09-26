@@ -23,7 +23,7 @@ HTTPERROR_ALLOWED_CODES = [302,]
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 2
+# CONCURRENT_REQUESTS = 2
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -102,4 +102,4 @@ MYSQL_USER = "root"
 MYSQL_PASSWORD = ""
 
 # 宽度优先
-SCHEDULER_ORDER = 'BFO'
+# SCHEDULER_ORDER = 'BFO'
