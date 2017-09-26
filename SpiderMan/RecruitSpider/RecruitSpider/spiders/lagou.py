@@ -31,7 +31,7 @@ class LagouSpider(Spider):
         'X-Requested-With': 'XMLHttpRequest'
     }
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super(LagouSpider,self).__init__()
         # 谷歌浏览器
         # 如果是linux环境 则开启无界面
