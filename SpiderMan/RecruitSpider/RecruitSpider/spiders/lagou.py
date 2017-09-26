@@ -91,8 +91,7 @@ class LagouSpider(Spider):
     # 进入职位列表页
     def positionList(self,response):
         self.number += 1
-        print(str(self.number) + ': ' + response.meta.get('city_name'))
-        print(response.body)
+        # print(str(self.number) + ': ' + response.meta.get('city_name'))
         # 组装接口链接
         city_str = {"city": response.meta.get('city_name')}
         url_city_str = parse.urlencode(city_str)
@@ -108,7 +107,7 @@ class LagouSpider(Spider):
             positionResult = res['content']['positionResult']['result']
             totalNum = res['content']['positionResult']['totalCount']
 
-            print(response.meta.get('city_name') + " 职位总数：" + str(totalNum))
+            # print(response.meta.get('city_name') + " 职位总数：" + str(totalNum))
 
             for item in positionResult:
                 # 如果不是今天发布的，则跳过
@@ -124,7 +123,6 @@ class LagouSpider(Spider):
                     yield Request(url=url_detail, meta={"hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
             # 如果下一页还有职位
             if totalNum > 15 * int(res['content']['pageNo']):
-                print('进入下一页')
                 curNum = res['content']['pageNo'] + 1
                 query_data = {'first': 'false', 'pn': str(curNum), 'kd': ''}
                 yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
@@ -136,8 +134,8 @@ class LagouSpider(Spider):
         positionInfo = response.meta.get('positionInfo')
         hrInfo = response.meta.get('hrInfoMap')
 
-        print("抓取职位详情页面")
-        print(positionInfo['city'] + '： ' + positionInfo['positionName'])
+        # print("抓取职位详情页面")
+        # print(positionInfo['city'] + '： ' + positionInfo['positionName'])
 
         item_loader.add_value('cityInitial',response.meta.get('city_initial') if response.meta.get('city_initial') else 'NULL')
         item_loader.add_value('cityTotalNum',response.meta.get('total_num'))
