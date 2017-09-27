@@ -30,6 +30,8 @@ class LagouSpider(Spider):
         'X-Anit-Forge-Token': 'None',
         'X-Requested-With': 'XMLHttpRequest'
     }
+    # 1爬取全部城市 2 爬取热门城市和数据不全的城市
+    spider_type = 2
 
     def __init__(self, **kwargs):
         super(LagouSpider,self).__init__()
@@ -64,34 +66,43 @@ class LagouSpider(Spider):
 
     def start_requests(self):
         cookies = lagouLogin('dict', self.browser)
-        # city_hot = getHotCity()
+        city_hot = getHotCity()
         # city_all_catch = getAllCatchCity()
         city_sick = getSickCity()
-        yield Request('https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC',cookies=cookies,meta={'city_filter': city_sick })
+        city_filter = [i for i in set(city_hot + city_sick)]
+        yield Request('https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC',cookies=cookies,meta={'city_filter': city_filter })
 
     # 进入城市列表
     def parse(self, response):
         city_parent = response.xpath("//table[contains(@class,'word_list')]/tr")
 
-        for city_node in city_parent:
-            city_initial = city_node.xpath("td[1]/div/span/text()").extract_first()
-            city_initial_part = city_node.xpath("td[2]/ul/li")
-            city_total_num = len(city_parent.xpath("td[2]/ul/li"))
-            for city_part in city_initial_part :
-                city_name = city_part.xpath('a/text()').extract_first()
-                url = city_part.xpath('input/@value').extract_first()
-                # 组装接口链接
-                city_str = {"city": city_name}
+        if self.spider_type == 1:
+            for city_node in city_parent:
+                city_initial = city_node.xpath("td[1]/div/span/text()").extract_first()
+                city_initial_part = city_node.xpath("td[2]/ul/li")
+                city_total_num = len(city_parent.xpath("td[2]/ul/li"))
+                for city_part in city_initial_part :
+                    city_name = city_part.xpath('a/text()').extract_first()
+                    url = city_part.xpath('input/@value').extract_first()
+                    # 组装接口链接
+                    city_str = {"city": city_name}
+                    url_city_str = parse.urlencode(city_str)
+                    url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
+                    query_data = {'first': 'false', 'pn': '1', 'kd': ''}
+                    yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num})
+        elif self.spider_type ==2:
+            for item in response.meta.get('city_filter'):
+                print(item)
+                city_str = {"city": item}
                 url_city_str = parse.urlencode(city_str)
                 url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
                 query_data = {'first': 'false', 'pn': '1', 'kd': ''}
-                if city_name in response.meta.get('city_filter'):
-                    yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num})
+                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data,method="POST", meta={'city_name': item, 'city_initial': '','city_total_num': ''})
 
     # 进入职位列表页
     def positionList(self,response):
         self.number += 1
-        # print(str(self.number) + ': ' + response.meta.get('city_name'))
+
         # 组装接口链接
         city_str = {"city": response.meta.get('city_name')}
         url_city_str = parse.urlencode(city_str)
@@ -107,7 +118,7 @@ class LagouSpider(Spider):
             positionResult = res['content']['positionResult']['result']
             totalNum = res['content']['positionResult']['totalCount']
 
-            print(response.meta.get('city_name') + " " + str(totalNum) + ' ' + str(res['content']['pageNo']))
+            print(str(self.number) + ' ' + response.meta.get('city_name') + " " + str(totalNum) + ' ' + str(res['content']['pageNo']))
 
             for item in positionResult:
                 # 如果不是今天发布的，则跳过
@@ -135,7 +146,7 @@ class LagouSpider(Spider):
         hrInfo = response.meta.get('hrInfoMap')
 
         # print("抓取职位详情页面")
-        # print(positionInfo['city'] + '： ' + positionInfo['positionName'])
+        print(positionInfo['city'] + ':' + positionInfo['positionName'])
 
         item_loader.add_value('cityInitial',response.meta.get('city_initial') if response.meta.get('city_initial') else 'NULL')
         item_loader.add_value('cityTotalNum',response.meta.get('total_num'))
