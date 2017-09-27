@@ -108,9 +108,9 @@ MYSQL_PASSWORD = ""
 # 日志
 LOG_LEVEL = 'INFO'
 # 禁止重试
-RETRY_ENABLED = False
+# RETRY_ENABLED = False
 # 设置下载超时时间
-DOWNLOAD_TIMEOUT = 10
+# DOWNLOAD_TIMEOUT = 10
 
 import sys
 import os

@@ -13,8 +13,15 @@ def getAllCatchCity():
     res = sqlExecute(sql_str)
     return res
 
+# 获取抓取数据不足的城市
 def getSickCity():
     sql_str = "select city_name from lagou_city where total_num > 400 and (num < total_num / 2) order by total_num desc"
+    res = sqlExecute(sql_str)
+    return res
+
+# 获取已抓取数据的positionID
+def getPositionId():
+    sql_str = "SELECT position_id FROM spider.lagou_recruit_day"
     res = sqlExecute(sql_str)
     return res
 

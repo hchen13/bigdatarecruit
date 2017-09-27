@@ -6,7 +6,7 @@ from scrapy import Spider
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from tools.seleniumTest import lagouLogin
-from tools.getFilterName import getHotCity,getAllCatchCity,getSickCity
+from tools.getFilterName import getHotCity,getPositionId,getSickCity
 from tools.seleniumTest import platformJudge
 from RecruitSpider.items import LagouItem,LagouItemLoader
 from urllib import parse
@@ -20,6 +20,7 @@ class LagouSpider(Spider):
     allowed_domains = ['www.lagou.com']
     start_urls = ['https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC']
     number = 0
+    positionId_all = getPositionId()
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
         'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
@@ -102,7 +103,6 @@ class LagouSpider(Spider):
     # 进入职位列表页
     def positionList(self,response):
         self.number += 1
-
         # 组装接口链接
         city_str = {"city": response.meta.get('city_name')}
         url_city_str = parse.urlencode(city_str)
@@ -113,7 +113,7 @@ class LagouSpider(Spider):
         if res['msg']:
             print( 'Yes: ' + str(res))
 
-        if res["success"] and res['content']['pageNo'] != 0:
+        if res["success"] and res['content']['pageNo'] != 0 and res['content']['positionResult']['result']:
             hrInfoMap = res['content']['hrInfoMap']
             positionResult = res['content']['positionResult']['result']
             totalNum = res['content']['positionResult']['totalCount']
@@ -131,7 +131,11 @@ class LagouSpider(Spider):
                     url_detail = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
                     positionId = str(item["positionId"])
                     hrInfo = hrInfoMap[positionId]
-                    yield Request(url=url_detail, meta={"hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
+                    # positionId去重,每100次获取一次id数组
+                    if self.number % 100 == 0:
+                        self.positionId_all = getPositionId()
+                    if positionId not in self.positionId_all:
+                        yield Request(url=url_detail, meta={"hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
             # 如果下一页还有职位
             if totalNum > 15 * int(res['content']['pageNo']):
                 curNum = res['content']['pageNo'] + 1
