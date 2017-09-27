@@ -14,6 +14,7 @@ BOT_NAME = 'RecruitSpider'
 SPIDER_MODULES = ['RecruitSpider.spiders']
 NEWSPIDER_MODULE = 'RecruitSpider.spiders'
 
+# 遇到重定向
 REDIRECT_ENABLED = False
 HTTPERROR_ALLOWED_CODES = [302,]
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -23,15 +24,15 @@ HTTPERROR_ALLOWED_CODES = [302,]
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-# CONCURRENT_REQUESTS = 2
+CONCURRENT_REQUESTS = 16
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 100
-CONCURRENT_REQUESTS_PER_IP = 0
+# CONCURRENT_REQUESTS_PER_DOMAIN = 100
+# CONCURRENT_REQUESTS_PER_IP = 0
 
 # Disable cookies (enabled by default)
 # COOKIES_ENABLED = False
@@ -103,3 +104,15 @@ MYSQL_PASSWORD = ""
 
 # 宽度优先
 # SCHEDULER_ORDER = 'BFO'
+
+# 日志
+LOG_LEVEL = 'INFO'
+# 禁止重试
+RETRY_ENABLED = False
+# 设置下载超时时间
+DOWNLOAD_TIMEOUT = 10
+
+import sys
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, BASE_DIR)
