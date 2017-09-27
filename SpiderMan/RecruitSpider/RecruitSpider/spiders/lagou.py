@@ -107,7 +107,7 @@ class LagouSpider(Spider):
             positionResult = res['content']['positionResult']['result']
             totalNum = res['content']['positionResult']['totalCount']
 
-            # print(response.meta.get('city_name') + " 职位总数：" + str(totalNum))
+            print(response.meta.get('city_name') + " " + str(totalNum) + ' ' + res['content']['pageNo'])
 
             for item in positionResult:
                 # 如果不是今天发布的，则跳过

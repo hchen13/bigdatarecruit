@@ -18,7 +18,7 @@ NEWSPIDER_MODULE = 'RecruitSpider.spiders'
 REDIRECT_ENABLED = False
 HTTPERROR_ALLOWED_CODES = [302,]
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'RecruitSpider (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -57,7 +57,7 @@ USER_AGENT_TYPE = 'random'
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
+   # 'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
     # 'RecruitSpider.middlewares.MyProxiesSpiderMiddleware': 542,
     'scrapy.contrib.downloadermiddleware.redirect.RedirectMiddleware': 600,
     'RecruitSpider.middlewares.JsPageMiddleware': 544,
