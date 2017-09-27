@@ -77,6 +77,10 @@ class LagouSpider(Spider):
     def parse(self, response):
         city_parent = response.xpath("//table[contains(@class,'word_list')]/tr")
 
+        # 调整顺序 成都 北京 深圳 广州
+        city_first = ['成都','北京','深圳','上海','广州','杭州']
+        city_sort = city_first + list(set(response.meta.get('city_filter')) - set(city_first))
+
         if self.spider_type == 1:
             for city_node in city_parent:
                 city_initial = city_node.xpath("td[1]/div/span/text()").extract_first()
@@ -92,7 +96,7 @@ class LagouSpider(Spider):
                     query_data = {'first': 'false', 'pn': '1', 'kd': ''}
                     yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num})
         elif self.spider_type ==2:
-            for item in response.meta.get('city_filter'):
+            for item in city_sort:
                 print(item)
                 city_str = {"city": item}
                 url_city_str = parse.urlencode(city_str)
