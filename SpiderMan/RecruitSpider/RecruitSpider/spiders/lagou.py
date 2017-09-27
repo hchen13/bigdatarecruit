@@ -85,8 +85,8 @@ class LagouSpider(Spider):
                 url_city_str = parse.urlencode(city_str)
                 url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
                 query_data = {'first': 'false', 'pn': '1', 'kd': ''}
-                # if city_name in response.meta.get('city_filter'):
-                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num})
+                if city_name in response.meta.get('city_filter'):
+                    yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num})
 
     # 进入职位列表页
     def positionList(self,response):
@@ -165,7 +165,7 @@ class LagouSpider(Spider):
 
         item_loader.add_value('publisherId', positionInfo['publisherId'])
         item_loader.add_value('publishTime', positionInfo['createTime'])
-        item_loader.add_value('positionAdvantage', positionInfo['positionAdvantage'])
+        item_loader.add_value('positionAdvantage', positionInfo['positionAdvantage'] if positionInfo['positionAdvantage'] else 'NULl')
         location = response.xpath("//div[@class='work_addr']").xpath('string(.)').extract_first()
         item_loader.add_value('location', location if location else 'NULL')
         item_loader.add_xpath('department', "//div[@class='company']/text()")
