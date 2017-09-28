@@ -21,6 +21,8 @@ class LagouSpider(Spider):
     start_urls = ['https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC']
     number = 0
     positionId_all = getPositionId()
+    # 当前时间
+    date_cur_comp = int(time.strftime('%Y%m%d', time.localtime()))
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
         'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
@@ -129,9 +131,9 @@ class LagouSpider(Spider):
                 # 如果不是今天发布的，则跳过
                 t = time.strptime(item['createTime'], "%Y-%m-%d %H:%M:%S")
                 date_cur = t[0] * 10000 + t[1] * 100 + t[2]
-                date_cur_comp = int(time.strftime('%Y%m%d', time.localtime()))
+
                 # 2为当天 1为非当天
-                status = 2 if date_cur == date_cur_comp else 1
+                status = 2 if date_cur == self.date_cur_comp else 1
                 if status == 2:
                     url_detail = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
                     positionId = str(item["positionId"])
