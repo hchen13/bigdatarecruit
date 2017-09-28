@@ -34,7 +34,7 @@ class LagouSpider(Spider):
     # 1爬取全部城市 2 爬取热门城市和数据不全的城市
     spider_type = 2
     # 1 顺着爬 2 从最后一页往前爬
-    order_type = 2
+    order_type = 1
 
     def __init__(self, **kwargs):
         super(LagouSpider,self).__init__()
@@ -99,7 +99,6 @@ class LagouSpider(Spider):
                     yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': city_name, 'city_initial': city_initial, 'city_total_num': city_total_num})
         elif self.spider_type ==2:
             for item in city_sort:
-                print(item)
                 city_str = {"city": item}
                 url_city_str = parse.urlencode(city_str)
                 url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
@@ -133,7 +132,7 @@ class LagouSpider(Spider):
                 date_cur_comp = int(time.strftime('%Y%m%d', time.localtime()))
                 # 2为当天 1为非当天
                 status = 2 if date_cur == date_cur_comp else 1
-                if status:
+                if status == 2:
                     url_detail = "https://www.lagou.com/jobs/" + str(item["positionId"]) + '.html'
                     positionId = str(item["positionId"])
                     hrInfo = hrInfoMap[positionId]
@@ -142,8 +141,8 @@ class LagouSpider(Spider):
                         self.positionId_all = getPositionId()
                     if positionId not in self.positionId_all:
                         yield Request(url=url_detail, meta={"hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
-            # 如果下一页还有职位
-            if totalNum > 15 * int(res['content']['pageNo']) and int(res['content']['pageNo']) < 320:
+            # 如果下一页还有职位 , 且最大数不超过320 列表最后一个发布日不是今天
+            if totalNum > 15 * int(res['content']['pageNo']) and int(res['content']['pageNo']) < 320 and status == 2:
                 mark_num = response.meta.get('mark_num') + 1
                 if self.order_type == 1:
                     query_data = {'first': 'false', 'pn': str(res['content']['pageNo'] + 1), 'kd': ''}
