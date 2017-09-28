@@ -97,10 +97,10 @@ AUTOTHROTTLE_DEBUG = False
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-MYSQL_HOST = "127.0.0.1"
+MYSQL_HOST = "101.200.39.39"
 MYSQL_DBNAME = "spider"
 MYSQL_USER = "root"
-MYSQL_PASSWORD = ""
+MYSQL_PASSWORD = "Wxk123456"
 
 # 宽度优先
 # SCHEDULER_ORDER = 'BFO'

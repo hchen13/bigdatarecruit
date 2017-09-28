@@ -33,6 +33,8 @@ class LagouSpider(Spider):
     }
     # 1爬取全部城市 2 爬取热门城市和数据不全的城市
     spider_type = 2
+    # 1 顺着爬 2 从最后一页往前爬
+    order_type = 2
 
     def __init__(self, **kwargs):
         super(LagouSpider,self).__init__()
@@ -80,7 +82,7 @@ class LagouSpider(Spider):
         # 调整顺序 成都 北京 深圳 广州
         city_first = ['成都','北京','深圳','上海','广州','杭州']
         city_sort = city_first + list(set(response.meta.get('city_filter')) - set(city_first))
-
+        
         if self.spider_type == 1:
             for city_node in city_parent:
                 city_initial = city_node.xpath("td[1]/div/span/text()").extract_first()
@@ -102,7 +104,7 @@ class LagouSpider(Spider):
                 url_city_str = parse.urlencode(city_str)
                 url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&' + url_city_str + '&needAddtionalResult=false&isSchoolJob=0'
                 query_data = {'first': 'false', 'pn': '1', 'kd': ''}
-                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data,method="POST", meta={'city_name': item, 'city_initial': '','city_total_num': ''})
+                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data,method="POST", meta={'city_name': item, 'city_initial': '','city_total_num': '','mark_num':0})
 
     # 进入职位列表页
     def positionList(self,response):
@@ -141,10 +143,14 @@ class LagouSpider(Spider):
                     if positionId not in self.positionId_all:
                         yield Request(url=url_detail, meta={"hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
             # 如果下一页还有职位
-            if totalNum > 15 * int(res['content']['pageNo']):
-                curNum = res['content']['pageNo'] + 1
-                query_data = {'first': 'false', 'pn': str(curNum), 'kd': ''}
-                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial')})
+            if totalNum > 15 * int(res['content']['pageNo']) and int(res['content']['pageNo']) < 320:
+                mark_num = response.meta.get('mark_num') + 1
+                if self.order_type == 1:
+                    query_data = {'first': 'false', 'pn': str(res['content']['pageNo'] + 1), 'kd': ''}
+                elif self.order_type == 2:
+                    page_num = 320 if int(totalNum / 15) > 320 else int(totalNum / 15)
+                    query_data = {'first': 'false', 'pn': str(page_num - mark_num), 'kd': ''}
+                yield FormRequest(url=url, headers=self.headers, callback=self.positionList, formdata=query_data, method="POST", meta={'city_name': response.meta.get('city_name'), 'city_initial': response.meta.get('city_initial') , 'mark_num':mark_num})
 
 
     # 职位详情页
