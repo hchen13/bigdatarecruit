@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 
 # 获取招聘职位大于400的城市
 def getHotCity():
-    sql_str ="select city_name from lagou_city where total_num > 400"
+    sql_str ="select city_name from lagou_city where total_num > 50"
     res = sqlExecute(sql_str)
     return res
 
