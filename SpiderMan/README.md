@@ -51,3 +51,12 @@ sudo chown root:root /usr/local/bin/selenium-server-standalone.jar
 sudo chmod 0755 /usr/local/bin/selenium-server-standalone.jar
 ```
 
+### 爬虫配置介绍
+#### 拉钩
+>* 配置数据库 settings.py 和 tools/getFileName.py 中的数据库
+>* spider/lagou.py 参数 spider_type  1 爬取全部城市 2 （默认）爬取热门城市和数据不全的城市
+>* spider/lagou.py 参数 order_type  1 （默认）顺着爬 2 从最后一页往前爬
+>* spider/lagou.py 参数 catch_city 指定要爬取的城市 空数组则按默认规则爬取
+* middlewares.py 中的fake_useragent （默认关闭）随机user_agent
+
+
