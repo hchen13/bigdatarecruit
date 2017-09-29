@@ -125,7 +125,7 @@ class LagouSpider(Spider):
         if res['msg']:
             print( 'Yes: ' + str(res))
 
-        if res["success"] and res['content']['pageNo'] != 0 and res['content']['positionResult']['result']:
+        if res["success"] and res['content']['pageNo'] > 0 and res['content']['positionResult']['result']:
             hrInfoMap = res['content']['hrInfoMap']
             positionResult = res['content']['positionResult']['result']
             totalNum = res['content']['positionResult']['totalCount']
