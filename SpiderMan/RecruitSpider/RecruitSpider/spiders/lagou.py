@@ -141,7 +141,7 @@ class LagouSpider(Spider):
                     # positionId去重,每100次获取一次id数组
                     if self.number % 100 == 0:
                         self.positionId_all = getPositionId()
-                    if positionId not in self.positionId_all:
+                    if int(positionId) not in self.positionId_all:
                         yield Request(url=url_detail, meta={"hrInfoMap": hrInfo, 'positionInfo': item, 'city_initial': response.meta.get('city_initial'), 'total_num': totalNum}, callback=self.positionDetail)
             # 如果下一页还有职位 , 且最大数不超过320 列表最后一个发布日不是今天
             if totalNum > 15 * int(res['content']['pageNo']) and int(res['content']['pageNo']) < 320 and status == 2:
