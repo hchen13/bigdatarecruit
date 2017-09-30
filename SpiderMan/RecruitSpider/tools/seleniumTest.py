@@ -11,8 +11,10 @@ import json
 
 
 def lagouLogin(type = 'str', *args):
-
-    if os.path.exists('login.cookie'):
+    # 读取登录状态
+    # login_status = os.path.exists('login.cookie')
+    login_status = 0
+    if login_status:
         with codecs.open('login.cookie','r') as f:
             cookies = json.load(f)
     else:

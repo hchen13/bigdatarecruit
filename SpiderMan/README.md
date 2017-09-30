@@ -11,6 +11,15 @@ SpiderMan是招聘大数据的爬虫部分。抓取拉勾网，51job，智联招
 
 ### 安装第三方库
 	pip install scrapy pyvirtualdisplay fake-useragent selenium sqlalchemy requests
+	系统安装 Xvfb虚拟显示环境
+		* Ubuntu apt install Xvfb
+		* Centos yum install Xvfb
+	安装mysqlclient
+		* Ubuntu下： 
+			执行apt-get install libmysqlclient-devl
+		* centos下： 
+			Yum install python-devel mysql-devel 
+		* pip install mysqlclient
 	
 ### 在linux环境下安装chrome浏览器和chromedriver
 ```
