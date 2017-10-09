@@ -109,3 +109,5 @@ ENV/
 /SpiderMan/RecruitSpider/.idea
 /SpiderMan/RecruitSpider/errLog.txt
 /SpiderMan/RecruitSpider/login.cookie
+
+/SpiderMan/RecruitSpider/.DS_Store

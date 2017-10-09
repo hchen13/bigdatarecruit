@@ -26,7 +26,8 @@ def getPositionId():
     return res
 
 def sqlExecute(sql_str):
-    engine = create_engine('mysql://root:Wxk123456@101.200.39.39:3306/spider?charset=utf8', echo=False)
+    # engine = create_engine('mysql://root:Wxk123456@101.200.39.39:3306/spider?charset=utf8', echo=False)
+    engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
     conn = engine.connect()
     res = conn.execute(sql_str)
     res_arr = res.fetchall()
@@ -36,6 +37,16 @@ def sqlExecute(sql_str):
         res_deal.append(item[0])
     return res_deal
 
+# 获取所有城市拼音
+def getCityPinYin():
+    import pinyin
+    sql_str = "select city_name from city where parent_id <> 0 and parent_id <> 2"
+    res = sqlExecute(sql_str)
+    res_pinyin = []
+    for item in res:
+        res_pinyin.append(pinyin.get(item, format='strip'))
+    return res_pinyin
+
 if __name__ == "__main__":
-    res = getSickCity()
+    res = getCityPinYin()
     print(res)

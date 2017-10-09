@@ -19,6 +19,12 @@ class LagouSpider(Spider):
     name = 'lagou'
     allowed_domains = ['www.lagou.com']
     start_urls = ['https://www.lagou.com/jobs/allCity.html?px=new&city=%E5%8C%97%E4%BA%AC']
+
+    custom_settings = {
+        'CONCURRENT_REQUESTS': 16,
+        'DOWNLOAD_DELAY': 2,
+    }
+
     number = 0
     positionId_all = getPositionId()
     # 当前时间
