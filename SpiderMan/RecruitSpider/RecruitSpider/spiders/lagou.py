@@ -23,6 +23,8 @@ class LagouSpider(Spider):
     custom_settings = {
         'CONCURRENT_REQUESTS': 16,
         'DOWNLOAD_DELAY': 2,
+        'REDIRECT_ENABLED': False,
+        'HTTPERROR_ALLOWED_CODES': [302, ]
     }
 
     number = 0

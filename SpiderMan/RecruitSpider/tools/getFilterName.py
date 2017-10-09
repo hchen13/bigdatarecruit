@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-
+import sys
 
 # 获取招聘职位大于400的城市
 def getHotCity():
@@ -26,8 +26,11 @@ def getPositionId():
     return res
 
 def sqlExecute(sql_str):
-    # engine = create_engine('mysql://root:Wxk123456@101.200.39.39:3306/spider?charset=utf8', echo=False)
-    engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
+    # 判断系统平台, windows平台需加入编码设置
+    if 'win' in sys.platform:
+        engine = create_engine('mysql://root:Wxk123456@101.200.39.39:3306/spider?charset=utf8', echo=False)
+    else:
+        engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
     conn = engine.connect()
     res = conn.execute(sql_str)
     res_arr = res.fetchall()
