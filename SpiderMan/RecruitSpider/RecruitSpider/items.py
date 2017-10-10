@@ -20,17 +20,13 @@ class RecruitspiderItem(scrapy.Item):
 class LagouItemLoader(ItemLoader):
     default_output_processor = TakeFirst()
 
-
+# 去掉空白字符
 def RemoveBlankCharacter(value):
     return re.sub(r'\s+', '', value)
 
-
+# 处理拉钩工作地址
 def locationDeal(value):
     return value.replace("查看地图","")
-
-
-def KeyJudge(value):
-    return value if value else 'Null'
 
 
 class LagouItem(scrapy.Item):
@@ -170,3 +166,50 @@ class LagouItem(scrapy.Item):
         """
         params = (self['city'], self['cityInitial'], int(time.time()),1,self['cityTotalNum'])
         return insert_sql, params
+
+
+class ZhilianItemLoader(ItemLoader):
+    default_output_processor = TakeFirst()
+
+
+class ZhilianItem(scrapy.Item):
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+    cityInitial = scrapy.Field()
+
+
+class ZhilianCompanyDetailItem(scrapy.Item):
+    pass

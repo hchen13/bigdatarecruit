@@ -27,8 +27,8 @@ def getPositionId():
 
 def sqlExecute(sql_str):
     # 判断系统平台, windows平台需加入编码设置
-    if 'win' in sys.platform:
-        engine = create_engine('mysql://root:Wxk123456@101.200.39.39:3306/spider?charset=utf8', echo=False)
+    if 'win32' in sys.platform:
+        engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
     else:
         engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
     conn = engine.connect()
@@ -43,7 +43,7 @@ def sqlExecute(sql_str):
 # 获取所有城市拼音
 def getCityPinYin():
     import pinyin
-    sql_str = "select city_name from city where parent_id <> 0 and parent_id <> 2"
+    sql_str = "select city_name from city where parent_id <> 0 and parent_id <> 2 limit 1"
     res = sqlExecute(sql_str)
     res_pinyin = []
     for item in res:
