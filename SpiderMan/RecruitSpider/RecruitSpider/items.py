@@ -173,43 +173,76 @@ class ZhilianItemLoader(ItemLoader):
 
 
 class ZhilianItem(scrapy.Item):
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
-    cityInitial = scrapy.Field()
+    # 公司zhilian_company item
+    company_md5 = scrapy.Field()
+    full_name = scrapy.Field()
+    size = scrapy.Field()
+    company_nature = scrapy.Field()
+    logo = scrapy.Field()
+    website = scrapy.Field()
+    industry = scrapy.Field()
+    address = scrapy.Field()
 
+    # 智联招聘职位zhilian_position item
+    position_name = scrapy.Field()
+    city = scrapy.Field()
+    unique_md5 = scrapy.Field()
+    salary_low = scrapy.Field()
+    salary_high = scrapy.Field()
+    location = scrapy.Field()
+    publish_time = scrapy.Field()
+    advantage_labels = scrapy.Field()
+    job_nature = scrapy.Field()
+    work_year = scrapy.Field()
+    education = scrapy.Field()
+    recruit_num = scrapy.Field()
+    position_type = scrapy.Field()
+    content =scrapy.Field()
+    url = scrapy.Field()
 
-class ZhilianCompanyDetailItem(scrapy.Item):
-    pass
+    def get_zhilian_company_insert_sql(self):
+
+        insert_sql = """
+            insert into zhilian_company(
+            company_md5,
+            full_name,
+            company_nature,
+            logo,
+            industry,
+            website,
+            industry,
+            address,
+            created_at,
+            company_url
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+        """
+        params = (self['company_md5'], self['full_name'], self['company_nature'], self['logo'], self['industry'], self['website'], self['industry'], self['address'], int(time.time()), self['company_url'])
+        return insert_sql, params
+
+    def get_zhilian_position_insert_sql(self):
+
+        insert_sql = """
+            insert into zhilian_position(
+            position_name,
+            city,
+            company_md5,
+            unique_md5,
+            salary_low,
+            salary_high,
+            location,
+            publish_time,
+            advantage_labels,
+            job_nature,
+            work_year,
+            education,
+            recruit_num,
+            position_type,
+            content,
+            url,
+            created_at
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+        """
+        params = (self['position_name'], self['city'], self['company_md5'], self['unique_md5'], self['salary_low'], self['salary_high'], self['location'], self['publish_time'], self['advantage_labels'], self['job_nature'], self['work_year'], self['education'], self['recruit_num'], self['position_type'], self['content'], self['url'], int(time.time()))
+        return insert_sql, params
