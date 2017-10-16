@@ -24,7 +24,10 @@ class LagouSpider(Spider):
         'CONCURRENT_REQUESTS': 16,
         'DOWNLOAD_DELAY': 2,
         'REDIRECT_ENABLED': False,
-        'HTTPERROR_ALLOWED_CODES': [302, ]
+        'HTTPERROR_ALLOWED_CODES': [302, ],
+        'ITEM_PIPELINES': {
+           'RecruitSpider.pipelines.RecruitSpiderPipeline': 300,
+        },
     }
 
     number = 0

@@ -9,6 +9,7 @@ import scrapy
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose , Join
 import time
+from RecruitSpider.helper import md5
 import re
 
 class RecruitspiderItem(scrapy.Item):
@@ -168,34 +169,67 @@ class LagouItem(scrapy.Item):
         return insert_sql, params
 
 
+def getSalaryLow(value):
+    salary_obj = re.match(r"([\d]+)-([\d]+)元", value)
+    if salary_obj:
+        return salary_obj[1]
+    else:
+        return 0
+
+def getSlaryHigh(value):
+    salary_obj = re.match(r"([\d]+)-([\d]+)元", value)
+    if salary_obj:
+        return salary_obj[2]
+    else:
+        return 0
+
+def getRecruitNum(value):
+    return re.sub('人', '', value)
+
+
 class ZhilianItemLoader(ItemLoader):
     default_output_processor = TakeFirst()
 
 
 class ZhilianItem(scrapy.Item):
     # 公司zhilian_company item
-    company_md5 = scrapy.Field()
+    company_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
     full_name = scrapy.Field()
     size = scrapy.Field()
     company_nature = scrapy.Field()
     logo = scrapy.Field()
     website = scrapy.Field()
     industry = scrapy.Field()
-    address = scrapy.Field()
+    address = scrapy.Field(
+        input_processor=MapCompose(RemoveBlankCharacter),
+    )
+    company_url = scrapy.Field()
 
     # 智联招聘职位zhilian_position item
     position_name = scrapy.Field()
     city = scrapy.Field()
-    unique_md5 = scrapy.Field()
-    salary_low = scrapy.Field()
-    salary_high = scrapy.Field()
-    location = scrapy.Field()
+    unique_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+    salary_low = scrapy.Field(
+        input_processor=MapCompose(getSalaryLow),
+    )
+    salary_high = scrapy.Field(
+        input_processor=MapCompose(getSlaryHigh),
+    )
+    location = scrapy.Field(
+        input_processor=MapCompose(RemoveBlankCharacter),
+    )
     publish_time = scrapy.Field()
     advantage_labels = scrapy.Field()
     job_nature = scrapy.Field()
     work_year = scrapy.Field()
     education = scrapy.Field()
-    recruit_num = scrapy.Field()
+    recruit_num = scrapy.Field(
+        input_processor=MapCompose(getRecruitNum),
+    )
     position_type = scrapy.Field()
     content =scrapy.Field()
     url = scrapy.Field()
@@ -206,9 +240,9 @@ class ZhilianItem(scrapy.Item):
             insert into zhilian_company(
             company_md5,
             full_name,
+            size,
             company_nature,
             logo,
-            industry,
             website,
             industry,
             address,
@@ -217,7 +251,7 @@ class ZhilianItem(scrapy.Item):
             ) 
             values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
         """
-        params = (self['company_md5'], self['full_name'], self['company_nature'], self['logo'], self['industry'], self['website'], self['industry'], self['address'], int(time.time()), self['company_url'])
+        params = (self['company_md5'], self['full_name'], self['size'], self['company_nature'], self['logo'], self['website'], self['industry'], self['address'], int(time.time()), self['company_url'])
         return insert_sql, params
 
     def get_zhilian_position_insert_sql(self):

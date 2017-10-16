@@ -43,7 +43,7 @@ def sqlExecute(sql_str):
 # 获取所有城市拼音
 def getCityPinYin():
     import pinyin
-    sql_str = "select city_name from city where parent_id <> 0 and parent_id <> 2 limit 1"
+    sql_str = "select city_name from city where parent_id <> 0 and parent_id <> 2"
     res = sqlExecute(sql_str)
     res_pinyin = []
     for item in res:
