@@ -73,12 +73,14 @@ class ZhilianSpider(scrapy.Spider):
                 item_loader.add_xpath('industry', "//div[contains(@class,'company-box')]/ul/li[3]/strong/a/text()")
                 item_loader.add_xpath('website', "//div[contains(@class,'company-box')]/ul/li[4]/strong/a/text()")
                 # 需要二次处理字段，原因：去掉空白字符和换行符
-                item_loader.add_xpath('address', "//div[contains(@class,'company-box')]/ul/li[5]/strong/text()")
+                company_address = response.xpath("//div[contains(@class,'company-box')]/ul/li[5]/strong/text()").extract_first()
+                item_loader.add_value('address', company_address if company_address else 'NULL')
             else:
                 item_loader.add_value('website', "NULL")
                 item_loader.add_xpath('industry', "//div[contains(@class,'company-box')]/ul/li[3]/strong/a/text()")
                 # 需要二次处理字段，原因：去掉空白字符和换行符
-                item_loader.add_xpath('address', "//div[contains(@class,'company-box')]/ul/li[4]/strong/text()")
+                company_address = response.xpath("//div[contains(@class,'company-box')]/ul/li[5]/strong/text()").extract_first()
+                item_loader.add_value('address', company_address if company_address else 'NULL')
 
             item_loader.add_value('company_url', response.meta.get("company_url"))
 
@@ -97,7 +99,8 @@ class ZhilianSpider(scrapy.Spider):
             item_loader.add_xpath('position_type', "//div[contains(@class,'terminalpage-left')]/ul/li[8]/strong/a/text()")
             # 需要二次处理字段。 原因：md5
 
-            unique_md5 = response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/h1/text()").extract_first() + company_name + response.xpath("//div[contains(@class,'terminalpage-left')]/ul/li[3]/strong/span/text()").extract_first()
+            publish_time = response.xpath("//div[contains(@class,'terminalpage-left')]/ul/li[3]/strong/span/text()").extract_first()
+            unique_md5 = response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/h1/text()").extract_first() + company_name + publish_time if publish_time else '失效'
             item_loader.add_value('unique_md5', unique_md5)
             content_arr = response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/p[position() < last()]").extract()
             if not content_arr:
