@@ -2,7 +2,7 @@
 --
 -- Host: 127.0.0.1    Database: spider
 -- ------------------------------------------------------
--- Server version	5.7.18
+-- Server version	5.7.19
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -80,7 +80,7 @@ DROP TABLE IF EXISTS `zhilian_position`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `zhilian_position` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `postion_name` varchar(255) DEFAULT NULL COMMENT '职位名称',
+  `position_name` varchar(255) DEFAULT NULL COMMENT '职位名称',
   `city` varchar(45) DEFAULT NULL COMMENT '城市',
   `company_md5` varchar(100) DEFAULT NULL,
   `unique_md5` varchar(100) DEFAULT NULL COMMENT '职位表示，是 职位名称+公司名称+发布时间 组合而成的md5值',
@@ -120,4 +120,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-12 18:31:30
+-- Dump completed on 2017-10-17 14:57:28

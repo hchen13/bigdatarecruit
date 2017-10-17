@@ -141,7 +141,8 @@ class LagouSpider(Spider):
             positionResult = res['content']['positionResult']['result']
             totalNum = res['content']['positionResult']['totalCount']
 
-            print(str(self.number) + ' ' + response.meta.get('city_name') + " " + str(totalNum) + ' ' + str(res['content']['pageNo']))
+            # 显示进度
+            # print(str(self.number) + ' ' + response.meta.get('city_name') + " " + str(totalNum) + ' ' + str(res['content']['pageNo']))
 
             for item in positionResult:
                 # 如果不是今天发布的，则跳过
@@ -177,7 +178,7 @@ class LagouSpider(Spider):
         hrInfo = response.meta.get('hrInfoMap')
 
         # print("抓取职位详情页面")
-        print(positionInfo['city'] + ':' + positionInfo['positionName'])
+        # print(positionInfo['city'] + ':' + positionInfo['positionName'])
 
         item_loader.add_value('cityInitial',response.meta.get('city_initial') if response.meta.get('city_initial') else 'NULL')
         item_loader.add_value('cityTotalNum',response.meta.get('total_num'))
