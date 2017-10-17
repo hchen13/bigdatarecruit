@@ -109,5 +109,5 @@ ENV/
 /SpiderMan/RecruitSpider/.idea
 /SpiderMan/RecruitSpider/errLog.txt
 /SpiderMan/RecruitSpider/login.cookie
-
+/SpiderMan/RecruitSpider/zhilian_errLog.txt
 /SpiderMan/RecruitSpider/.DS_Store

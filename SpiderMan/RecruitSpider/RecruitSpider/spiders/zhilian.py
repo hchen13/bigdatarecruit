@@ -20,17 +20,23 @@ class ZhilianSpider(scrapy.Spider):
     }
 
     custom_settings = {
-        'DOWNLOAD_DELAY': 1,
+        # 'DOWNLOAD_DELAY': 1,
         'ITEM_PIPELINES': {
             'RecruitSpider.pipelines.ZhilianSpiderPipeline': 300,
         },
+        'DOWNLOADER_MIDDLEWARES': {
+            'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
+        },
+        'CONCURRENT_REQUESTS': 3,
     }
 
     def start_requests(self):
         # 组建爬取城市链接
+        n = 0
+        total_num = len(getCityPinYin())
         for item in getCityPinYin():
-            print(item)
-            yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'page_num':1})
+            n += 1
+            yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'page_num':1, 'total_num': total_num, 'current_num':n})
 
     def parse(self, response):
         # 获取职位列表
@@ -38,7 +44,9 @@ class ZhilianSpider(scrapy.Spider):
 
         page_obj = re.match(r"http://.*?/.*?/p(\d*)/$", response.url)
         page_num = page_obj[1] if page_obj else 1
-        print(position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页, 共" + str(len(position_list)))
+        current_num = response.meta.get("current_num")
+        total_num = response.meta.get("total_num")
+        print( '总进度：' + str(current_num) + '/' + str(total_num) + position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页")
         # 判断如果有职位信息
         if len(position_list) > 0:
             for position_node in position_list:
@@ -51,7 +59,7 @@ class ZhilianSpider(scrapy.Spider):
         # 获取下一页
         next_url = response.xpath("//div[@class='searchlist_page']/span[@class='search_page_next']/a/@href").extract_first()
         if next_url:
-            yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, callback=self.parse, meta={'page_num': response.meta.get("page_num") + 1})
+            yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, callback=self.parse, meta={'page_num': response.meta.get("page_num") + 1, 'total_num': total_num, 'current_num':current_num})
 
     # 职位信息
     def position_detail(self, response):
@@ -69,17 +77,18 @@ class ZhilianSpider(scrapy.Spider):
             item_loader.add_xpath('size', "//div[contains(@class,'company-box')]/ul/li[1]/strong/text()")
             item_loader.add_xpath('company_nature', "//div[contains(@class,'company-box')]/ul/li[2]/strong/text()")
 
+            industry = response.xpath("//div[contains(@class,'company-box')]/ul/li[3]/strong/a/text()").extract_first()
+            item_loader.add_value('industry', industry if industry else "NULL")
+
             if len(response.xpath("//div[contains(@class,'company-box')]/ul/li")) == 5:
-                item_loader.add_xpath('industry', "//div[contains(@class,'company-box')]/ul/li[3]/strong/a/text()")
                 item_loader.add_xpath('website', "//div[contains(@class,'company-box')]/ul/li[4]/strong/a/text()")
                 # 需要二次处理字段，原因：去掉空白字符和换行符
-                company_address = response.xpath("//div[contains(@class,'company-box')]/ul/li[5]/strong/text()").extract_first()
+                company_address = re.sub(r'\s+', '', response.xpath("//div[contains(@class,'company-box')]/ul/li[5]/strong/text()").extract_first())
                 item_loader.add_value('address', company_address if company_address else 'NULL')
             else:
                 item_loader.add_value('website', "NULL")
-                item_loader.add_xpath('industry', "//div[contains(@class,'company-box')]/ul/li[3]/strong/a/text()")
                 # 需要二次处理字段，原因：去掉空白字符和换行符
-                company_address = response.xpath("//div[contains(@class,'company-box')]/ul/li[5]/strong/text()").extract_first()
+                company_address = re.sub(r'\s+', '', response.xpath("//div[contains(@class,'company-box')]/ul/li[4]/strong/text()").extract_first())
                 item_loader.add_value('address', company_address if company_address else 'NULL')
 
             item_loader.add_value('company_url', response.meta.get("company_url"))
@@ -89,7 +98,8 @@ class ZhilianSpider(scrapy.Spider):
             item_loader.add_xpath('salary_low', "//div[contains(@class,'terminalpage-left')]/ul/li[1]/strong/text()")
             item_loader.add_xpath('salary_high', "//div[contains(@class,'terminalpage-left')]/ul/li[1]/strong/text()")
             item_loader.add_xpath('city', "//div[contains(@class,'terminalpage-left')]/ul/li[2]/strong/a/text()")
-            item_loader.add_xpath('publish_time', "//div[contains(@class,'terminalpage-left')]/ul/li[3]/strong/span/text()")
+            publish_time = response.xpath("//div[contains(@class,'terminalpage-left')]/ul/li[3]/strong/span/text()").extract_first()
+            item_loader.add_value('publish_time', publish_time if publish_time else 'NULL')
             item_loader.add_xpath('job_nature', "//div[contains(@class,'terminalpage-left')]/ul/li[4]/strong/text()")
             item_loader.add_xpath('work_year', "//div[contains(@class,'terminalpage-left')]/ul/li[5]/strong/text()")
             item_loader.add_xpath('education', "//div[contains(@class,'terminalpage-left')]/ul/li[6]/strong/text()")
@@ -102,10 +112,13 @@ class ZhilianSpider(scrapy.Spider):
             publish_time = response.xpath("//div[contains(@class,'terminalpage-left')]/ul/li[3]/strong/span/text()").extract_first()
             unique_md5 = response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/h1/text()").extract_first() + company_name + publish_time if publish_time else '失效'
             item_loader.add_value('unique_md5', unique_md5)
-            content_arr = response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/p[position() < last()]").extract()
+
+            content_obj = response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]")
+            content_arr = content_obj.xpath("p[position() < last()]").extract() + content_obj.xpath("div/p[position() < last()]").extract()
             if not content_arr:
-                content_arr = response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/div/p[position() < last()]").extract()
-            item_loader.add_value('content', ''.join(content_arr))
+                content_arr = content_obj.xpath("div").extract()
+            item_loader.add_value('content', ''.join(content_arr) if content_arr else "NULL")
+
             # 需要二次处理字段 原因：去掉空白字符和换行符
             item_loader.add_xpath('location', "//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/h2/text()")
             item_loader.add_value('url', response.url)
