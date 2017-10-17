@@ -24,9 +24,9 @@ class ZhilianSpider(scrapy.Spider):
         'ITEM_PIPELINES': {
             'RecruitSpider.pipelines.ZhilianSpiderPipeline': 300,
         },
-        'DOWNLOADER_MIDDLEWARES': {
-            'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
-        },
+        # 'DOWNLOADER_MIDDLEWARES': {
+        #     'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
+        # },
         'CONCURRENT_REQUESTS': 3,
     }
 
