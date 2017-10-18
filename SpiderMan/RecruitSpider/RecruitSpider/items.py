@@ -172,14 +172,14 @@ class LagouItem(scrapy.Item):
 def getSalaryLow(value):
     salary_obj = re.match(r"([\d]+)-([\d]+)元", value)
     if salary_obj:
-        return salary_obj[1]
+        return salary_obj.group(1)
     else:
         return 0
 
 def getSlaryHigh(value):
     salary_obj = re.match(r"([\d]+)-([\d]+)元", value)
     if salary_obj:
-        return salary_obj[2]
+        return salary_obj.group(2)
     else:
         return 0
 

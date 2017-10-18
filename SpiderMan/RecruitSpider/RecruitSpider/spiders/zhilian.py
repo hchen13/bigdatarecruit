@@ -20,7 +20,7 @@ class ZhilianSpider(scrapy.Spider):
     }
 
     custom_settings = {
-        # 'DOWNLOAD_DELAY': 1,
+        'DOWNLOAD_DELAY': 1.2,
         'ITEM_PIPELINES': {
             'RecruitSpider.pipelines.ZhilianSpiderPipeline': 300,
         },
@@ -43,7 +43,7 @@ class ZhilianSpider(scrapy.Spider):
         position_list = response.xpath("//div[contains(@class,'details_container')]")
 
         page_obj = re.match(r"http://.*?/.*?/p(\d*)/$", response.url)
-        page_num = page_obj[1] if page_obj else 1
+        page_num = page_obj.group(1) if page_obj else 1
         current_num = response.meta.get("current_num")
         total_num = response.meta.get("total_num")
         print( '总进度：' + str(current_num) + '/' + str(total_num) + position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页")
