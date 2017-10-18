@@ -68,7 +68,7 @@ class ZhilianSpider(scrapy.Spider):
             else:
                 page_num = int(page_num) + 1
                 next_url = re.sub(r'\d+', str(page_num), response.url)
-                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, callback=self.parse)
+                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, meta={'err_num': err_num}, callback=self.parse)
         else:
             self.headers['Referer'] = response.url
             # 获取职位列表
@@ -88,7 +88,7 @@ class ZhilianSpider(scrapy.Spider):
             # 获取下一页
             next_url = response.xpath("//div[@class='searchlist_page']/span[@class='search_page_next']/a/@href").extract_first()
             if next_url:
-                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, callback=self.parse)
+                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, meta={'err_num': err_num}, callback=self.parse)
             # else:
             #     self.n += 1
             #     sub_num = self.n - 1
