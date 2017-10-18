@@ -11,55 +11,82 @@ class ZhilianSpider(scrapy.Spider):
     allowed_domains = ['zhaopin.com']
     start_urls = ['http://jobs.zhaopin.com/']
 
-    headers = {
-        'Referer': 'http://jobs.zhaopin.com/beijing/',
-        'Origin': 'http://jobs.zhaopin.com/',
-        'Cache_Control': "max-age=0",
-        'Connection': 'keep-alive',
-
-    }
-
     custom_settings = {
-        'DOWNLOAD_DELAY': 1.2,
+        # 'DOWNLOAD_DELAY': 2,
         'ITEM_PIPELINES': {
             'RecruitSpider.pipelines.ZhilianSpiderPipeline': 300,
         },
         # 'DOWNLOADER_MIDDLEWARES': {
         #     'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
         # },
-        'CONCURRENT_REQUESTS': 3,
+        # 'CONCURRENT_REQUESTS': 1,
+        'HTTPERROR_ALLOWED_CODES': [500],
     }
+
+    headers = {
+        'Host': 'jobs.zhaopin.com',
+        'Referer': 'http://jobs.zhaopin.com/beijing/',
+        'Origin': 'http://jobs.zhaopin.com/',
+        'Cache_Control': "max-age=0",
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': 1,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Encoding": "gzip, deflate",
+        "Accept-Language": "zh-CN,zh;q=0.8,en;q=0.6"
+    }
+    n = 1
+    total_city_pinyin = getCityPinYin()
+    total_city_num = len(total_city_pinyin)
+    err_num = 0
 
     def start_requests(self):
         # 组建爬取城市链接
-        n = 0
-        total_num = len(getCityPinYin())
-        for item in getCityPinYin():
-            n += 1
-            yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'page_num':1, 'total_num': total_num, 'current_num':n})
+        # for item in getCityPinYin():
+        #     yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'page_num':1})
+        yield Request(ps.urljoin('http://jobs.zhaopin.com', 'chengdu/p8'), headers=self.headers, )
 
     def parse(self, response):
-        # 获取职位列表
-        position_list = response.xpath("//div[contains(@class,'details_container')]")
 
+        # 获取当前页数
         page_obj = re.match(r"http://.*?/.*?/p(\d*)/$", response.url)
         page_num = page_obj.group(1) if page_obj else 1
-        current_num = response.meta.get("current_num")
-        total_num = response.meta.get("total_num")
-        print( '总进度：' + str(current_num) + '/' + str(total_num) + position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页")
-        # 判断如果有职位信息
-        if len(position_list) > 0:
-            for position_node in position_list:
-                # 职位详情页
-                position_url = position_node.xpath("span[contains(@class,'post')]/a/@href").extract_first()
-                # 公司工商信息详情页
-                company_url = position_node.xpath("span[contains(@class,'company_name')]/a/@href").extract_first()
 
-                yield Request(url=ps.urljoin(response.url, position_url), headers=self.headers, meta={'company_url': company_url}, callback=self.position_detail)
-        # 获取下一页
-        next_url = response.xpath("//div[@class='searchlist_page']/span[@class='search_page_next']/a/@href").extract_first()
-        if next_url:
-            yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, callback=self.parse, meta={'page_num': response.meta.get("page_num") + 1, 'total_num': total_num, 'current_num':current_num})
+        # 遇到500页面爬取下一页，错误连续出现三次则爬取下一个城市
+        if response.status == 500:
+            print('去你妹的！第' + str(page_num + '页'))
+            self.err_num += 1
+            if self.err_num % 5 == 0:
+                self.n += 1
+                sub_num = self.n - 1
+                yield Request(ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[sub_num]), headers=self.headers, )
+            else:
+                page_num = int(page_num) + 1
+                next_url = re.sub(r'\d+', str(page_num), response.url)
+                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, callback=self.parse)
+        else:
+            self.headers['Referer'] = response.url
+            # 获取职位列表
+            position_list = response.xpath("//div[contains(@class,'details_container')]")
+
+            print( '总进度：' + str(self.n) + '/' + str(self.total_city_num) + position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页")
+
+            # 判断如果有职位信息
+            if len(position_list) > 0:
+                for position_node in position_list:
+                    # 职位详情页
+                    position_url = position_node.xpath("span[contains(@class,'post')]/a/@href").extract_first()
+                    # 公司工商信息详情页
+                    company_url = position_node.xpath("span[contains(@class,'company_name')]/a/@href").extract_first()
+
+                    yield Request(url=ps.urljoin(response.url, position_url), headers=self.headers, meta={'company_url': company_url}, callback=self.position_detail)
+            # 获取下一页
+            next_url = response.xpath("//div[@class='searchlist_page']/span[@class='search_page_next']/a/@href").extract_first()
+            if next_url:
+                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, callback=self.parse)
+            else:
+                self.n += 1
+                sub_num = self.n - 1
+                yield Request(url=ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[sub_num]), headers=self.headers ,callback=self.parse)
 
     # 职位信息
     def position_detail(self, response):
