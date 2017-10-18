@@ -5,6 +5,7 @@ from RecruitSpider.items import ZhilianItemLoader, ZhilianItem
 from urllib import parse as ps
 from scrapy.http import Request
 import re
+from time import sleep
 
 class ZhilianSpider(scrapy.Spider):
     name = 'zhilian'
@@ -51,9 +52,10 @@ class ZhilianSpider(scrapy.Spider):
         page_obj = re.match(r"http://.*?/.*?/p(\d*)/$", response.url)
         page_num = page_obj.group(1) if page_obj else 1
 
-        # 遇到500页面爬取下一页，错误连续出现三次则爬取下一个城市
+        # 遇到500页面爬取下一页，错误连续出现4次则爬取下一个城市
         if response.status == 500:
-            print('去你妹的！第' + str(page_num + '页'))
+            print('去你妹的！' + self.total_city_pinyin[self.n - 1] + '第' + str(page_num + '页'))
+            sleep(2)
             self.err_num += 1
             if self.err_num % 5 == 0:
                 self.n += 1
