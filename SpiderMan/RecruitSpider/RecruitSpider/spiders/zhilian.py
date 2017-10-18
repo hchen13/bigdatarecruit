@@ -20,7 +20,7 @@ class ZhilianSpider(scrapy.Spider):
         # 'DOWNLOADER_MIDDLEWARES': {
         #     'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
         # },
-        # 'CONCURRENT_REQUESTS': 1,
+        'CONCURRENT_REQUESTS': 1,
         'HTTPERROR_ALLOWED_CODES': [500],
     }
 
@@ -37,30 +37,34 @@ class ZhilianSpider(scrapy.Spider):
     }
     n = 1
     total_city_pinyin = getCityPinYin()
+    # 过滤错误拼音
+    total_city_pinyin.append('chongqing')
+    total_city_pinyin.remove('zhongqing')
     total_city_num = len(total_city_pinyin)
     err_num = 0
 
     def start_requests(self):
         # 组建爬取城市链接
-        # for item in getCityPinYin():
-        #     yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'page_num':1})
-        yield Request(ps.urljoin('http://jobs.zhaopin.com', 'chengdu/p8'), headers=self.headers, )
+        for item in self.total_city_pinyin:
+            yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'err_num': 0})
+        # yield Request(ps.urljoin('http://jobs.zhaopin.com', 'chengdu/p8'), headers=self.headers, )
 
     def parse(self, response):
-
+        err_num = response.meta.get("err_num")
         # 获取当前页数
         page_obj = re.match(r"http://.*?/.*?/p(\d*)/$", response.url)
         page_num = page_obj.group(1) if page_obj else 1
 
-        # 遇到500页面爬取下一页，错误连续出现4次则爬取下一个城市
+        # 遇到500页面爬取下一页
         if response.status == 500:
-            print('去你妹的！' + self.total_city_pinyin[self.n - 1] + '第' + str(page_num + '页'))
+            print('去你妹的! 第' + str(page_num) + '页')
             sleep(2)
-            self.err_num += 1
-            if self.err_num % 5 == 0:
-                self.n += 1
-                sub_num = self.n - 1
-                yield Request(ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[sub_num]), headers=self.headers, )
+            err_num += 1
+            if err_num % 5 == 0:
+                pass
+                # n += 1
+                # sub_num = n - 1
+                # yield Request(ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[sub_num]), headers=self.headers, )
             else:
                 page_num = int(page_num) + 1
                 next_url = re.sub(r'\d+', str(page_num), response.url)
@@ -85,10 +89,10 @@ class ZhilianSpider(scrapy.Spider):
             next_url = response.xpath("//div[@class='searchlist_page']/span[@class='search_page_next']/a/@href").extract_first()
             if next_url:
                 yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, callback=self.parse)
-            else:
-                self.n += 1
-                sub_num = self.n - 1
-                yield Request(url=ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[sub_num]), headers=self.headers ,callback=self.parse)
+            # else:
+            #     self.n += 1
+            #     sub_num = self.n - 1
+            #     yield Request(url=ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[sub_num]), headers=self.headers ,callback=self.parse)
 
     # 职位信息
     def position_detail(self, response):
