@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 import scrapy
+from scrapy.http import Request
+from scrapy import signals
 from tools.getFilterName import getCityPinYin
 from RecruitSpider.items import ZhilianItemLoader, ZhilianItem
 from urllib import parse as ps
-from scrapy.http import Request
 import re
 from time import sleep
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from tools.seleniumTest import platformJudge
+import sys
 
 class ZhilianSpider(scrapy.Spider):
     name = 'zhilian'
@@ -21,7 +26,7 @@ class ZhilianSpider(scrapy.Spider):
         #     'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
         # },
         'CONCURRENT_REQUESTS': 1,
-        'HTTPERROR_ALLOWED_CODES': [500],
+        'HTTPERROR_ALLOWED_CODES': [500, 404, 504],
     }
 
     headers = {
@@ -35,36 +40,69 @@ class ZhilianSpider(scrapy.Spider):
         "Accept-Encoding": "gzip, deflate",
         "Accept-Language": "zh-CN,zh;q=0.8,en;q=0.6"
     }
-    n = 1
+    # 当前抓取城市数量
+    n = 0
     total_city_pinyin = getCityPinYin()
+
     # 过滤错误拼音
     total_city_pinyin.append('chongqing')
     total_city_pinyin.remove('zhongqing')
     total_city_num = len(total_city_pinyin)
     err_num = 0
 
+    # ******************************************开启 Selenium 配置***********************************************
+
+    def __init__(self, **kwargs):
+        super(ZhilianSpider, self).__init__()
+        # 谷歌浏览器
+        # 如果是linux环境 则开启无界面
+        if 'linux' in sys.platform:
+            from pyvirtualdisplay import Display
+            self.display = Display(visible=0,size=(1024,768))
+            self.display.start()
+
+        chrome_opt = Options()
+        prefs = {"profile.managed_default_content_sttings.images": 2}
+        chrome_opt.add_experimental_option("prefs", prefs)
+        chrome_opt.add_argument("--no-sandbox")
+        chrome_opt.add_argument("--disable-setuid-sandbox")
+
+        driver_path = platformJudge()
+        self.browser = webdriver.Chrome(driver_path, chrome_options=chrome_opt)
+
+    # 爬虫信号绑定
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(ZhilianSpider, cls).from_crawler(crawler, *args, **kwargs)
+        crawler.signals.connect(spider.spider_close, signals.spider_closed)
+        return spider
+
+    def spider_close(self, spider):
+        print('spider close')
+        self.browser.quit()
+        if 'linux' in sys.platform:
+            self.display.stop()
+
+    # *****************************************************************************************************
+
     def start_requests(self):
         # 组建爬取城市链接
-        for item in self.total_city_pinyin:
-            yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'err_num': 0})
-        # yield Request(ps.urljoin('http://jobs.zhaopin.com', 'chengdu/p8'), headers=self.headers, )
+        # for item in self.total_city_pinyin:
+        #     yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'err_num': 0})
+        yield Request(ps.urljoin('http://jobs.zhaopin.com', 'chengdu/p24'), headers=self.headers, meta={})
 
     def parse(self, response):
-        err_num = response.meta.get("err_num")
         # 获取当前页数
         page_obj = re.match(r"http://.*?/.*?/p(\d*)/$", response.url)
         page_num = page_obj.group(1) if page_obj else 1
-
         # 遇到500页面爬取下一页
-        if response.status == 500:
+        if response.status in (500, 404, 504):
             print('去你妹的! 第' + str(page_num) + '页')
             sleep(2)
-            err_num += 1
-            if err_num % 5 == 0:
-                pass
-                # n += 1
-                # sub_num = n - 1
-                # yield Request(ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[sub_num]), headers=self.headers, )
+            self.err_num += 1
+            if self.err_num % 5 == 0:
+                yield Request(ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[self.n]), headers=self.headers)
+                self.n += 1
             else:
                 page_num = int(page_num) + 1
                 next_url = re.sub(r'\d+', str(page_num), response.url)
@@ -74,7 +112,7 @@ class ZhilianSpider(scrapy.Spider):
             # 获取职位列表
             position_list = response.xpath("//div[contains(@class,'details_container')]")
 
-            print( '总进度：' + str(self.n) + '/' + str(self.total_city_num) + position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页")
+            print( '总进度：' + str(self.n + 1) + '/' + str(self.total_city_num) + position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页")
 
             # 判断如果有职位信息
             if len(position_list) > 0:
@@ -83,16 +121,15 @@ class ZhilianSpider(scrapy.Spider):
                     position_url = position_node.xpath("span[contains(@class,'post')]/a/@href").extract_first()
                     # 公司工商信息详情页
                     company_url = position_node.xpath("span[contains(@class,'company_name')]/a/@href").extract_first()
-
+                    # 不使用selenium 抓取
                     yield Request(url=ps.urljoin(response.url, position_url), headers=self.headers, meta={'company_url': company_url}, callback=self.position_detail)
             # 获取下一页
             next_url = response.xpath("//div[@class='searchlist_page']/span[@class='search_page_next']/a/@href").extract_first()
             if next_url:
-                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, meta={'err_num': err_num}, callback=self.parse)
-            # else:
-            #     self.n += 1
-            #     sub_num = self.n - 1
-            #     yield Request(url=ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[sub_num]), headers=self.headers ,callback=self.parse)
+                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, meta={'err_num': self.err_num}, callback=self.parse)
+            else:
+                yield Request(url=ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[self.n]), headers=self.headers ,callback=self.parse)
+                self.n += 1
 
     # 职位信息
     def position_detail(self, response):

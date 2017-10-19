@@ -104,6 +104,7 @@ class JsPageMiddleware(object):
         # self.browser.set_page_load_timeout(20)
         # self.browser.set_script_timeout(20)
         if spider.name == 'lagou' and res and request.meta.get('curNum') != 1:
+            # 拉钩处理
             spider.browser.get(request.url)
             # 找到元素就停止加载，否则刷新
             try:
@@ -112,3 +113,16 @@ class JsPageMiddleware(object):
                 spider.browser.refresh()
             # 不经过downloader 直接返回结果
             return HtmlResponse(url=spider.browser.current_url,body=spider.browser.page_source,encoding="utf-8")
+        elif spider.name == 'zhilian':
+            # 智联招聘处理 只抓列表页
+            url = request.url
+            res = re.match(r'http://.*?/(\d+).htm', url)
+            if not res:
+                spider.browser.get(request.url)
+                # 找到元素就停止加载，否则刷新
+                # try:
+                #     WebDriverWait(driver=spider.browser, timeout=5).until(lambda x: x.find_element_by_id('container'))
+                # except Exception as e:
+                #     spider.browser.refresh()
+                # 不经过downloader 直接返回结果
+                return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding="utf-8")

@@ -184,7 +184,11 @@ def getSlaryHigh(value):
         return 0
 
 def getRecruitNum(value):
-    return re.sub('人', '', value)
+    res = re.match(r'\d+',value)
+    if res:
+        return re.sub('人', '', value)
+    else:
+        return 0
 
 
 class ZhilianItemLoader(ItemLoader):
