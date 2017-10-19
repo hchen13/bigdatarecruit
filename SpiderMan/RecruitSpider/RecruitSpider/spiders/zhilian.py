@@ -25,7 +25,7 @@ class ZhilianSpider(scrapy.Spider):
         # 'DOWNLOADER_MIDDLEWARES': {
         #     'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
         # },
-        'CONCURRENT_REQUESTS': 1,
+        # 'CONCURRENT_REQUESTS': 1,
         'HTTPERROR_ALLOWED_CODES': [500, 404, 504],
     }
 
@@ -89,7 +89,7 @@ class ZhilianSpider(scrapy.Spider):
         # 组建爬取城市链接
         # for item in self.total_city_pinyin:
         #     yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'err_num': 0})
-        yield Request(ps.urljoin('http://jobs.zhaopin.com', 'chengdu/p24'), headers=self.headers, meta={})
+        yield Request(ps.urljoin('http://jobs.zhaopin.com', 'chengdu'), headers=self.headers, meta={})
 
     def parse(self, response):
         # 获取当前页数
