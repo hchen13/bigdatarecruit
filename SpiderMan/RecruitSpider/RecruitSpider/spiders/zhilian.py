@@ -219,11 +219,11 @@ class ZhilianSpider(scrapy.Spider):
             content_arr = content_obj.xpath("p[position() < last()]").extract() + content_obj.xpath("div/p[position() < last()]").extract()
             if not content_arr:
                 content_arr = content_obj.xpath("div").extract()
-            item_loader.add_value('content', ''.join(content_arr) if content_arr else "NULL")
+            item_loader.add_value('content', str(''.join(content_arr)) if content_arr else "NULL")
 
             # 需要二次处理字段 原因：去掉空白字符和换行符
             location = re.sub(r'\s+', '', response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/h2/text()").extract_first())
-            item_loader.add_value('location', location if location else 'NULL')
+            item_loader.add_value('location', str(location) if location else 'NULL')
             item_loader.add_value('url', response.url)
             # 需要二次处理字段 原因：数组
             advantage_labels = ','.join(response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/div[contains(@class,'welfare-tab-box')]/span/text()").extract())
