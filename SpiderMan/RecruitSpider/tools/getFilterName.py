@@ -60,6 +60,12 @@ def getZhilianPositionUrlMd5():
         res_md5.append(md5(item))
     return res_md5
 
+# 获取爬虫配置
+def getConfigureValue(key_name):
+    sql_str = "SELECT param_value FROM spider.configure where param_name = '%s'" % key_name
+    res = sqlExecute(sql_str)
+    return res[0]
+
 if __name__ == "__main__":
-    res = getZhilianPositionUrlMd5()
+    res = getConfigureValue('full_city_status')
     print(res)

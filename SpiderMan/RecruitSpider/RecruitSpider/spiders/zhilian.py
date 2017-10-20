@@ -2,7 +2,7 @@
 import scrapy
 from scrapy import signals
 from scrapy.http import Request
-from tools.getFilterName import getCityPinYin, getZhilianPositionUrlMd5
+from tools.getFilterName import getCityPinYin, getZhilianPositionUrlMd5 , getConfigureValue
 from tools.seleniumTest import platformJudge
 from RecruitSpider.items import ZhilianItemLoader, ZhilianItem
 from RecruitSpider.helper import md5
@@ -44,9 +44,9 @@ class ZhilianSpider(scrapy.Spider):
 
     # ******************************************抓取参数配置***********************************************
     # 全站抓取标记 1.全部城市全部页面 2.指定爬取城市 3.全部城市最新未录取职位
-    full_city_status = 2
+    full_city_status = int(getConfigureValue('full_city_status'))
     # 该数组为空时默认第一个城市为成都
-    default_city = ['shanghai']
+    default_city = getConfigureValue('default_city').split(',')
 
     # 当前抓取城市数量
     n = 0
@@ -125,7 +125,7 @@ class ZhilianSpider(scrapy.Spider):
             # 获取职位列表
             position_list = response.xpath("//div[contains(@class,'details_container')]")
 
-            print( '总进度：' + str(self.n + 1) + '/' + str(self.total_city_num) + position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页")
+            print(str(self.n + 1) + '/' + str(self.total_city_num) + ' ' + position_list[0].xpath("span[contains(@class,'address')]/text()").extract_first() + " 第" + str(page_num) + "页")
 
             # 判断如果有职位信息
             if len(position_list) > 0:
@@ -223,7 +223,7 @@ class ZhilianSpider(scrapy.Spider):
 
             # 需要二次处理字段 原因：去掉空白字符和换行符
             location = re.sub(r'\s+', '', response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/h2/text()").extract_first())
-            item_loader.add_xpath('location', location if location else 'NULL')
+            item_loader.add_value('location', location if location else 'NULL')
             item_loader.add_value('url', response.url)
             # 需要二次处理字段 原因：数组
             advantage_labels = ','.join(response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/div[contains(@class,'welfare-tab-box')]/span/text()").extract())
