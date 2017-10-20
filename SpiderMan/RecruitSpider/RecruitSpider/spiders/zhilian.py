@@ -166,7 +166,7 @@ class ZhilianSpider(scrapy.Spider):
         item_loader = ZhilianItemLoader(item=ZhilianItem(), response=response)
         company_name = response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/h2/a/text()").extract_first()
 
-        print(response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/h1/text()").extract_first())
+        # print(response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/h1/text()").extract_first())
 
         # 没有公司信息的职位不予录取
         if company_name:
@@ -222,7 +222,8 @@ class ZhilianSpider(scrapy.Spider):
             item_loader.add_value('content', ''.join(content_arr) if content_arr else "NULL")
 
             # 需要二次处理字段 原因：去掉空白字符和换行符
-            item_loader.add_xpath('location', "//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/h2/text()")
+            location = re.sub(r'\s+', '', response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/h2/text()").extract_first())
+            item_loader.add_xpath('location', location if location else 'NULL')
             item_loader.add_value('url', response.url)
             # 需要二次处理字段 原因：数组
             advantage_labels = ','.join(response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/div[contains(@class,'welfare-tab-box')]/span/text()").extract())
