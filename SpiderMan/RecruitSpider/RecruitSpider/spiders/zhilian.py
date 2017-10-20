@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapy.http import Request
 from scrapy import signals
-from tools.getFilterName import getCityPinYin
+from scrapy.http import Request
+from tools.getFilterName import getCityPinYin, getZhilianPositionUrlMd5
+from tools.seleniumTest import platformJudge
 from RecruitSpider.items import ZhilianItemLoader, ZhilianItem
-from urllib import parse as ps
-import re
-from time import sleep
+from RecruitSpider.helper import md5
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from tools.seleniumTest import platformJudge
+from urllib import parse as ps
+from time import sleep
 import sys
+import re
 
 class ZhilianSpider(scrapy.Spider):
     name = 'zhilian'
-    allowed_domains = ['zhaopin.com']
+    allowed_domains = ['jobs.zhaopin.com']
     start_urls = ['http://jobs.zhaopin.com/']
 
     custom_settings = {
@@ -25,7 +26,7 @@ class ZhilianSpider(scrapy.Spider):
         # 'DOWNLOADER_MIDDLEWARES': {
         #     'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
         # },
-        # 'CONCURRENT_REQUESTS': 1,
+        'CONCURRENT_REQUESTS': 3,
         'HTTPERROR_ALLOWED_CODES': [500, 404, 504],
     }
 
@@ -40,6 +41,13 @@ class ZhilianSpider(scrapy.Spider):
         "Accept-Encoding": "gzip, deflate",
         "Accept-Language": "zh-CN,zh;q=0.8,en;q=0.6"
     }
+
+    # ******************************************抓取参数配置***********************************************
+    # 全站抓取标记 1.全部城市全部页面 2.指定爬取城市 3.全部城市最新未录取职位
+    full_city_status = 2
+    # 该数组为空时默认第一个城市为成都
+    default_city = ['shanghai']
+
     # 当前抓取城市数量
     n = 0
     total_city_pinyin = getCityPinYin()
@@ -49,6 +57,9 @@ class ZhilianSpider(scrapy.Spider):
     total_city_pinyin.remove('zhongqing')
     total_city_num = len(total_city_pinyin)
     err_num = 0
+
+    # 获取已抓取职位md5
+    position_url_md5 = getZhilianPositionUrlMd5()
 
     # ******************************************开启 Selenium 配置***********************************************
 
@@ -86,12 +97,14 @@ class ZhilianSpider(scrapy.Spider):
     # *****************************************************************************************************
 
     def start_requests(self):
-        # 组建爬取城市链接
-        # for item in self.total_city_pinyin:
-        #     yield Request(ps.urljoin('http://jobs.zhaopin.com', item), headers=self.headers, meta={'err_num': 0})
-        yield Request(ps.urljoin('http://jobs.zhaopin.com', 'chengdu'), headers=self.headers, meta={})
+        if len(self.default_city) == 0:
+            self.default_city.append('chengdu')
+
+        yield Request(ps.urljoin('http://jobs.zhaopin.com', self.default_city[0]), headers=self.headers)
 
     def parse(self, response):
+        # 当前城市停止标志 1,继续当前城市 2，下一个城市
+        stop_status = 1
         # 获取当前页数
         page_obj = re.match(r"http://.*?/.*?/p(\d*)/$", response.url)
         page_num = page_obj.group(1) if page_obj else 1
@@ -121,20 +134,39 @@ class ZhilianSpider(scrapy.Spider):
                     position_url = position_node.xpath("span[contains(@class,'post')]/a/@href").extract_first()
                     # 公司工商信息详情页
                     company_url = position_node.xpath("span[contains(@class,'company_name')]/a/@href").extract_first()
-                    # 不使用selenium 抓取
-                    yield Request(url=ps.urljoin(response.url, position_url), headers=self.headers, meta={'company_url': company_url}, callback=self.position_detail)
+                    # 过滤掉一抓取的职位
+                    if not (md5(position_url) in self.position_url_md5):
+                        yield Request(url=ps.urljoin(response.url, position_url), headers=self.headers, meta={'company_url': company_url}, callback=self.position_detail)
+                    else:
+                        stop_status = 2
             # 获取下一页
             next_url = response.xpath("//div[@class='searchlist_page']/span[@class='search_page_next']/a/@href").extract_first()
-            if next_url:
+            if self.full_city_status == 1:
+                # 全站爬取 继续当前城市抓取
+                stop_status = 1
+                city_arr = self.total_city_pinyin
+            elif self.full_city_status == 2:
+                stop_status = 1
+                city_arr = self.default_city
+            elif self.full_city_status == 3:
+                city_arr = self.total_city_pinyin
+
+            if next_url and stop_status != 2:
+                # 该城市下一页
                 yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, meta={'err_num': self.err_num}, callback=self.parse)
             else:
-                yield Request(url=ps.urljoin('http://jobs.zhaopin.com', self.total_city_pinyin[self.n]), headers=self.headers ,callback=self.parse)
+                # 下个城市
+                print('开始下一个城市')
+                yield Request(url=ps.urljoin('http://jobs.zhaopin.com', city_arr[self.n]), headers=self.headers ,callback=self.parse)
                 self.n += 1
+
 
     # 职位信息
     def position_detail(self, response):
         item_loader = ZhilianItemLoader(item=ZhilianItem(), response=response)
         company_name = response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/h2/a/text()").extract_first()
+
+        print(response.xpath("//div[contains(@class,'top-fixed-box')]/div[contains(@class,'fixed-inner-box')]/div[contains(@class,'inner-left')]/h1/text()").extract_first())
 
         # 没有公司信息的职位不予录取
         if company_name:

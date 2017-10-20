@@ -50,6 +50,16 @@ def getCityPinYin():
         res_pinyin.append(pinyin.get(item, format='strip'))
     return res_pinyin
 
+# 获取智联招聘职位页url
+def getZhilianPositionUrlMd5():
+    from RecruitSpider.helper import md5
+    sql_str = "SELECT url FROM spider.zhilian_position"
+    res = sqlExecute(sql_str)
+    res_md5 = []
+    for item in res:
+        res_md5.append(md5(item))
+    return res_md5
+
 if __name__ == "__main__":
-    res = getCityPinYin()
+    res = getZhilianPositionUrlMd5()
     print(res)
