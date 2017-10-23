@@ -190,7 +190,8 @@ class ZhilianSpider(scrapy.Spider):
             else:
                 item_loader.add_value('website', "NULL")
                 # 需要二次处理字段，原因：去掉空白字符和换行符
-                company_address = re.sub(r'\s+', '', response.xpath("//div[contains(@class,'company-box')]/ul/li[4]/strong/text()").extract_first())
+                company_address_str = response.xpath("//div[contains(@class,'company-box')]/ul/li[4]/strong/text()").extract_first()
+                company_address = re.sub(r'\s+', '', str(company_address_str) if company_address_str else '')
                 item_loader.add_value('address', company_address if company_address else 'NULL')
 
             item_loader.add_value('company_url', response.meta.get("company_url"))
@@ -222,7 +223,8 @@ class ZhilianSpider(scrapy.Spider):
             item_loader.add_value('content', str(''.join(content_arr)) if content_arr else "NULL")
 
             # 需要二次处理字段 原因：去掉空白字符和换行符
-            location = re.sub(r'\s+', '', response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/h2/text()").extract_first())
+            location_str = response.xpath("//div[contains(@class,'terminalpage-main')]/div[contains(@class,'tab-cont-box')]/div[1]/h2/text()").extract_first()
+            location = re.sub(r'\s+', '', str(location_str) if location_str else '')
             item_loader.add_value('location', str(location) if location else 'NULL')
             item_loader.add_value('url', response.url)
             # 需要二次处理字段 原因：数组
