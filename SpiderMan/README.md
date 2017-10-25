@@ -10,7 +10,7 @@ SpiderMan是招聘大数据的爬虫部分。抓取拉勾网，51job，智联招
 >* RecruitSpider 	爬虫项目代码目录
 
 ### 安装第三方库
-	pip install scrapy pyvirtualdisplay fake-useragent selenium sqlalchemy requests
+	pip install scrapy pyvirtualdisplay fake-useragent selenium sqlalchemy requests pinyin
 	系统安装 Xvfb虚拟显示环境
 		* Ubuntu apt install Xvfb
 		* Centos yum install Xvfb
@@ -67,5 +67,10 @@ sudo chmod 0755 /usr/local/bin/selenium-server-standalone.jar
 >* spider/lagou.py 参数 order_type  1 （默认）顺着爬 2 从最后一页往前爬
 >* spider/lagou.py 参数 catch_city 指定要爬取的城市 空数组则按默认规则爬取
 * middlewares.py 中的fake_useragent （默认关闭）随机user_agent
+
+#### 智联招聘 （三种抓取模式，在configure表中选择full_city_status参数）
+>* 1、全部城市全部页面
+>* 2、指定爬取城市 （指定城市在default_city参数中增加，类型为城市名的pinyin）
+>* 3、全部城市最新未录取职位
 
 
