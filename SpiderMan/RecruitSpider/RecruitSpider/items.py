@@ -284,3 +284,142 @@ class ZhilianItem(scrapy.Item):
         """
         params = (self['position_name'], self['city'], self['company_md5'], self['unique_md5'], self['salary_low'], self['salary_high'], self['location'], self['publish_time'], self['advantage_labels'], self['job_nature'], self['work_year'], self['education'], self['recruit_num'], self['position_type'], self['content'], self['url'], int(time.time()))
         return insert_sql, params
+
+
+class Job51ItemLoader(ItemLoader):
+    default_output_processor = TakeFirst()
+
+
+class Job51PositionItem(scrapy.Item):
+    # 51job city item
+    city_name = scrapy.Field()
+    city_code = scrapy.Field()
+
+    # 51job position item
+    name = scrapy.Field()
+    district = scrapy.Field()
+    salary = scrapy.Field()
+    company_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+    work_year = scrapy.Field()
+    education = scrapy.Field()
+    recruit_num = scrapy.Field()
+    publish_time = scrapy.Field()
+    language = scrapy.Field()
+    position_labels = scrapy.Field()
+    advantage = scrapy.Field()
+    content = scrapy.Field()
+    location = scrapy.Field()
+    phone_num = scrapy.Field()
+    email = scrapy.Field()
+    url = scrapy.Field()
+    url_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+
+    def get_company_insert_sql(self):
+
+        insert_sql = """
+            insert into 51job_city(
+            city_name,
+            city_code,
+            num,
+            created_at
+            ) 
+            values(%s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
+        """
+        params = (self['city_name'], self['city_code'], 1, int(time.time()))
+        return insert_sql, params
+
+    def get_position_insert_sql(self):
+
+        insert_sql = """
+            insert into 51job_position(
+            name,
+            city,
+            district,
+            salary,
+            company_md5,
+            work_year,
+            education,
+            recruit_num,
+            publish_time,
+            language,
+            position_labels,
+            advantage,
+            content,
+            location,
+            phone_num,
+            email,
+            url,
+            url_md5,
+            created_at
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+        """
+        params = (self['name'],
+                  self['city_name'],
+                  self['district'],
+                  self['salary'],
+                  self['company_md5'],
+                  self['work_year'],
+                  self['education'],
+                  self['recruit_num'],
+                  self['publish_time'],
+                  self['language'],
+                  self['position_labels'],
+                  self['advantage'],
+                  self['location'],
+                  self['phone_num'],
+                  self['email'],
+                  self['url'],
+                  self['url_md5'],
+                  int(time.time()))
+
+        return insert_sql, params
+
+class Job51CompanyItem(scrapy.Item):
+    # 公司zhilian_company item
+    company_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+    name = scrapy.Field()
+    size = scrapy.Field()
+    nature = scrapy.Field()
+    industry = scrapy.Field()
+    addr = scrapy.Field(
+        input_processor=MapCompose(RemoveBlankCharacter),
+    )
+    url = scrapy.Field()
+    post_code = scrapy.Field()
+    company_url = scrapy.Field()
+
+    def get_zhilian_company_insert_sql(self):
+        insert_sql = """
+            insert into zhilian_company(
+            company_md5,
+            name,
+            size,
+            nature,
+            industry,
+            addr,
+            postcode,
+            num,
+            url,
+            created_at
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
+        """
+        params = (
+        self['company_md5'],
+        self['name'],
+        self['size'],
+        self['nature'],
+        self['industry'],
+        self['addr'],
+        self['postcode'],
+        self['num'],
+        self['url'],
+        int(time.time()))
+        return insert_sql, params
