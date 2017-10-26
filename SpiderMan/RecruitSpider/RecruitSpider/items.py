@@ -290,6 +290,10 @@ class Job51ItemLoader(ItemLoader):
     default_output_processor = TakeFirst()
 
 
+def removeStr(value):
+    return re.sub('经验', '', value)
+
+
 class Job51PositionItem(scrapy.Item):
     # 51job city item
     city_name = scrapy.Field()
@@ -302,13 +306,20 @@ class Job51PositionItem(scrapy.Item):
     company_md5 = scrapy.Field(
         input_processor=MapCompose(md5),
     )
-    work_year = scrapy.Field()
+    work_year = scrapy.Field(
+        input_processor=MapCompose(removeStr),
+    )
     education = scrapy.Field()
     recruit_num = scrapy.Field()
     publish_time = scrapy.Field()
     language = scrapy.Field()
-    position_labels = scrapy.Field()
-    advantage = scrapy.Field()
+    industry = scrapy.Field()
+    position_labels = scrapy.Field(
+        output_processor=Join(",")
+    )
+    advantage = scrapy.Field(
+        output_processor=Join(",")
+    )
     content = scrapy.Field()
     location = scrapy.Field()
     phone_num = scrapy.Field()
@@ -318,7 +329,7 @@ class Job51PositionItem(scrapy.Item):
         input_processor=MapCompose(md5),
     )
 
-    def get_company_insert_sql(self):
+    def get_51Job_city_insert_sql(self):
 
         insert_sql = """
             insert into 51job_city(
@@ -332,7 +343,7 @@ class Job51PositionItem(scrapy.Item):
         params = (self['city_name'], self['city_code'], 1, int(time.time()))
         return insert_sql, params
 
-    def get_position_insert_sql(self):
+    def get_51Job_position_insert_sql(self):
 
         insert_sql = """
             insert into 51job_position(
@@ -346,6 +357,7 @@ class Job51PositionItem(scrapy.Item):
             recruit_num,
             publish_time,
             language,
+            industry,
             position_labels,
             advantage,
             content,
@@ -356,7 +368,7 @@ class Job51PositionItem(scrapy.Item):
             url_md5,
             created_at
             ) 
-            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
         """
         params = (self['name'],
                   self['city_name'],
@@ -368,8 +380,10 @@ class Job51PositionItem(scrapy.Item):
                   self['recruit_num'],
                   self['publish_time'],
                   self['language'],
+                  self['industry'],
                   self['position_labels'],
                   self['advantage'],
+                  self['content'],
                   self['location'],
                   self['phone_num'],
                   self['email'],
@@ -384,42 +398,42 @@ class Job51CompanyItem(scrapy.Item):
     company_md5 = scrapy.Field(
         input_processor=MapCompose(md5),
     )
-    name = scrapy.Field()
+    full_name = scrapy.Field()
     size = scrapy.Field()
-    nature = scrapy.Field()
+    company_nature = scrapy.Field()
     industry = scrapy.Field()
-    addr = scrapy.Field(
+    address = scrapy.Field(
         input_processor=MapCompose(RemoveBlankCharacter),
     )
-    url = scrapy.Field()
+    company_url = scrapy.Field()
     post_code = scrapy.Field()
     company_url = scrapy.Field()
 
-    def get_zhilian_company_insert_sql(self):
+    def get_51Job_company_insert_sql(self):
         insert_sql = """
-            insert into zhilian_company(
+            insert into 51job_company(
             company_md5,
-            name,
+            full_name,
             size,
-            nature,
+            company_nature,
             industry,
-            addr,
+            address,
+            company_url,
             postcode,
             num,
-            url,
             created_at
             ) 
             values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
         """
         params = (
         self['company_md5'],
-        self['name'],
+        self['full_name'],
         self['size'],
-        self['nature'],
+        self['company_nature'],
         self['industry'],
-        self['addr'],
-        self['postcode'],
-        self['num'],
-        self['url'],
+        self['address'],
+        self['company_url'],
+        self['post_code'],
+        1,
         int(time.time()))
         return insert_sql, params

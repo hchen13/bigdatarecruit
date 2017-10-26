@@ -126,7 +126,3 @@ class JsPageMiddleware(object):
                     spider.browser.refresh()
                 # 不经过downloader 直接返回结果
                 return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding="utf-8")
-
-        elif spider.name == 'job51':
-            # 51job进入地区搜索页面
-            url = request.url
