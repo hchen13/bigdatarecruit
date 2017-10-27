@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
 --
--- Host: 127.0.0.1    Database: spider
+-- Host: 101.200.39.39    Database: spider
 -- ------------------------------------------------------
--- Server version	5.7.19
+-- Server version	5.5.57-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -29,7 +29,7 @@ CREATE TABLE `configure` (
   `param_value` varchar(45) DEFAULT NULL COMMENT '参数的值',
   `Remarks` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='爬虫的有关配置';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='爬虫的有关配置';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `configure` (
 
 LOCK TABLES `configure` WRITE;
 /*!40000 ALTER TABLE `configure` DISABLE KEYS */;
-INSERT INTO `configure` VALUES (1,'zhilian','full_city_status','1','智联抓取模式 1.全部城市全部页面 2.指定爬取城市 3.全部城市最新未录取职位'),(2,'zhilian','default_city','chengdu','智联抓取城市 在2模式下的指定城市');
+INSERT INTO `configure` VALUES (1,'zhilian','full_city_status','1','智联抓取模式 1.全部城市全部页面 2.指定爬取城市 3.全部城市最新未录取职位'),(2,'zhilian','default_city','chengdu','智联抓取城市 在2模式下的指定城市'),(3,'job51','catch_type','3','51job  1、当天数据 2、全站数据 3、指定城市'),(4,'job51','default_city','成都','51job 指定抓取城市');
 /*!40000 ALTER TABLE `configure` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-20 17:17:57
+-- Dump completed on 2017-10-27 16:27:10
