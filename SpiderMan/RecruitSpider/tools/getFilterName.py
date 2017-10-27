@@ -61,8 +61,8 @@ def getZhilianPositionUrlMd5():
     return res_md5
 
 # 获取爬虫配置
-def getConfigureValue(key_name):
-    sql_str = "SELECT param_value FROM spider.configure where param_name = '%s'" % key_name
+def getConfigureValue(spider_name, key_name):
+    sql_str = "SELECT param_value FROM spider.configure where spider = '%s' and param_name = '%s'" % (spider_name, key_name)
     res = sqlExecute(sql_str)
     return res[0]
 

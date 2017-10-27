@@ -3,6 +3,10 @@ import scrapy
 from scrapy.http import Request
 import re
 from RecruitSpider.items import Job51ItemLoader, Job51CompanyItem, Job51PositionItem
+import time
+from tools.getFilterName import getConfigureValue
+import pinyin
+from urllib import parse as ps
 
 
 class Job51Spider(scrapy.Spider):
@@ -11,6 +15,7 @@ class Job51Spider(scrapy.Spider):
     start_urls = ['http://search.51job.com/']
 
     custom_settings = {
+        'CONCURRENT_REQUESTS': 300,
         'ITEM_PIPELINES': {
             'RecruitSpider.pipelines.Job51SpiderPipeline': 300,
         },
@@ -28,20 +33,33 @@ class Job51Spider(scrapy.Spider):
     #     "Accept-Language": "zh-CN,zh;q=0.8,en;q=0.6"
     # }
 
+    # 爬取模式 1，当天数据 2，全站爬取 3、指定城市
+    catch_type = getConfigureValue('job51', 'catch_type')
+    default_city_name_arr = getConfigureValue('job51', 'default_city').split(',')
+    default_city_pinyin_arr = [pinyin.get(x, format='strip') for x in default_city_name_arr]
+    if 'zhongqing' in default_city_pinyin_arr:
+        default_city_pinyin_arr.remove('zhongqing')
+        default_city_pinyin_arr.append('chongqing')
     city_total_num = 0
     city_num = 0
     def parse(self, response):
-        city_obj_arr = response.css(".pcon span")
-        self.city_total_num = len(city_obj_arr)
-        for node in city_obj_arr:
-            self.city_num += 1
-            city_url = node.css("a::attr(href)").extract_first()
-            city_name = node.css("a::text").extract_first()
-            yield Request(url=city_url, meta={'city_name': city_name}, callback=self.findCityPositionList)
+        if self.catch_type == '3':
+            self.city_total_num = len(self.default_city_name_arr)
+            for key,item in enumerate(self.default_city_pinyin_arr):
+                yield Request(url=ps.urljoin("http://www.51job.com",item), meta={'city_name': self.default_city_name_arr[key]}, callback=self.findCityPositionList)
+        else:
+            city_obj_arr = response.css(".pcon span")
+            self.city_total_num = len(city_obj_arr)
+            for node in city_obj_arr:
+                city_url = node.css("a::attr(href)").extract_first()
+                city_name = node.css("a::text").extract_first()
+                yield Request(url=city_url, meta={'city_name': city_name}, callback=self.findCityPositionList)
 
     # 获取城市代码
     def findCityPositionList(self, response):
-        print(str(self.city_num) + '/' + str(self.city_total_num))
+        self.city_num += 1
+        # 进度显示
+        # print(response.meta.get('city_name') + str(self.city_num) + '/' + str(self.city_total_num))
         p = re.compile(r'http://search.51job.com/list/(\d+),.*\"')
         city_code = p.findall(response.text)[2]
         position_list_url = "http://search.51job.com/list/" + city_code + ",000000,0000,00,9,99,%2520,2,1.html?lang=c&stype=&postchannel=0000&workyear=99&cotype=99&degreefrom=99&jobterm=99&companysize=99&providesalary=99&lonlat=0%2C0&radius=-1&ord_field=0&confirmdate=9&fromType=&dibiaoid=0&address=&line=&specialarea=00&from=&welfare="
@@ -49,8 +67,10 @@ class Job51Spider(scrapy.Spider):
 
     # 职位列表页
     def positionList(self, response):
-        n = response.meta.get('n') + 1
-        print(response.meta.get('city_name') + ' 第' + str(n) + '页')
+
+        # 进度显示
+        # print( '***********' + response.meta.get('city_name') + ' 第' + str(response.meta.get('n') + 1) + '页')
+
         position_arr = response.css(".dw_table div[class='el']")
         for item in position_arr:
             position_name = item.xpath("p/span/a/@title").extract_first()
@@ -59,7 +79,7 @@ class Job51Spider(scrapy.Spider):
             company_url = item.xpath("span[@class='t2']/a/@href").extract_first()
             district = item.xpath("span[@class='t3']/text()").extract_first()
             salary = item.xpath("span[@class='t4']/text()").extract_first()
-            publish_time = item.xpath("span[@class='t5']/text()").extract_first()
+            publish_time = time.strftime('%Y', time.localtime())+ '-' + item.xpath("span[@class='t5']/text()").extract_first()
             param_diliver = {
                 'city_code': response.meta.get('city_code'),
                 'city_name': response.meta.get('city_name'),
@@ -69,13 +89,19 @@ class Job51Spider(scrapy.Spider):
                 'salary': salary,
                 'publish_time': publish_time
             }
-            yield Request(url=position_url, meta=param_diliver, callback=self.positionDetail)
-            yield Request(url=company_url, meta=param_diliver, callback=self.companyDetail)
+            # 1,爬取当天数据 2，全站爬取
+            if self.catch_type == 1:
+                if publish_time == time.strftime('%Y-%m-%d', time.localtime()):
+                    yield Request(url=position_url, meta=param_diliver, callback=self.positionDetail)
+                    yield Request(url=company_url, meta=param_diliver, callback=self.companyDetail)
+            else:
+                yield Request(url=position_url, meta=param_diliver, callback=self.positionDetail)
+                yield Request(url=company_url, meta=param_diliver, callback=self.companyDetail)
 
         # 下一页
         next_url = response.css('.dw_table .dw_page li.bk:last-child a::attr(href)').extract_first()
         if next_url:
-            yield Request(url=next_url, meta={'city_name': response.meta.get('city_name'), 'city_code': response.meta.get('city_code'), 'n':n}, callback=self.positionList)
+            yield Request(url=next_url, meta={'city_name': response.meta.get('city_name'), 'city_code': response.meta.get('city_code'), 'n': (response.meta.get('n') + 1)}, callback=self.positionList)
 
     def positionDetail(self, response):
         city_name = response.meta.get('city_name')
@@ -90,7 +116,7 @@ class Job51Spider(scrapy.Spider):
         language = label_second[0] if label_second and len(label_second) != 1 else 'NULL'
 
         company_label = re.sub(r"\s+", '', str(response.css(".cn p:last-child::text").extract_first())).split('|')
-        company_label = company_label[2] if len(company_label) > 2 else company_label[1]
+        company_label = company_label[2] if len(company_label) == 3 else (company_label[1] if len(company_label) == 2 else '')
         labels_1 = label_second[1] if label_second and len(label_second) > 1 else ''
         position_labels = company_label + ',' + labels_1
         position_labels = position_labels.split(',')
@@ -118,7 +144,7 @@ class Job51Spider(scrapy.Spider):
         item_loader.add_value('advantage', advantage if advantage else 'NULL')
         item_loader.add_value('content', response.css(".tBorderTop_box:nth-child(2)").extract_first().replace(
             response.css(".share").extract_first(), ''))
-        location = re.sub('\t', '', str(response.css(".tBorderTop_box:nth-child(3) p::text").extract()))
+        location = re.sub('\s', '', str(''.join(response.css(".tBorderTop_box:nth-child(3) p::text").extract())))
         item_loader.add_value('location', location[1] if location else 'NULL')
 
         # 获取电话和email

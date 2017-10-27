@@ -291,7 +291,7 @@ class Job51ItemLoader(ItemLoader):
 
 
 def removeStr(value):
-    return re.sub('经验', '', value)
+    return re.sub('工作|经验', '', value)
 
 
 class Job51PositionItem(scrapy.Item):

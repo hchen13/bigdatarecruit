@@ -44,9 +44,9 @@ class ZhilianSpider(scrapy.Spider):
 
     # ******************************************抓取参数配置***********************************************
     # 全站抓取标记 1.全部城市全部页面 2.指定爬取城市 3.全部城市最新未录取职位
-    full_city_status = int(getConfigureValue('full_city_status'))
+    full_city_status = int(getConfigureValue('zhilian', 'full_city_status'))
     # 该数组为空时默认第一个城市为成都
-    default_city = getConfigureValue('default_city').split(',')
+    default_city = getConfigureValue('zhilian','default_city').split(',')
 
     # 当前抓取城市数量
     n = 0
