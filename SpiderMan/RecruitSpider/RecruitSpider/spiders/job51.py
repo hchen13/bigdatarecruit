@@ -145,16 +145,16 @@ class Job51Spider(scrapy.Spider):
         item_loader.add_value('content', response.css(".tBorderTop_box:nth-child(2)").extract_first().replace(
             response.css(".share").extract_first(), ''))
         location = re.sub('\s', '', str(''.join(response.css(".tBorderTop_box:nth-child(3) p::text").extract())))
-        item_loader.add_value('location', location[1] if location else 'NULL')
+        item_loader.add_value('location', location if location else 'NULL')
 
         # 获取电话和email
         email_regex = re.compile(r"[a-zA-Z0-9]+[\_]*[a-zA-Z0-9]+[@|#][a-zA-Z0-9]+\.[a-zA-Z0-9]+[[\.]*[a-zA-Z0-9]*]*")
-        phone_regex = re.compile(r"[\d]{3,8}-[\d]{4,11}[-\d+]*")
+        phone_regex = re.compile(r"[\d]{3,8}-[\d]{5,11}[-\d+]*")
         telephone_regex = re.compile(r"[\d]{11}")
-        email = list(set(email_regex.findall(','.join(response.css(".tBorderTop_box").extract()))))
+        email = list(set(email_regex.findall(','.join(response.css(".tCompany_main").extract()))))
         phone_num = list(set(
-            phone_regex.findall(','.join(response.css(".tBorderTop_box").extract())) + telephone_regex.findall(
-                ','.join(response.css(".tBorderTop_box").extract()))))
+            phone_regex.findall(','.join(response.css(".tCompany_main").extract())) + telephone_regex.findall(
+                ','.join(response.css(".tCompany_main").extract()))))
 
         item_loader.add_value('email', email if email else 'NULL')
         item_loader.add_value('phone_num', phone_num if phone_num else 'NULL')
