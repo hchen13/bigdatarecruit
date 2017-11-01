@@ -167,23 +167,24 @@ class Job51Spider(scrapy.Spider):
         item_loader = Job51ItemLoader(item=Job51CompanyItem(), response=response)
         item_loader.add_value('company_md5', response.meta.get('company_name'))
         item_loader.add_value('full_name', response.meta.get('company_name'))
-        labels_part = re.sub(r'\s+', '', str(response.css(".tHeader.tHCop .in p::text").extract_first())).split('|')
-        size = labels_part[1] if len(labels_part) > 2 else 'NULL'
-        industry = labels_part[2] if len(labels_part) > 2 else labels_part[1]
+        if response.css(".tHeader.tHCop .in p::text").extract_first():
+            labels_part = re.sub(r'\s+', '', str(response.css(".tHeader.tHCop .in p::text").extract_first())).split('|')
+            size = labels_part[1] if len(labels_part) > 2 else 'NULL'
+            industry = labels_part[2] if len(labels_part) > 2 else labels_part[1]
 
-        item_loader.add_value('size', size)
-        item_loader.add_value('company_nature', labels_part[0])
-        item_loader.add_value('industry', industry)
+            item_loader.add_value('size', size)
+            item_loader.add_value('company_nature', labels_part[0])
+            item_loader.add_value('industry', industry)
 
-        info_part = re.sub('\s+', '', ''.join(str(response.css('.tBorderTop_box.bmsg .inbox p::text').extract())))
-        res = re.match("(.*?)\(邮编：(.*)\)", info_part)
-        if not res and info_part:
-            address = info_part
-        else:
-            address = res.group(1)
-        item_loader.add_value('address', address)
-        item_loader.add_value('post_code', res.group(2) if res else 'NULL')
-        item_loader.add_value('company_url', response.url)
-        job51_item = item_loader.load_item()
-        yield job51_item
+            info_part = re.sub('\s+', '', ''.join(str(response.css('.tBorderTop_box.bmsg .inbox p::text').extract())))
+            res = re.match("(.*?)\(邮编：(.*)\)", info_part)
+            if not res and info_part:
+                address = info_part
+            else:
+                address = res.group(1)
+            item_loader.add_value('address', address)
+            item_loader.add_value('post_code', res.group(2) if res else 'NULL')
+            item_loader.add_value('company_url', response.url)
+            job51_item = item_loader.load_item()
+            yield job51_item
 
