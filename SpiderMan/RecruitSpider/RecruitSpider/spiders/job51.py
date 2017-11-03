@@ -7,18 +7,21 @@ import time
 from tools.getFilterName import getConfigureValue
 import pinyin
 from urllib import parse as ps
+from scrapy_redis.spiders import RedisSpider
+from scrapy_redis.connection import SETTINGS_PARAMS_MAP
 
-
-class Job51Spider(scrapy.Spider):
+class Job51Spider(RedisSpider):
     name = 'job51'
     allowed_domains = ['jobs.51job.com', 'www.51job.com', 'search.51job.com']
-    start_urls = ['http://search.51job.com/']
+    # start_urls = ['http://search.51job.com/']
 
     custom_settings = {
         'CONCURRENT_REQUESTS': 300,
         'ITEM_PIPELINES': {
             'RecruitSpider.pipelines.Job51SpiderPipeline': 300,
         },
+        'SCHEDULER': "scrapy_redis.scheduler.Scheduler",
+        'DUPEFILTER_CLASS': "scrapy_redis.dupefilter.RFPDupeFilter"
     }
 
     # headers = {
