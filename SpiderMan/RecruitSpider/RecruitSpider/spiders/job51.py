@@ -8,7 +8,6 @@ from tools.getFilterName import getConfigureValue
 import pinyin
 from urllib import parse as ps
 from scrapy_redis.spiders import RedisSpider
-from scrapy_redis.connection import SETTINGS_PARAMS_MAP
 
 class Job51Spider(RedisSpider):
     name = 'job51'
@@ -21,8 +20,11 @@ class Job51Spider(RedisSpider):
             'RecruitSpider.pipelines.Job51SpiderPipeline': 300,
         },
         'SCHEDULER': "scrapy_redis.scheduler.Scheduler",
-        'DUPEFILTER_CLASS': "scrapy_redis.dupefilter.RFPDupeFilter"
+        'DUPEFILTER_CLASS': "scrapy_redis.dupefilter.RFPDupeFilter",
+        'REDIS_HOST': 'localhost',
+        'REDIS_PORT': '6379'
     }
+
 
     # headers = {
     #     'Host': 'http://www.51job.com/',
