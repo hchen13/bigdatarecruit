@@ -8,11 +8,13 @@ from tools.getFilterName import getConfigureValue
 import pinyin
 from urllib import parse as ps
 from scrapy_redis.spiders import RedisSpider
+from RecruitSpider.helper import redisAddValue
 
 class Job51Spider(RedisSpider):
     name = 'job51'
     allowed_domains = ['jobs.51job.com', 'www.51job.com', 'search.51job.com']
     # start_urls = ['http://search.51job.com/']
+    redisAddValue(2, 'job51:start_urls', 'http://search.51job.com')
 
     custom_settings = {
         'CONCURRENT_REQUESTS': 300,
@@ -47,6 +49,7 @@ class Job51Spider(RedisSpider):
         default_city_pinyin_arr.append('chongqing')
     city_total_num = 0
     city_num = 0
+
     def parse(self, response):
         if self.catch_type == '3':
             self.city_total_num = len(self.default_city_name_arr)
@@ -175,7 +178,7 @@ class Job51Spider(RedisSpider):
         if response.css(".tHeader.tHCop .in p::text").extract_first():
             labels_part = re.sub(r'\s+', '', str(response.css(".tHeader.tHCop .in p::text").extract_first())).split('|')
             size = labels_part[1] if len(labels_part) > 2 else 'NULL'
-            industry = labels_part[2] if len(labels_part) > 2 else labels_part[1]
+            industry = labels_part[2] if len(labels_part) > 2 else (labels_part[1] if len(labels_part) > 1 else labels_part)
 
             item_loader.add_value('size', size)
             item_loader.add_value('company_nature', labels_part[0])
