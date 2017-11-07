@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `spider`.`lagou_recruit_day` (
   `url` VARCHAR(255) NULL DEFAULT NULL COMMENT '网页链接',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `position_id_UNIQUE` (`position_id` ASC))
-ENGINE = InnoDB
+ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
 
 

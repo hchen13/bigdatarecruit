@@ -10,7 +10,8 @@ SpiderMan是招聘大数据的爬虫部分。抓取拉勾网，51job，智联招
 >* RecruitSpider 	爬虫项目代码目录
 
 ### 安装第三方库
-	pip install scrapy pyvirtualdisplay fake-useragent selenium sqlalchemy requests pinyin
+	pip install scrapy pyvirtualdisplay fake-useragent selenium sqlalchemy requests pinyin scrapy-redis redis
+	系统需要安装redis
 	系统安装 Xvfb虚拟显示环境
 		* Ubuntu apt install Xvfb
 		* Centos yum install Xvfb

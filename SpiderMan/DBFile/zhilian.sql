@@ -98,8 +98,12 @@ CREATE TABLE `zhilian_position` (
   `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_md5_UNIQUE` (`unique_md5`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='智联招聘职位表';
+  UNIQUE KEY `unique_md5_UNIQUE` (`unique_md5`),
+  KEY `index_position_name` (`position_name`),
+  KEY `index_city` (`city`),
+  KEY `index_position_type` (`position_type`),
+  FULLTEXT KEY `ft_position` (`position_name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='智联招聘职位表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

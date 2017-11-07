@@ -85,8 +85,11 @@ CREATE TABLE `51job_position` (
   `url_md5` varchar(255) DEFAULT NULL COMMENT 'url的md5值',
   `company_md5` varchar(100) DEFAULT NULL COMMENT '公司名称的md5值',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `url_md5_UNIQUE` (`url_md5`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='51job职位详情';
+  UNIQUE KEY `url_md5_UNIQUE` (`url_md5`),
+  KEY `index_city` (`city`),
+  FULLTEXT KEY `ft_name` (`name`),
+  FULLTEXT KEY `ft_pn` (`name`,`position_labels`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='51job职位详情';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
