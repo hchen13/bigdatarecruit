@@ -6,7 +6,7 @@ from scrapy.utils.request import request_fingerprint
 
 from . import defaults
 from .connection import get_redis_from_settings
-from tools.py_bloomfilter import conn, PyBloomFilter
+from tools.py_bloomfilter import PyBloomFilter
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ class RFPDupeFilter(BaseDupeFilter):
         self.debug = debug
         self.logdupes = True
 
-        self.bf = PyBloomFilter(conn=conn, key=key)
+        self.bf = PyBloomFilter(host='127.0.0.1', port=6379, key=key)
 
     @classmethod
     def from_settings(cls, settings):

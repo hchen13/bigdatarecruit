@@ -16,7 +16,9 @@ class PyBloomFilter():
     #error_rate表示错误率
     #conn表示redis的连接客户端
     #key表示在redis中的键的名字前缀
-    def __init__(self, capacity=1000000000, error_rate=0.00000001, conn=None, key='BloomFilter'):
+    def __init__(self, capacity=1000000000, error_rate=0.00000001, host=None, port=None, db=0, key='BloomFilter'):
+        pool = redis.ConnectionPool(host=host, port=port, db=db)
+        conn = redis.StrictRedis(connection_pool=pool)
         self.m = math.ceil(capacity*math.log2(math.e)*math.log2(1/error_rate))      #需要的总bit位数
         self.k = math.ceil(math.log1p(2)*self.m/capacity)                           #需要最少的hash次数
         self.mem = math.ceil(self.m/8/1024/1024)                                    #需要的多少M内存
@@ -53,12 +55,10 @@ class PyBloomFilter():
         return hashs
 
 
-pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)
-conn = redis.StrictRedis(connection_pool=pool)
 
 if __name__ == "__main__":
     start = time.time()
-    bf = PyBloomFilter(conn=conn)
+    bf = PyBloomFilter(host='127.0.0.1', port=6379)
     bf.add('www.jobbole.com')
     bf.add('www.zhihu.com')
     print(bf.is_exist('www.zhihu.com'))

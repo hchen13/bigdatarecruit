@@ -20,9 +20,9 @@ def md5(src):
 # @return boolean
 # @author WuXiaokun
 # @DateTime 2017-11-07
-def redisAddValue(type, key, value):
+def redisAddValue(type, key, value, host='127.0.0.1', port=6379):
     import redis
-    r = redis.Redis(host="127.0.0.1",port="6379")
+    r = redis.Redis(host=host,port=port)
     r.flushall()
     if type == 1:
         res = r.set(key, value)

@@ -14,7 +14,6 @@ class Job51Spider(RedisSpider):
     name = 'job51'
     allowed_domains = ['jobs.51job.com', 'www.51job.com', 'search.51job.com']
     # start_urls = ['http://search.51job.com/']
-    redisAddValue(2, 'job51:start_urls', 'http://search.51job.com')
 
     custom_settings = {
         'CONCURRENT_REQUESTS': 300,
@@ -24,9 +23,10 @@ class Job51Spider(RedisSpider):
         'SCHEDULER': "scrapy_redis.scheduler.Scheduler",
         'DUPEFILTER_CLASS': "scrapy_redis.dupefilter.RFPDupeFilter",
         'REDIS_HOST': '127.0.0.1',
-        'REDIS_PORT': '6379'
+        'REDIS_PORT': 6379
     }
 
+    redisAddValue(2, 'job51:start_urls', 'http://search.51job.com', host=custom_settings['REDIS_HOST'], port=custom_settings['REDIS_PORT'])
 
     # headers = {
     #     'Host': 'http://www.51job.com/',
@@ -182,7 +182,7 @@ class Job51Spider(RedisSpider):
 
             item_loader.add_value('size', size)
             item_loader.add_value('company_nature', labels_part[0])
-            item_loader.add_value('industry', industry)
+            item_loader.add_value('industry', industry if industry else 'NULL')
 
             info_part = re.sub('\s+', '', ''.join(str(response.css('.tBorderTop_box.bmsg .inbox p::text').extract())))
             res = re.match("(.*?)\(邮编：(.*)\)", info_part)
