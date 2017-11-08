@@ -10,7 +10,7 @@ SpiderMan是招聘大数据的爬虫部分。抓取拉勾网，51job，智联招
 >* RecruitSpider 	爬虫项目代码目录
 
 ### 安装第三方库
-	pip install scrapy pyvirtualdisplay fake-useragent selenium sqlalchemy requests pinyin scrapy-redis redis
+	pip install scrapy pyvirtualdisplay fake-useragent selenium sqlalchemy requests pinyin redis mmh3
 	系统需要安装redis
 	系统安装 Xvfb虚拟显示环境
 		* Ubuntu apt install Xvfb
@@ -73,5 +73,13 @@ sudo chmod 0755 /usr/local/bin/selenium-server-standalone.jar
 >* 1、全部城市全部页面
 >* 2、指定爬取城市 （指定城市在default_city参数中增加，类型为城市名的pinyin）
 >* 3、全部城市最新未录取职位
+
+#### 51job （三种模式 配置字段为catch_type）
+>* 1、当天数据
+>* 2、全站数据
+>* 3、制定城市
+>* default_city 	指定城市
+
+ps:51job是一个分布式爬虫，利用redis做任务分发机制，其中去重算法是bloomfilter
 
 
