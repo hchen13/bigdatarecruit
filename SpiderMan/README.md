@@ -81,5 +81,11 @@ sudo chmod 0755 /usr/local/bin/selenium-server-standalone.jar
 >* default_city 	指定城市
 
 ps:51job是一个分布式爬虫，利用redis做任务分发机制，其中去重算法是bloomfilter
+### redis配置
+遇到WARNING you have Transparent Huge Pages (THP) support enabled in yourkernel时行
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo 511 > /proc/sys/net/core/somaxconn. 
+永久解决需将上述两个命令写在/etc/rc.local中。
+在/etc/sysctl.conf增加vm.overcommit_memory=1
 
 
