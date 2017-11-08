@@ -23,7 +23,7 @@ class Job51Spider(RedisSpider):
         },
         'SCHEDULER': "scrapy_redis.scheduler.Scheduler",
         'DUPEFILTER_CLASS': "scrapy_redis.dupefilter.RFPDupeFilter",
-        'REDIS_HOST': 'localhost',
+        'REDIS_HOST': '127.0.0.1',
         'REDIS_PORT': '6379'
     }
 
@@ -127,7 +127,7 @@ class Job51Spider(RedisSpider):
         company_label = company_label[2] if len(company_label) == 3 else (company_label[1] if len(company_label) == 2 else '')
         labels_1 = label_second[1] if label_second and len(label_second) > 1 else ''
         position_labels = company_label + ',' + labels_1
-        position_labels = position_labels.split(',') if position_labels.split(',') else 'NULL'
+        position_labels = position_labels.split(',')
 
         item_loader = Job51ItemLoader(item=Job51PositionItem(), response=response)
         item_loader.add_value('city_code', response.meta.get('city_code'))
@@ -144,7 +144,7 @@ class Job51Spider(RedisSpider):
         item_loader.add_value('recruit_num', recruit_num)
         item_loader.add_value('publish_time', response.meta.get('publish_time'))
         item_loader.add_value('language', language)
-        item_loader.add_value('industry', position_labels)
+        item_loader.add_value('industry', position_labels if len(position_labels) > 0 else 'NULL')
         # 数组需要二次处理
         item_loader.add_css('position_labels', '.el::text')
         # 数组需要二次处理

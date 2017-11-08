@@ -23,6 +23,7 @@ def md5(src):
 def redisAddValue(type, key, value):
     import redis
     r = redis.Redis(host="127.0.0.1",port="6379")
+    r.flushall()
     if type == 1:
         res = r.set(key, value)
     elif type == 2:
