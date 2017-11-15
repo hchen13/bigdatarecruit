@@ -98,17 +98,20 @@ class Job51Spider(RedisSpider):
                 'publish_time': publish_time
             }
             # 1,爬取当天数据 2，全站爬取
+            status = 1
             if self.catch_type == 1:
                 if publish_time == time.strftime('%Y-%m-%d', time.localtime()):
                     yield Request(url=position_url, meta=param_diliver, callback=self.positionDetail)
                     yield Request(url=company_url, meta=param_diliver, callback=self.companyDetail)
+                else:
+                    status = 0
             else:
                 yield Request(url=position_url, meta=param_diliver, callback=self.positionDetail)
                 yield Request(url=company_url, meta=param_diliver, callback=self.companyDetail)
 
         # 下一页
         next_url = response.css('.dw_table .dw_page li.bk:last-child a::attr(href)').extract_first()
-        if next_url:
+        if next_url and status:
             yield Request(url=next_url, meta={'city_name': response.meta.get('city_name'), 'city_code': response.meta.get('city_code'), 'n': (response.meta.get('n') + 1)}, callback=self.positionList)
 
     def positionDetail(self, response):
