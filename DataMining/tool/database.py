@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from ..settings import *
+from settings import *
 
 def database_exec(sql_str):
     engine = create_engine('mysql://{user}:{password}@{host}:3306/{dbname}'.format(**mysql_setting), echo=False)
