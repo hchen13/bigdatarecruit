@@ -1,0 +1,101 @@
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 45px;
+  float: left;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.App-header {
+  background-color: #222;
+  /*opacity:0.5;*/
+  height: 50px;
+  padding: 3px;
+  color: white;
+}
+
+.App-title {
+  font-size: 2em;
+  margin-top: -8px;
+  color: white;
+}
+
+.Content {
+  height: 1500px;
+  background: white;
+}
+
+.Footer {
+  font-size: 0.8em;
+  text-align: center;
+  color: silver;
+  background: #222;
+  height: 160px;
+  padding-top: 20px;
+}
+
+.Footer p {
+  margin-top: 10px;
+}
+
+.video_div {
+  opacity: 1;
+  overflow: hidden;
+}
+
+#xpc_video {
+  width: 100%;
+  visibility: visible;
+  z-index: -1;
+}
+
+.bn_pic {
+  width: 20px;
+  margin-right: 3px;
+}
+
+.icon-link {
+  margin-right: 10px;
+}
+
+.icon-img {
+  width: 20px;
+}
+
+.video-div {
+  position: relative;
+}
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 160px;
+  line-height: 160px;
+  background: #364d79;
+  overflow: hidden;
+}
+
+.ant-carousel .slick-slide h1 {
+  color: #fff;
+}
+
+.video-part {
+  width: 100%;
+  position: absolute;
+  z-index: 5;
+}
+
+.cover {
+  position: absolute;
+  top: 200px;
+  left: 35%;
+  z-index: 10;
+}
+
+.cover-word {
+  font-size: 5em;
+  color: white;
+  opacity: 0.8;
+}
