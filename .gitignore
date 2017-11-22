@@ -112,3 +112,4 @@ ENV/
 /SpiderMan/RecruitSpider/zhilian_errLog.txt
 /SpiderMan/RecruitSpider/.DS_Store
 SpiderMan/RecruitSpider/51job_errLog.txt
+*.pickle
