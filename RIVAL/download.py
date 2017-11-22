@@ -66,7 +66,7 @@ def download_batches(target='lagou', page_size=100):
 			'lagou': LagouJob
 		}[target]
 	except KeyError as e:
-		print('目标Model不存在, 跳过...\n')
+		print('目标Model: {}不存在, 跳过...\n'.format(target))
 		return None
 
 	start, stop = 0, page_size
@@ -114,12 +114,27 @@ def save(words):
 
 
 def load(file_name):
-	with open(file_name, 'rb') as fin:
+	if file_name.startswith(DATA_DIR):
+		file_path = file_name
+	else:
+		file_path = os.path.join(DATA_DIR, file_name)
+	with open(file_path, 'rb') as fin:
 		return pickle.load(fin)
 
 
 def list_save_files():
-	return os.listdir(DATA_DIR)
+
+	def keyfunc(item):
+		match = re.search(r'^words(?P<idx>\d+).pickle', item)
+		return int(match.group('idx'))
+
+	file_list = list(filter(is_save_file, os.listdir(DATA_DIR)))
+	return sorted(file_list, key=keyfunc)
+
+
+def is_save_file(file_name):
+	result = file_name.startswith('words') and file_name.endswith('.pickle')
+	return result
 
 
 def setup():
@@ -156,5 +171,4 @@ def main():
 
 
 if __name__ == '__main__':
-	setup()
 	main()
