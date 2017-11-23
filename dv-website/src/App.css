@@ -14,7 +14,20 @@
   /*opacity:0.5;*/
   height: 50px;
   padding: 3px;
-  color: white;
+}
+
+.App-header h2{
+  margin-top: -6px;
+  color: gray;
+}
+
+.App-header a{
+  color: gray;
+  font-size: 1.5em;
+}
+
+.label-1 {
+  margin-top: -6px;
 }
 
 .App-title {
@@ -24,7 +37,7 @@
 }
 
 .Content {
-  height: 1500px;
+  height: 2000px;
   background: white;
 }
 
@@ -41,16 +54,6 @@
   margin-top: 10px;
 }
 
-.video_div {
-  opacity: 1;
-  overflow: hidden;
-}
-
-#xpc_video {
-  width: 100%;
-  visibility: visible;
-  z-index: -1;
-}
 
 .bn_pic {
   width: 20px;
@@ -65,37 +68,9 @@
   width: 20px;
 }
 
-.video-div {
-  position: relative;
+* {
+  min-height: 0;
+  min-width: 0;
 }
 
-.ant-carousel .slick-slide {
-  text-align: center;
-  height: 160px;
-  line-height: 160px;
-  background: #364d79;
-  overflow: hidden;
-}
 
-.ant-carousel .slick-slide h1 {
-  color: #fff;
-}
-
-.video-part {
-  width: 100%;
-  position: absolute;
-  z-index: 5;
-}
-
-.cover {
-  position: absolute;
-  top: 200px;
-  left: 35%;
-  z-index: 10;
-}
-
-.cover-word {
-  font-size: 5em;
-  color: white;
-  opacity: 0.8;
-}

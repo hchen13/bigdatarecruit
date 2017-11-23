@@ -5744,7 +5744,7 @@ react-scripts@1.0.17:
   optionalDependencies:
     fsevents "1.1.2"
 
-react-slick@~0.15.4:
+react-slick@^0.15.4, react-slick@~0.15.4:
   version "0.15.4"
   resolved "http://registry.npm.taobao.org/react-slick/download/react-slick-0.15.4.tgz#6709c87b06e7640feeacc06711be42cc2066aabe"
   dependencies:

@@ -1,28 +1,80 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Layout, Row, Col, Carousel} from 'antd';
+import FirstPage from './FirstPage';
+
+import {Layout, Row, Col, Icon, Menu, Dropdown} from 'antd';
 const {Header, Content, Footer} = Layout
+
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">招聘大数据</a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">Word2Vec</a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">3rd menu item</a>
+    </Menu.Item>
+  </Menu>
+);
 
 class App extends Component {
   render() {
     return (
       <Layout className='Layout'>
         <Header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Minokun 数据站</h1>
+          <Row>
+            <Col span={6}>
+              <img src={logo} className="App-logo" alt="logo" />
+              <h1 className="App-title">Minokun 数据站</h1>
+            </Col>
+            <Col span={10}>
+              <Row>
+                <Col span={5} className='label-1'>
+                  <Dropdown overlay={menu}>
+                    <a className="ant-dropdown-link" href="#">
+                      AI 大数据 <Icon type="down" />
+                    </a>
+                  </Dropdown>
+                </Col>
+                <Col span={5}>
+                  <h2>最新动态</h2>
+                </Col>
+                <Col span={3}>
+                  <h2>相册</h2>
+                </Col>
+                <Col span={3}>
+                  <h2>博客</h2>
+                </Col>
+                <Col span={4}>
+                  <h2>技术支持</h2>
+                </Col>
+                <Col span={4}>
+                  <h2>关于我们</h2>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={8}>
+              <Row>
+                <Col span={12}>
+                </Col>
+                <Col span={5}>
+                  <h2><Icon type="github" />&nbsp;&nbsp;天气</h2>
+                </Col>
+                <Col span={3}>
+                  <h2>留言</h2>
+                </Col>
+                <Col span={3}>
+                  <h2>登陆&nbsp;</h2>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </Header>
         <Content className='Content'>
-          <div className='video-div'>
-            <div className='cover'>
-              <div><h1 className='cover-word'>从数据中发现真理</h1></div>
-              <div><h1 className='cover-word'>从真理中窥探未来</h1></div>
-              <div><h1 className='cover-word'>大数据 + AI = Future</h1></div>
-            </div>
-            <video className='video-part' src='//qiniu-video5.vmoviercdn.com/59f6a61b40879.mp4' autoplay='autoplay' loop='loop'>
-            </video>
-            
-          </div>
+          <FirstPage />
         </Content>
         <Footer className='Footer'>
           <Row>
