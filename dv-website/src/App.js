@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import FirstPage from './FirstPage';
+import RecruitBigData from './RecruitBigData';
+import { BrowserRouter, Route, Link } from 'react-router-dom'
 
 import {Layout, Row, Col, Icon, Menu, Dropdown} from 'antd';
 const {Header, Content, Footer} = Layout
@@ -9,7 +11,7 @@ const {Header, Content, Footer} = Layout
 const menu = (
   <Menu>
     <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">招聘大数据</a>
+      <a rel="noopener noreferrer" href="recruitBigData">招聘大数据</a>
     </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">Word2Vec</a>
@@ -23,6 +25,7 @@ const menu = (
 class App extends Component {
   render() {
     return (
+      <BrowserRouter>
       <Layout className='Layout'>
         <Header className="App-header">
           <Row>
@@ -30,19 +33,22 @@ class App extends Component {
               <img src={logo} className="App-logo" alt="logo" />
               <h1 className="App-title">Minokun 数据站</h1>
             </Col>
-            <Col span={10}>
+            <Col span={11}>
               <Row>
+                <Col span={2}>
+                  <h2><Link to='/'>首页</Link></h2>
+                </Col>
                 <Col span={5} className='label-1'>
                   <Dropdown overlay={menu}>
-                    <a className="ant-dropdown-link" href="#">
-                      AI 大数据 <Icon type="down" />
-                    </a>
+                    <Link className="ant-dropdown-link" to="recruitBigData">
+                      AI大数据 <Icon type="down" />
+                    </Link>
                   </Dropdown>
                 </Col>
-                <Col span={5}>
+                <Col span={4}>
                   <h2>最新动态</h2>
                 </Col>
-                <Col span={3}>
+                <Col span={2}>
                   <h2>相册</h2>
                 </Col>
                 <Col span={3}>
@@ -56,7 +62,7 @@ class App extends Component {
                 </Col>
               </Row>
             </Col>
-            <Col span={8}>
+            <Col span={7}>
               <Row>
                 <Col span={12}>
                 </Col>
@@ -74,7 +80,10 @@ class App extends Component {
           </Row>
         </Header>
         <Content className='Content'>
-          <FirstPage />
+            <div>
+              <Route exact path="/" component={FirstPage}/>
+              <Route path="/recruitBigData" component={RecruitBigData}/>
+            </div>
         </Content>
         <Footer className='Footer'>
           <Row>
@@ -98,6 +107,7 @@ class App extends Component {
           </Row>
         </Footer>
       </Layout>
+      </BrowserRouter>
     );
   }
 }

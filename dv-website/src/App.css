@@ -19,15 +19,17 @@
 .App-header h2{
   margin-top: -6px;
   color: gray;
+  font-size: 1.3em;
 }
 
 .App-header a{
   color: gray;
-  font-size: 1.5em;
+  font-size: 1em;
 }
 
 .label-1 {
   margin-top: -6px;
+  font-size: 1.3em;
 }
 
 .App-title {
@@ -37,7 +39,6 @@
 }
 
 .Content {
-  height: 2000px;
   background: white;
 }
 
@@ -73,4 +74,9 @@
   min-width: 0;
 }
 
-
+.pic_title {
+  height: 150px;
+  width: 100%;
+  background: url('./media/title.png') no-repeat;
+  background-size: 100% 100%;
+}

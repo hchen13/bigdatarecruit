@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './FirstPage.css';
 import { Carousel, Timeline, Icon, Row, Col, Card} from 'antd';
+import wxk from './media/wxk.png';
+import yxy from './media/yxy.png';
 
 class FirstPage extends Component {
 	render() {
@@ -9,9 +11,8 @@ class FirstPage extends Component {
 				<div className='video-div'>
 
 		            <div className='cover'>
-		              <div><h1 className='cover-word'>从数据中发现真理</h1></div>
-		              <div><h1 className='cover-word'>从真理中窥探未来</h1></div>
-		              <div><h1 className='cover-word'>大数据 + AI = Future</h1></div>
+		            	<h1>Minokun 数据站</h1>
+						<p>从数据中发现真理 从真理中窥探未来</p>
 		            </div>
 
 		            <video className='video-part' 
@@ -66,56 +67,56 @@ class FirstPage extends Component {
 		        </div>
 
 		        <Row className='time-line-div'>
-		        <Col span={6}>
-		        </Col>
-		        <Col span={12}>
+			        <Col span={6}>
+			        </Col>
+			        <Col span={12}>
 
-			        <div style={{background:'lavender', height:'100px'}}>
-			        </div>
-		        	<Row gutter={16} className='human-card'>
-		        		<Col span={8}>
-		        			<Card style={{ width: 240 }} bodyStyle={{ padding: 0 }}>
-							    <div className="custom-image">
-							      <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							    </div>
-							    <div className="custom-card">
-							      <h3>Europe Street beat</h3>
-							      <p>www.instagram.com</p>
-							    </div>
-							  </Card>
-		        		</Col>
-		        		<Col span={8}>
-		        			<Card style={{ width: 240 }} bodyStyle={{ padding: 0 }}>
-							    <div className="custom-image">
-							      <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							    </div>
-							    <div className="custom-card">
-							      <h3>Europe Street beat</h3>
-							      <p>www.instagram.com</p>
-							    </div>
-							  </Card>
-		        		</Col>
-		        		<Col span={8}>
-		        			<Card style={{ width: 240 }} bodyStyle={{ padding: 0 }}>
-							    <div className="custom-image">
-							      <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							    </div>
-							    <div className="custom-card">
-							      <h3>Europe Street beat</h3>
-							      <p>www.instagram.com</p>
-							    </div>
-							  </Card>
-		        		</Col>
-		        	</Row>
-					<Timeline className='time-line'>
-						<Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-						<Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-						<Timeline.Item dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />} color="red">Technical testing 2015-09-01</Timeline.Item>
-						<Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
-					</Timeline>
-				</Col>
-		        <Col span={6}>
-		        </Col>
+				        <div className='pic_title'>
+				        </div>
+
+			        	<Row type="flex" justify="space-around" className='human-card'>
+			        		<Col span={8}>
+			        			<Card style={{ width: 240 }} bodyStyle={{ padding: 0 }}>
+								    <div className="custom-image">
+								      <img alt="example" width="100%" src={wxk} />
+								    </div>
+								    <div className="custom-card">
+								      <h3><Icon type="user" />Minokun Wu</h3>
+								      <p> <Icon type="github" /> <a target="_blank" href="https://github.com/Minokun">https://github.com/Minokun</a></p>
+								      <p> <Icon type="star" /> MK数据站创始人</p>
+								      <p> <Icon type="star" /> 大数据分析师</p>
+								      <p> <Icon type="star" /> Python全栈工程师</p>
+								    </div>
+								  </Card>
+			        		</Col>
+			        		<Col span={8}>
+			        			<Card style={{ width: 240 }} bodyStyle={{ padding: 0 }}>
+								    <div className="custom-image">
+								      <img alt="example" width="100%" src={yxy} />
+								    </div>
+								    <div className="custom-card">
+								      <h3><Icon type="user" />Xander Ye</h3>
+								      <p> <Icon type="github" /> <a target="_blank" href="http://yeli.studio">http://yeli.studio</a></p>
+								      <p> <Icon type="star" /> 大数据运维工程师</p>
+								      <p> <Icon type="star" /> 产品孵化先驱</p>
+								      <p> <Icon type="star" /> Python全栈工程师</p>
+								    </div>
+								  </Card>
+			        		</Col>
+			        	</Row>
+
+						<Timeline className='time-line'>
+							<Timeline.Item dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />} color="red">2017-11-24 Minokun数据站 初版开发完成! </Timeline.Item>
+							<Timeline.Item>2017-11-18 Recruitment position recognition of machine learning model complete! </Timeline.Item>
+							<Timeline.Item>2017-11-01 大数据分析部分启动！ </Timeline.Item>
+							<Timeline.Item dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />} color="red">2017-10-08 Spider system complete! 并获取500万初始招聘数据 </Timeline.Item>
+							<Timeline.Item>2017-09-01 招聘大数据项目启动 </Timeline.Item>
+						</Timeline>
+
+					</Col>
+
+			        <Col span={6}>
+			        </Col>
 				</Row>
 		    </div>
 		);
