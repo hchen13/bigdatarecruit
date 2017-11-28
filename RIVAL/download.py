@@ -118,8 +118,12 @@ def load(file_name):
 		file_path = file_name
 	else:
 		file_path = os.path.join(DATA_DIR, file_name)
-	with open(file_path, 'rb') as fin:
-		return pickle.load(fin)
+	try:
+		with open(file_path, 'rb') as fin:
+			return pickle.load(fin)
+	except FileNotFoundError:
+		print("No such file: {}\n".format(file_path))
+		return None
 
 
 def list_save_files():

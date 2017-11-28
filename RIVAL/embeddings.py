@@ -8,9 +8,11 @@ import os
 import pickle
 
 from RIVAL import download
+from RIVAL.settings import DATA_DIR
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 VALIDATION_WORDS = ['C++', '数据库', '程序员', '金融', '人工智能', '设计']
+
 
 class SkipGram:
 	vocab_size = 6000
@@ -27,7 +29,7 @@ class SkipGram:
 		self.graph = graph
 
 	def build_graph(self, device='/cpu:0'):
-		print('Contructing computational graph: ')
+		print('Constructing computational graph: ')
 		with self.graph.as_default(), tf.device(device):
 			# inputs: source data for training
 			self.x = tf.placeholder(tf.int32, [None], 'input_layer')
@@ -39,15 +41,17 @@ class SkipGram:
 				name='embedding_lookup_table'
 			)
 			softmax_w = tf.Variable(
-				tf.truncated_normal([self.vocab_size, self.embedding_size],
-				                    stddev=1.0 / math.sqrt(self.embedding_size)),
+				tf.truncated_normal(
+					[self.vocab_size, self.embedding_size],
+					stddev=1.0 / math.sqrt(self.embedding_size)
+				),
 				name='softmax_weights'
 			)
 			softmax_b = tf.Variable(tf.zeros([self.vocab_size]), name='softmax_biases')
 
 			# operations
 			embed = tf.nn.embedding_lookup(embeddings, self.x, name='word_vectors')
-			loss = tf.nn.sampled_softmax_loss(
+			loss = self.loss_fn(
 				weights=softmax_w, biases=softmax_b, inputs=embed,
 				labels=self.y, num_sampled=self.n_sampled, num_classes=self.vocab_size
 			)
@@ -129,7 +133,8 @@ class SkipGram:
 		print("Verification complete\n")
 		return x, y
 
-	def gen_batches(self, batch_size, x, y):
+	@staticmethod
+	def gen_batches(batch_size, x, y):
 		print("Generating dataset batches...\n")
 		for i in range(0, len(x), batch_size):
 			end = i + batch_size
@@ -144,8 +149,11 @@ class SkipGram:
 				validation_embeddings = tf.nn.embedding_lookup(
 					self.final_embeddings, self.validations, name='validation_embeds'
 				)
-				self.similarity = tf.matmul(validation_embeddings, tf.transpose(self.final_embeddings),
-				                            name='similarity')
+				self.similarity = tf.matmul(
+					validation_embeddings,
+					tf.transpose(self.final_embeddings),
+					name='similarity'
+				)
 
 	def train(self, epochs=1, batch_size=128, eval_step=10000, max_iter=None, verbose=FULL):
 		print("Start training...")
@@ -193,7 +201,7 @@ class SkipGram:
 
 	def validate(self, similarity, top_k=5):
 		for i in range(len(self.validations)):
-			nearest = (-similarity[i, :]).argsort()[1:top_k+1]
+			nearest = (-similarity[i, :]).argsort()[1:top_k + 1]
 			log = "Nearest to [{}]: ".format(self.idx2word[self.validations[i]])
 			for k in range(top_k):
 				close_word = self.idx2word[nearest[k]]
@@ -231,6 +239,8 @@ def concatenate(files):
 	words = []
 	for i, file in enumerate(files):
 		w = download.load(file)
+		if w is None:
+			continue
 		words += w
 	print("Concatenation complete, {} words in total.\n".format(len(words)))
 	return words
@@ -238,6 +248,8 @@ def concatenate(files):
 
 def main(datafiles, save_path='.'):
 	words = concatenate(datafiles)
+	if not len(words):
+		return
 	engine = SkipGram()
 	engine.build_graph()
 	engine.feed(words, VALIDATION_WORDS)
@@ -246,5 +258,13 @@ def main(datafiles, save_path='.'):
 	engine.save_embeddings(save_path)
 
 
+def load(path=os.path.join(DATA_DIR, 'embeddings.pickle')):
+	if not path.startswith(DATA_DIR):
+		path = os.path.join(DATA_DIR, path)
+	with open(path, 'rb') as fin:
+		pack = pickle.load(fin)
+	return pack['embeddings'], pack['word2idx'], pack['idx2word']
+
+
 if __name__ == '__main__':
-	main()
+	main(['words'])
