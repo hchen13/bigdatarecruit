@@ -14,5 +14,8 @@ def test_font():
 
 if __name__ == '__main__':
 	# download.main()
-	files = download.list_save_files()
-	embeddings.main(files, save_path=os.path.join(DATA_DIR, 'embeddings.pickle'))
+	# files = download.list_save_files()
+	# embeddings.main(files, save_path=os.path.join(DATA_DIR, 'embeddings.pickle'))
+	emb, w2i, i2w = embeddings.load()
+	print(type(w2i), type(i2w))
+	print(emb.shape)
