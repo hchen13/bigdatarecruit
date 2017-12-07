@@ -9,7 +9,7 @@ class dataAnalyze():
     workday_list = []
 
     def __init__(self,name):
-        data = pd.read_excel('/Users/monstar/Desktop/2017.xls')
+        data = pd.read_excel('/Users/monstar/Desktop/2017.xlsx')
         data = data[(data['姓名'] == name)]
         name_list = set(list(data['姓名']))
         num = data.index[0]
