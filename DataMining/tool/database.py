@@ -28,15 +28,14 @@ def getLagouHrActiveTime():
     return res
 
 # 2、获取51job行业数据
-def get51IndustryNum():
+def get51IndustrySql():
 
-    sql_str = '''
-        SELECT industry,position_labels 
+    sql = '''
+        SELECT industry
         FROM spider.51job_position
     '''
 
-    res = database_exec(sql_str)
-    return res
+    return sql
 
 def getDatabaseConn():
     engine = create_engine('mysql://{user}:{password}@{host}:3306/{dbname}'.format(**mysql_setting), echo=False)
@@ -48,5 +47,21 @@ def getLagouPositionSql():
     sql = '''
         select position_name, position_labels
         from lagou_recruit_day
+    '''
+    return sql
+
+# 获取智联的职位和职位标签
+def getZhilianPositionSql():
+    sql = '''
+        select position_name, position_type
+        from zhilian_position
+    '''
+    return sql
+
+# 获取51job的职位和职位标签
+def get51jobPositionSql():
+    sql = '''
+        select name, position_labels
+        from 51job_position 
     '''
     return sql

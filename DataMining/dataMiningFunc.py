@@ -9,14 +9,18 @@ def hrRecruitTime():
     res = data.groupby('time').size().sort_values()
     return res.to_json(orient='index', force_ascii=False)
 
-# 统计51job各行业职位数辆
+# 统计51job各行业职位数辆 前60
 def get51IndustryNum():
-    res = database.get51IndustryNum()
-    data = pd.DataFrame(res, columns=['industry', 'position_labels'])
+    # 获取行业数据
+    sql = database.get51IndustrySql()
+    # 获取数据库连接
+    conn = database.getDatabaseConn()
+    data = pd.read_sql(sql, conn)
     data = data[(True ^ data.industry.isin(['1000-5000人', '5000-10000人', '500-1000人', '少于50人', '150-500人', '50-150人']))]
-    data_sort = data.groupby('industry').size().sort_values()
-    res = data_sort[len(data_sort) - 50: len(data_sort)]
-    return res.to_json(orient='index', force_ascii=False)
+    data_sort = data.groupby('industry').size().sort_values(ascending=False)[:60]
+    return data_sort.to_json(orient='index', force_ascii=False)
+
+####################################### 编程语言排行 ################################################################
 
 # 通过关键字查找数量
 # @params df 要查找的DataFrame数据集
@@ -36,10 +40,11 @@ def getNumByKeyWords(df, query_key, query_list):
     res = pd.DataFrame([query_series], index=['数量']).T.sort_values(['数量'])
     return res
 
-# 统计拉钩招聘职位中编程语言排行
-def lagouRecruitCodeRank():
-    # 获取拉钩的sql
-    sql = database.getLagouPositionSql()
+# 编程语言排行
+# @param sql 查询sql
+# @param query_key 查询字段
+# @return
+def programingPositionRank(sql, query_key):
     # 获取数据库连接
     conn = database.getDatabaseConn()
     # 获取常用语言
@@ -47,9 +52,30 @@ def lagouRecruitCodeRank():
     # 获取数据
     lg_rd_df = pd.read_sql(sql, conn)
     conn.close()
-    query_key = ['position_name', 'position_labels']
     # 查询数据
     lg_df_programing_rank = getNumByKeyWords(lg_rd_df, query_key, programing_language_list)
     return lg_df_programing_rank
 
+# 统计拉钩招聘职位中编程语言排行
+def lagouRecruitCodeRank():
+    # 获取拉钩的sql
+    sql = database.getLagouPositionSql()
+    query_key = ['position_name', 'position_labels']
+    res = programingPositionRank(sql, query_key)
+    return res.to_json(orient='index', force_ascii=False)
+
 # 获取智联招聘编程语言排行
+def zhilianPositionCodeRank():
+    # 获取智联的sql
+    sql = database.getZhilianPositionSql()
+    query_key = ['position_name', 'position_type']
+    res = programingPositionRank(sql, query_key)
+    return res.to_json(orient='index', force_ascii=False)
+
+# 获取51job编程语言职位排行
+def job51PositionRank():
+    # 获取51job的sql
+    sql = database.get51jobPositionSql()
+    query_key = ['name', 'position_labels']
+    res = programingPositionRank(sql, query_key)
+    return res.to_json(orient='index', force_ascii=False)
