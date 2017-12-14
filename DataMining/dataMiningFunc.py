@@ -270,3 +270,57 @@ def job51CompanyHighNumType(type=1):
         query_column = 'industry'
     res = res_total.groupby(query_column).size().sort_values(ascending=False)
     return res.to_json(orient='index', force_ascii=False)
+
+# 获取工作年限数统计
+# @param sql 统计字段work_year
+# @return Series
+def workYearNum(sql):
+    # 获取数据库连接
+    conn = database.getDatabaseConn()
+    df = pd.read_sql(sql, conn)
+    df_g = df.groupby('work_year')
+    return df_g.size().sort_values(ascending=False)[:7]
+
+# 智联工作年限招聘数
+def zhilianWorkYearNum():
+    sql = database.getZhilianZCSql()
+    res_series = workYearNum(sql)
+    return res_series.to_json(orient='index', force_ascii=False)
+
+# 51工作年限招聘数
+def j5WorkYearNum():
+    sql = database.getJ5ZCSql()
+    res_series = workYearNum(sql)
+    return res_series.to_json(orient='index', force_ascii=False)
+
+# 拉钩工作年限招聘数
+def lagouWorkYearNum():
+    sql = database.getLagouPositionInfo()
+    res_series = workYearNum(sql)
+    return res_series.to_json(orient='index', force_ascii=False)
+
+def salarySplit(line):
+    import re
+    res = re.match(r'([\d]+)K-([\d]+)K', line)
+    if not res:
+        res = re.match(r'([\d]+)k-([\d]+)k', line)
+    if res:
+        salary_low = res[1]
+        salary_high = res[2]
+        salary_mean = (int(salary_low) + int(salary_high)) / 2
+    else:
+        res = re.match(r'([\d]+).*', line)
+        salary_low = res[1]
+        salary_high = res[1]
+        salary_mean = res[1]
+    return pd.Series([salary_low, salary_high, salary_mean])
+
+# 拉钩薪资分布
+def lagouSalaryDistribution():
+    sql = database.getLagouPositionInfo()
+    # 获取数据库连接
+    conn = database.getDatabaseConn()
+    df = pd.read_sql(sql, conn)
+    tmp = df['salary'].apply(salarySplit).rename(columns={0:'salary_low', 1:'salary_high', 2:'salary_mean'})
+    df = df.combine_first(tmp).to_json(orient='index', force_ascii=False)
+    df_filter = pd.DataFrame([])

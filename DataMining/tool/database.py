@@ -154,3 +154,25 @@ def get51JobCompanySql():
         from 51job_company
     '''
     return sql
+
+# 获取智联薪水年限和教育程度
+def getZhilianZCSql():
+    sql = '''
+        select salary_low, salary_high, work_year, education from zhilian_position
+    '''
+    return sql
+
+# 获取51薪水年限和教育程度
+def getJ5ZCSql():
+    sql = '''
+        select salary, work_year, education from 51job_position
+    '''
+    return sql
+
+# 获取拉钩职位标签，名称，年限，教育程度，薪水
+def getLagouPositionInfo():
+    sql = '''
+        select position_name, position_labels, salary, work_year, education, second_type, city
+        from lagou_recruit_day
+    '''
+    return sql
