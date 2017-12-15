@@ -315,12 +315,18 @@ def salarySplit(line):
         salary_mean = res[1]
     return pd.Series([salary_low, salary_high, salary_mean])
 
-# 拉钩薪资分布
-def lagouSalaryDistribution():
+# 拉钩薪资整体情况
+# @return DataFrame 包含最高、最低、平均工资的招聘职位信息
+def lagouSalaryDetail():
     sql = database.getLagouPositionInfo()
     # 获取数据库连接
     conn = database.getDatabaseConn()
     df = pd.read_sql(sql, conn)
     tmp = df['salary'].apply(salarySplit).rename(columns={0:'salary_low', 1:'salary_high', 2:'salary_mean'})
-    df = df.combine_first(tmp).to_json(orient='index', force_ascii=False)
-    df_filter = pd.DataFrame([])
+    df = df.combine_first(tmp)
+    return df
+
+# 拉钩整体薪资情况
+def lagouHoleSalaryDistribution():
+    df = lagouSalaryDetail()
+    df_filter = pd.DataFrame(df, columns=['salary_high', 'salary_low', 'salary_mean'])
