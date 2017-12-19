@@ -9,11 +9,12 @@ from scrapy import signals
 from scrapy.http import HtmlResponse
 from fake_useragent import UserAgent
 import random
-from selenium import webdriver
 import time
 import re
 from tools.seleniumTest import platformJudge
+from selenium import webdriver
 import os
+from selenium.webdriver.support.ui import  WebDriverWait
 
 class RecruitspiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -66,7 +67,7 @@ class RandomUserAgentMiddleware(object):
     def __init__(self,crawler):
         super(RandomUserAgentMiddleware,self).__init__()
 
-        self.ua = UserAgent()
+        self.ua = UserAgent(use_cache_server=True)
         self.ua_type = crawler.settings.get('USER_AGENT_TYPE','random')
 
     @classmethod
@@ -90,16 +91,38 @@ class JsPageMiddleware(object):
     def __init__(self):
         super(JsPageMiddleware,self).__init__()
         # 谷歌浏览器
-        chrome_opt = webdriver.ChromeOptions()
-        prefs = {"profile.managed_default_content_sttings.images": 2}
-        chrome_opt.add_experimental_option("prefs", prefs)
-        driver_path = platformJudge()
-        self.browser = webdriver.Chrome(driver_path, chrome_options=chrome_opt)
+        # chrome_opt = webdriver.ChromeOptions()
+        # prefs = {"profile.managed_default_content_sttings.images": 2}
+        # chrome_opt.add_experimental_option("prefs", prefs)
+        # driver_path = platformJudge()
+        # self.browser = webdriver.Chrome(driver_path, chrome_options=chrome_opt)
+
 
     def process_request(self, request, spider):
         regx = re.compile(r'\d+.html')
         res = re.findall(regx, request.url)
+        # self.browser.set_page_load_timeout(20)
+        # self.browser.set_script_timeout(20)
         if spider.name == 'lagou' and res and request.meta.get('curNum') != 1:
-            self.browser.get(request.url)
-            time.sleep(0.8)
-            return HtmlResponse(url=self.browser.current_url,body=self.browser.page_source,encoding="utf-8")
+            # 拉钩处理
+            spider.browser.get(request.url)
+            # 找到元素就停止加载，否则刷新
+            try:
+                WebDriverWait(driver=spider.browser, timeout=5).until(lambda x: x.find_element_by_id('container'))
+            except Exception as e:
+                spider.browser.refresh()
+            # 不经过downloader 直接返回结果
+            return HtmlResponse(url=spider.browser.current_url,body=spider.browser.page_source,encoding="utf-8")
+        elif spider.name == 'zhilian':
+            # 智联招聘处理 只抓列表页
+            url = request.url
+            res = re.match(r'http://.*?/(.*?).htm', url)
+            if not res:
+                spider.browser.get(request.url)
+                # 找到元素就停止加载，否则刷新
+                try:
+                    WebDriverWait(driver=spider.browser, timeout=5).until(lambda x: x.find_element_by_xpath("//div[contains(@class,'details_container')]"))
+                except Exception as e:
+                    spider.browser.refresh()
+                # 不经过downloader 直接返回结果
+                return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding="utf-8")

@@ -14,24 +14,26 @@ BOT_NAME = 'RecruitSpider'
 SPIDER_MODULES = ['RecruitSpider.spiders']
 NEWSPIDER_MODULE = 'RecruitSpider.spiders'
 
-REDIRECT_ENABLED = False
-HTTPERROR_ALLOWED_CODES = [302,]
+# 遇到重定向
+# REDIRECT_ENABLED = False
+# HTTPERROR_ALLOWED_CODES = [302,]
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'RecruitSpider (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 4
+# CONCURRENT_REQUESTS = 16
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1.2
+# DOWNLOAD_DELAY = 2
+
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 100
-CONCURRENT_REQUESTS_PER_IP = 0
+# CONCURRENT_REQUESTS_PER_DOMAIN = 100
+# CONCURRENT_REQUESTS_PER_IP = 0
 
 # Disable cookies (enabled by default)
 # COOKIES_ENABLED = False
@@ -56,7 +58,7 @@ USER_AGENT_TYPE = 'random'
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
+   # 'RecruitSpider.middlewares.RandomUserAgentMiddleware': 543,
     # 'RecruitSpider.middlewares.MyProxiesSpiderMiddleware': 542,
     'scrapy.contrib.downloadermiddleware.redirect.RedirectMiddleware': 600,
     'RecruitSpider.middlewares.JsPageMiddleware': 544,
@@ -71,22 +73,22 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'RecruitSpider.pipelines.RecruitSpiderPipeline': 300,
-}
+# ITEM_PIPELINES = {
+#    'RecruitSpider.pipelines.RecruitSpiderPipeline': 300,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 AUTOTHROTTLE_ENABLED = True
-# The initial download delay
-#AUTOTHROTTLE_START_DELAY = 5
+# # The initial download delay
+AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY = 60
+AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
 #AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 # Enable showing throttling stats for every response received:
-#AUTOTHROTTLE_DEBUG = False
+# AUTOTHROTTLE_DEBUG = False
 
 # Enable and configure HTTP caching (disabled by default)
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
@@ -96,7 +98,22 @@ AUTOTHROTTLE_ENABLED = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-MYSQL_HOST = "127.0.0.1"
+MYSQL_HOST = "localhost"
 MYSQL_DBNAME = "spider"
 MYSQL_USER = "root"
 MYSQL_PASSWORD = ""
+
+# 宽度优先
+# SCHEDULER_ORDER = 'BFO'
+
+# 日志
+LOG_LEVEL = 'INFO'
+# 禁止重试
+# RETRY_ENABLED = False
+# 设置下载超时时间
+# DOWNLOAD_TIMEOUT = 10
+
+import sys
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, BASE_DIR)

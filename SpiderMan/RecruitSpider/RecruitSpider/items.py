@@ -9,6 +9,7 @@ import scrapy
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose , Join
 import time
+from RecruitSpider.helper import md5
 import re
 
 class RecruitspiderItem(scrapy.Item):
@@ -20,17 +21,13 @@ class RecruitspiderItem(scrapy.Item):
 class LagouItemLoader(ItemLoader):
     default_output_processor = TakeFirst()
 
-
+# 去掉空白字符
 def RemoveBlankCharacter(value):
     return re.sub(r'\s+', '', value)
 
-
+# 处理拉钩工作地址
 def locationDeal(value):
     return value.replace("查看地图","")
-
-
-def KeyJudge(value):
-    return value if value else 'Null'
 
 
 class LagouItem(scrapy.Item):
@@ -150,7 +147,7 @@ class LagouItem(scrapy.Item):
             content,
             created_at
             ) 
-            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)  ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
         """
         params = (self['positionId'], self['url'] , self['positionName'], self['positionLabels'], self['salary'], self['workYear'], self['education'], self['jobNature'], self['firstType'], self['secondType'],self['city'], self['district'], self['companyId'], self['positionAdvantage'], self['location'], self['publisherId'], self['publishTime'], department, self['describe'], int(time.time()))
         return insert_sql, params
@@ -166,7 +163,277 @@ class LagouItem(scrapy.Item):
             num,
             total_num
             ) 
-            values(%s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
+            values(%s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1,total_num=VALUES(total_num)
         """
         params = (self['city'], self['cityInitial'], int(time.time()),1,self['cityTotalNum'])
+        return insert_sql, params
+
+
+def getSalaryLow(value):
+    salary_obj = re.match(r"([\d]+)-([\d]+)元", value)
+    if salary_obj:
+        return salary_obj.group(1)
+    else:
+        return 0
+
+def getSlaryHigh(value):
+    salary_obj = re.match(r"([\d]+)-([\d]+)元", value)
+    if salary_obj:
+        return salary_obj.group(2)
+    else:
+        return 0
+
+def getRecruitNum(value):
+    res = re.match(r'\d+',value)
+    if res:
+        return re.sub('人', '', value)
+    else:
+        return 0
+
+
+class ZhilianItemLoader(ItemLoader):
+    default_output_processor = TakeFirst()
+
+
+class ZhilianItem(scrapy.Item):
+    # 公司zhilian_company item
+    company_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+    full_name = scrapy.Field()
+    size = scrapy.Field()
+    company_nature = scrapy.Field()
+    logo = scrapy.Field()
+    website = scrapy.Field()
+    industry = scrapy.Field()
+    address = scrapy.Field(
+        input_processor=MapCompose(RemoveBlankCharacter),
+    )
+    company_url = scrapy.Field()
+
+    # 智联招聘职位zhilian_position item
+    position_name = scrapy.Field()
+    city = scrapy.Field()
+    unique_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+    salary_low = scrapy.Field(
+        input_processor=MapCompose(getSalaryLow),
+    )
+    salary_high = scrapy.Field(
+        input_processor=MapCompose(getSlaryHigh),
+    )
+    location = scrapy.Field(
+        input_processor=MapCompose(RemoveBlankCharacter),
+    )
+    publish_time = scrapy.Field()
+    advantage_labels = scrapy.Field()
+    job_nature = scrapy.Field()
+    work_year = scrapy.Field()
+    education = scrapy.Field()
+    recruit_num = scrapy.Field(
+        input_processor=MapCompose(getRecruitNum),
+    )
+    position_type = scrapy.Field()
+    content =scrapy.Field()
+    url = scrapy.Field()
+
+    def get_zhilian_company_insert_sql(self):
+
+        insert_sql = """
+            insert into zhilian_company(
+            company_md5,
+            full_name,
+            size,
+            company_nature,
+            logo,
+            website,
+            industry,
+            address,
+            created_at,
+            company_url
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+        """
+        params = (self['company_md5'], self['full_name'], self['size'], self['company_nature'], self['logo'], self['website'], self['industry'], self['address'], int(time.time()), self['company_url'])
+        return insert_sql, params
+
+    def get_zhilian_position_insert_sql(self):
+
+        insert_sql = """
+            insert into zhilian_position(
+            position_name,
+            city,
+            company_md5,
+            unique_md5,
+            salary_low,
+            salary_high,
+            location,
+            publish_time,
+            advantage_labels,
+            job_nature,
+            work_year,
+            education,
+            recruit_num,
+            position_type,
+            content,
+            url,
+            created_at
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+        """
+        params = (self['position_name'], self['city'], self['company_md5'], self['unique_md5'], self['salary_low'], self['salary_high'], self['location'], self['publish_time'], self['advantage_labels'], self['job_nature'], self['work_year'], self['education'], self['recruit_num'], self['position_type'], self['content'], self['url'], int(time.time()))
+        return insert_sql, params
+
+
+class Job51ItemLoader(ItemLoader):
+    default_output_processor = TakeFirst()
+
+
+def removeStr(value):
+    return re.sub('工作|经验', '', value)
+
+
+class Job51PositionItem(scrapy.Item):
+    # 51job city item
+    city_name = scrapy.Field()
+    city_code = scrapy.Field()
+
+    # 51job position item
+    name = scrapy.Field()
+    district = scrapy.Field()
+    salary = scrapy.Field()
+    company_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+    work_year = scrapy.Field(
+        input_processor=MapCompose(removeStr),
+    )
+    education = scrapy.Field()
+    recruit_num = scrapy.Field()
+    publish_time = scrapy.Field()
+    language = scrapy.Field()
+    industry = scrapy.Field()
+    position_labels = scrapy.Field(
+        output_processor=Join(",")
+    )
+    advantage = scrapy.Field(
+        output_processor=Join(",")
+    )
+    content = scrapy.Field()
+    location = scrapy.Field()
+    phone_num = scrapy.Field()
+    email = scrapy.Field()
+    url = scrapy.Field()
+    url_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+
+    def get_51Job_city_insert_sql(self):
+
+        insert_sql = """
+            insert into 51job_city(
+            city_name,
+            city_code,
+            num,
+            created_at
+            ) 
+            values(%s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
+        """
+        params = (self['city_name'], self['city_code'], 1, int(time.time()))
+        return insert_sql, params
+
+    def get_51Job_position_insert_sql(self):
+
+        insert_sql = """
+            insert into 51job_position(
+            name,
+            city,
+            district,
+            salary,
+            company_md5,
+            work_year,
+            education,
+            recruit_num,
+            publish_time,
+            language,
+            industry,
+            position_labels,
+            advantage,
+            content,
+            location,
+            phone_num,
+            email,
+            url,
+            url_md5,
+            created_at
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+        """
+        params = (self['name'],
+                  self['city_name'],
+                  self['district'],
+                  self['salary'],
+                  self['company_md5'],
+                  self['work_year'],
+                  self['education'],
+                  self['recruit_num'],
+                  self['publish_time'],
+                  self['language'],
+                  self['industry'],
+                  self['position_labels'],
+                  self['advantage'],
+                  self['content'],
+                  self['location'],
+                  self['phone_num'],
+                  self['email'],
+                  self['url'],
+                  self['url_md5'],
+                  int(time.time()))
+
+        return insert_sql, params
+
+class Job51CompanyItem(scrapy.Item):
+    # 公司zhilian_company item
+    company_md5 = scrapy.Field(
+        input_processor=MapCompose(md5),
+    )
+    full_name = scrapy.Field()
+    size = scrapy.Field()
+    company_nature = scrapy.Field()
+    industry = scrapy.Field()
+    address = scrapy.Field(
+        input_processor=MapCompose(RemoveBlankCharacter),
+    )
+    company_url = scrapy.Field()
+    post_code = scrapy.Field()
+    company_url = scrapy.Field()
+
+    def get_51Job_company_insert_sql(self):
+        insert_sql = """
+            insert into 51job_company(
+            company_md5,
+            full_name,
+            size,
+            company_nature,
+            industry,
+            address,
+            company_url,
+            postcode,
+            num,
+            created_at
+            ) 
+            values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now()),num=num+1
+        """
+        params = (
+        self['company_md5'],
+        self['full_name'],
+        self['size'],
+        self['company_nature'],
+        self['industry'],
+        self['address'],
+        self['company_url'],
+        self['post_code'],
+        1,
+        int(time.time()))
         return insert_sql, params
