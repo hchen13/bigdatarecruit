@@ -326,7 +326,78 @@ def lagouSalaryDetail():
     df = df.combine_first(tmp)
     return df
 
-# 拉钩整体薪资情况
-def lagouHoleSalaryDistribution():
+# 拉钩整体平均薪资情况(中位数)
+def lagouWholeSalaryDistribution():
     df = lagouSalaryDetail()
     df_filter = pd.DataFrame(df, columns=['salary_high', 'salary_low', 'salary_mean'])
+    return df_filter.salary_mean.describe()['50%']
+
+# 拉钩个工作年限薪资情况
+# @param type 1, 50% 中位数 2，std 标准差
+# @return json
+def lagouWorkYearSalary(type = 1):
+    df = lagouSalaryDetail()
+    df_work_res = df[df.work_year != '1-3'].groupby('work_year').salary_mean.describe().sort_values(['50%'],ascending=False)
+    if type == 1:
+        res = df_work_res['50%'].apply(lambda x: round(x, 2))
+    elif type == 2:
+        res = df_work_res['std'].apply(lambda x: round(x, 2))
+    return res.to_json(orient='index', force_ascii=False)
+
+# 51job网站薪资处理函数
+def job51SalaryDeal(line):
+    import re
+    patten1 = r'([\d]+.?[\d]?)-([\d]+.?[\d]?)千/月'
+    patten2 = r'([\d]+.?[\d]?)-([\d]+.?[\d]?)万/月'
+    patten3 = r'([\d]+.?[\d]?)-([\d]+.?[\d]?)万/年'
+    low = high = mean = 0
+    if re.compile(patten1).match(line):
+        low = float(re.compile(patten1).match(line).group(1))
+        high = float(re.compile(patten1).match(line).group(2))
+        mean = int((low + high)) / 2
+    elif re.compile(patten2).match(line):
+        low = float(re.compile(patten2).match(line).group(1)) * 10
+        high = float(re.compile(patten2).match(line).group(2)) * 10
+        mean = int((low + high)) / 2
+    elif re.compile(patten3).match(line):
+        low = float(re.compile(patten3).match(line).group(1)) * 10 / 12
+        high = float(re.compile(patten3).match(line).group(2)) * 10 / 12
+        mean = int(low + high) / 2
+    return pd.Series([round(low, 2), round(high, 2), round(mean, 2)])
+
+# 51job薪资情况
+# 获取51job工作年限，教育水平，薪资 （此方法运行时间将近15分钟）
+def job51SalaryPosition():
+    # 获取数据库连接
+    conn = database.getDatabaseConn()
+    sql = database.getJ5ZCSql()
+    df_51job_salary = pd.read_sql(sql, conn)
+    df_51job_salary = df_51job_salary[df_51job_salary.salary != 'NULL']
+    df_51job_salary_deal = df_51job_salary[True ^ df_51job_salary['salary'].str.contains('天|小时|\+')]
+    df_tmp = df_51job_salary_deal.salary.apply(job51SalaryDeal)
+    return df_51job_salary_deal.combine_first(df_tmp.rename(columns={0: 'low', 1: 'high', 2: 'mean'}))
+
+# 获取51job整体薪资中位数
+def get51jobSalaryMiddle():
+    df = job51SalaryPosition()
+    return df.describe().apply(lambda x: round(x, 2))['mean']['50%']
+
+# 获取51job教育程度招聘数情况
+def get51jobRecruitNumByEducation():
+    # 获取数据库连接
+    conn = database.getDatabaseConn()
+    sql = database.getJ5ZCSql()
+    df_51job_salary = pd.read_sql(sql, conn)
+    return df_51job_salary.groupby('education').size().sort_values(ascending=False).to_json(orient='index', force_ascii=False)
+
+# 获取51job教育程度与薪资关系
+def get51jobSalaryByEducation():
+    df = job51SalaryPosition()
+    df_res = df.groupby('education')['mean'].describe().sort_values(['count'], ascending=False)
+    return df_res['mean']
+
+# 获取51job教育程度与薪资关系的标准差
+def get51jobSalaryStdByEducation():
+    df = job51SalaryPosition()
+    df_res = df.groupby('education')['mean'].describe().sort_values(['count'], ascending=False)
+    return df_res['std']

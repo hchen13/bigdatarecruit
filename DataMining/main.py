@@ -11,6 +11,7 @@ if __name__ == '__main__':
 
     # 51排行前60的行业
     # Industry_num = get51IndustryNum()
+    # print(Industry_num)
 
     # 获取51职位排名
     # print(job51PositionRank())
@@ -46,5 +47,9 @@ if __name__ == '__main__':
     # 拉钩
     # print(lagouWorkYearNum())
     # *********************************  拉钩薪资分布  ********************************
-    # 拉钩薪资分布
-    lagouSalaryDistribution()
+    # 拉钩整体薪资分布
+    # lagouWholeSalaryDistribution()
+    # 拉钩年限薪资分析
+    # lagouWorkYearSalary()
+    # 拉钩年限 标准差 分析
+    print(lagouWorkYearSalary(2))
