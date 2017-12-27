@@ -183,7 +183,7 @@ def zhilianPositionRank():
 
 # 获取拉钩全国招聘职位数排行 前60 （it行业招聘职位排行）
 def lagouPositionRank():
-    # 获取51job的sql
+    # 获取拉钩的sql
     sql = database.getLagouSecondtype()
     # 获取数据库连接
     conn = database.getDatabaseConn()
@@ -400,4 +400,31 @@ def get51jobSalaryByEducation():
 def get51jobSalaryStdByEducation():
     df = job51SalaryPosition()
     df_res = df.groupby('education')['mean'].describe().sort_values(['count'], ascending=False)
+    return df_res['std']
+
+# 51job工作年限与薪资关系
+def get51jobSalaryByWorkYear():
+    df = job51SalaryPosition()
+    df_res = df.groupby('work_year')['mean'].describe().sort_values(['count'], ascending=False)
+    return df_res['std']
+
+# 51job根据教育水平和工作年限分析薪资情况
+def get51jobSalaryByWE():
+    df = job51SalaryPosition()
+    df_rename = df.rename(columns={'work_year' : '工作年限', 'mean' : '平均薪资', 'education' : '教育程度'})
+    df_res = df_rename.pivot_table(index=['工作年限'], columns='教育程度', values=['平均薪资']).rename(columns={'NULL' : '其他'}).apply(lambda x: round(x,2))
+    return df_res.to_json(orient='split', force_ascii=False)
+
+# 51job行业薪资情况
+def get51jobSalaryByIndustry():
+    df = job51SalaryPosition()
+    df = df[(True ^ df.industry.isin(['1000-5000人', '5000-10000人', '500-1000人', '少于50人', '150-500人', '50-150人']))]
+    df_res = df.groupby('industry')['mean'].describe().sort_values(['50%'], ascending=False)
+    return df_res['50%']
+
+# 51job行业薪资标准差情况
+def get51jobSalaryStdByIndustry():
+    df = job51SalaryPosition()
+    df = df[(True ^ df.industry.isin(['1000-5000人', '5000-10000人', '500-1000人', '少于50人', '150-500人', '50-150人']))]
+    df_res = df.groupby('industry')['mean'].describe().sort_values(['50%'], ascending=False)
     return df_res['std']

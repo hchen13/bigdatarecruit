@@ -165,7 +165,7 @@ def getZhilianZCSql():
 # 获取51薪水年限和教育程度
 def getJ5ZCSql():
     sql = '''
-        select salary, work_year, education from 51job_position
+        select salary, work_year, education, city, industry from 51job_position
     '''
     return sql
 
