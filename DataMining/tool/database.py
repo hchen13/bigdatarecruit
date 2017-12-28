@@ -176,3 +176,10 @@ def getLagouPositionInfo():
         from lagou_recruit_day
     '''
     return sql
+
+# 智联 具体职位薪资排行
+def getZLSalaryByPositionSql():
+    sql = '''
+        select city, salary_low, salary_high, work_year, education, position_type from zhilian_position
+    '''
+    return sql

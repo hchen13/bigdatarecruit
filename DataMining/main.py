@@ -12,8 +12,8 @@ if __name__ == '__main__':
     # job51_df_programing_rank_json = job51PositionRank()
 
     # 51排行前60的行业
-    # Industry_num = get51IndustryNum()
-    # print(Industry_num)
+    Industry_num = get51IndustryNum()
+    print(Industry_num)
 
     # *********************************  行业招聘数分析  ********************************
     # 获取51职位排名
@@ -84,7 +84,15 @@ if __name__ == '__main__':
 
     # 51job根据教育水平和工作年限分析薪资情况
     # get51jobSalaryByWE()
+
     # 51job行业薪资情况
     # get51jobSalaryByIndustry()
+
     # 51job行业薪资标准差情况
     # get51jobSalaryStdByIndustry()
+
+    # 智联 具体职位薪资排行前100
+    # getZLSalaryByPosition(1)
+
+    # 智联 具体职位薪资（年限，城市）排行前100
+    # getZLSalaryByPosition(2)
