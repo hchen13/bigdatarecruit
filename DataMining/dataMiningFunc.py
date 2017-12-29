@@ -183,7 +183,7 @@ def zhilianPositionRank():
 
 # 获取拉钩全国招聘职位数排行 前60 （it行业招聘职位排行）
 def lagouPositionRank():
-    # 获取51job的sql
+    # 获取拉钩的sql
     sql = database.getLagouSecondtype()
     # 获取数据库连接
     conn = database.getDatabaseConn()
@@ -401,3 +401,63 @@ def get51jobSalaryStdByEducation():
     df = job51SalaryPosition()
     df_res = df.groupby('education')['mean'].describe().sort_values(['count'], ascending=False)
     return df_res['std']
+
+# 51job工作年限与薪资关系
+def get51jobSalaryByWorkYear():
+    df = job51SalaryPosition()
+    df_res = df.groupby('work_year')['mean'].describe().sort_values(['count'], ascending=False)
+    return df_res['std']
+
+# 51job根据教育水平和工作年限分析薪资情况
+def get51jobSalaryByWE():
+    df = job51SalaryPosition()
+    df_rename = df.rename(columns={'work_year' : '工作年限', 'mean' : '平均薪资', 'education' : '教育程度'})
+    df_res = df_rename.pivot_table(index=['工作年限'], columns='教育程度', values=['平均薪资']).rename(columns={'NULL' : '其他'}).apply(lambda x: round(x,2))
+    return df_res.to_json(orient='split', force_ascii=False)
+
+# 51job行业薪资情况
+def get51jobSalaryByIndustry():
+    df = job51SalaryPosition()
+    df = df[(True ^ df.industry.isin(['1000-5000人', '5000-10000人', '500-1000人', '少于50人', '150-500人', '50-150人']))]
+    df_res = df.groupby('industry')['mean'].describe()
+    df_j5_industry_salary = df_res[df_res['count'] > 10].sort_values('mean', ascending=False).apply(
+        lambda x: round(x, 2))
+    return pd.DataFrame(df_j5_industry_salary, columns=['mean','std']).to_json(orient='split', force_ascii=False)
+
+# 51job行业薪资标准差情况
+def get51jobSalaryStdByIndustry():
+    df = job51SalaryPosition()
+    df = df[(True ^ df.industry.isin(['1000-5000人', '5000-10000人', '500-1000人', '少于50人', '150-500人', '50-150人']))]
+    df_res = df.groupby('industry')['mean'].describe()
+    df_j5_industry_salary = df_res[df_res['count'] > 10].sort_values('mean', ascending=False).apply(
+        lambda x: round(x, 2))
+    return pd.DataFrame(df_j5_industry_salary, columns=['mean', 'std']).to_json(orient='split', force_ascii=False)
+
+# 智联 具体职位薪资排行 TODO 倒序排名
+# @param type 1 只分析职位 2 加入工作年限和地区
+def getZLSalaryByPosition(type = 1):
+    sql = database.getZLSalaryByPositionSql()
+    conn = database.getDatabaseConn()
+    df = pd.read_sql(sql, conn)
+    if type == 1:
+        condition = ['position_type']
+    elif type == 2:
+        condition = ['position_type', 'work_year', 'city']
+    df_res = df.groupby(condition).describe().salary_high.sort_values('50%', ascending=False)[:100]
+    return df_res.to_json(orient='index', force_ascii=False)
+
+# 城市薪资排行
+def getCitySalary():
+    df_51 = job51SalaryPosition()
+    df_lagou = lagouSalaryDetail()
+    city_mix_df = pd.concat([pd.DataFrame(df_51, columns=['city', 'salary_mean']),
+                             pd.DataFrame(df_lagou, columns=['city', 'salary_mean'])])
+    g_df = city_mix_df.groupby('city')
+    g_df_res = g_df.describe().apply(lambda x: round(x, 2))
+    g_df_res = g_df_res[
+        (g_df_res[('salary_mean', 'std')] < 20) & (g_df_res[('salary_mean', 'count')] > 18)].sort_values(
+        ('salary_mean', 'mean'), ascending=False)
+    pd.DataFrame(g_df_res, columns=[('salary_mean', 'count'), ('salary_mean', 'std'), ('salary_mean', 'mean'),
+                                    ('salary_mean', '50%')]).rename(
+        columns={'salary_mean': '薪资/k', 'mean': '平均数', 'count': '职位数', 'std': '标准差', '50%': '中位数', })
+    return g_df_res.to_json(orient='index', force_ascii=False)

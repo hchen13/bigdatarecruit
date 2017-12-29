@@ -165,7 +165,7 @@ def getZhilianZCSql():
 # 获取51薪水年限和教育程度
 def getJ5ZCSql():
     sql = '''
-        select salary, work_year, education from 51job_position
+        select salary, work_year, education, city, industry from 51job_position
     '''
     return sql
 
@@ -174,5 +174,12 @@ def getLagouPositionInfo():
     sql = '''
         select position_name, position_labels, salary, work_year, education, second_type, city
         from lagou_recruit_day
+    '''
+    return sql
+
+# 智联 具体职位薪资排行
+def getZLSalaryByPositionSql():
+    sql = '''
+        select city, salary_low, salary_high, work_year, education, position_type from zhilian_position
     '''
     return sql
