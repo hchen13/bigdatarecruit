@@ -1,4 +1,5 @@
 from dataMiningFunc import *
+from wordCloud import *
 
 if __name__ == '__main__':
     # *********************************  编程语言排行  ********************************
@@ -7,13 +8,14 @@ if __name__ == '__main__':
 
     # # zhilian
     # zhilian_df_programing_rank_json = zhilianPositionCodeRank()
+    # print(zhilian_df_programing_rank_json)
 
     # # job51
     # job51_df_programing_rank_json = job51PositionRank()
 
     # 51排行前60的行业
-    Industry_num = get51IndustryNum()
-    print(Industry_num)
+    # Industry_num = get51IndustryNum()
+    # print(Industry_num)
 
     # *********************************  行业招聘数分析  ********************************
     # 获取51职位排名
@@ -96,3 +98,10 @@ if __name__ == '__main__':
 
     # 智联 具体职位薪资（年限，城市）排行前100
     # getZLSalaryByPosition(2)
+
+    # 获取51job职位诱惑词云
+    # getJ5PositionWordCloud()
+
+    # *********************************  词云  ********************************
+    #获取拉钩职位词云
+    getLagouPositionWordCloud('嵌入式')

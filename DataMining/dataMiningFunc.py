@@ -433,9 +433,10 @@ def get51jobSalaryStdByIndustry():
         lambda x: round(x, 2))
     return pd.DataFrame(df_j5_industry_salary, columns=['mean', 'std']).to_json(orient='split', force_ascii=False)
 
-# 智联 具体职位薪资排行 TODO 倒序排名
+# 智联 具体职位薪资排行
 # @param type 1 只分析职位 2 加入工作年限和地区
-def getZLSalaryByPosition(type = 1):
+# @param sort_type 1, 高到低 2， 低到高
+def getZLSalaryByPosition(type = 1, sort_type = 1):
     sql = database.getZLSalaryByPositionSql()
     conn = database.getDatabaseConn()
     df = pd.read_sql(sql, conn)
@@ -443,21 +444,26 @@ def getZLSalaryByPosition(type = 1):
         condition = ['position_type']
     elif type == 2:
         condition = ['position_type', 'work_year', 'city']
-    df_res = df.groupby(condition).describe().salary_high.sort_values('50%', ascending=False)[:100]
+    sort_status = True if sort_type == 1 else False
+    df_res = df.groupby(condition).describe().salary_high.sort_values('50%', ascending=sort_status)[:100]
     return df_res.to_json(orient='index', force_ascii=False)
 
 # 城市薪资排行
-def getCitySalary():
+# @param type 1、全部 2、工作年限1-3的
+def getCitySalary(type = 1):
     df_51 = job51SalaryPosition()
     df_lagou = lagouSalaryDetail()
-    city_mix_df = pd.concat([pd.DataFrame(df_51, columns=['city', 'salary_mean']),
-                             pd.DataFrame(df_lagou, columns=['city', 'salary_mean'])])
-    g_df = city_mix_df.groupby('city')
+    city_mix_df = pd.concat([pd.DataFrame(df_51, columns=['city', 'salary_mean', 'work_year']),
+                             pd.DataFrame(df_lagou, columns=['city', 'salary_mean', 'work_year'])])
+    if type == 1:
+        g_df = city_mix_df.groupby('city')
+    else:
+        g_df = city_mix_df[city_mix_df['work_year'] == '1-3年']
     g_df_res = g_df.describe().apply(lambda x: round(x, 2))
     g_df_res = g_df_res[
         (g_df_res[('salary_mean', 'std')] < 20) & (g_df_res[('salary_mean', 'count')] > 18)].sort_values(
         ('salary_mean', 'mean'), ascending=False)
-    pd.DataFrame(g_df_res, columns=[('salary_mean', 'count'), ('salary_mean', 'std'), ('salary_mean', 'mean'),
+    res_df = pd.DataFrame(g_df_res, columns=[('salary_mean', 'std'), ('salary_mean', 'mean'),
                                     ('salary_mean', '50%')]).rename(
-        columns={'salary_mean': '薪资/k', 'mean': '平均数', 'count': '职位数', 'std': '标准差', '50%': '中位数', })
-    return g_df_res.to_json(orient='index', force_ascii=False)
+        columns={'salary_mean': '薪资/k', 'mean': '平均数', 'std': '标准差', '50%': '中位数', })
+    return res_df.to_json(orient='index', force_ascii=False)
