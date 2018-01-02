@@ -368,14 +368,20 @@ def job51SalaryDeal(line):
 # 51job薪资情况
 # 获取51job工作年限，教育水平，薪资 （此方法运行时间将近15分钟）
 def job51SalaryPosition():
+    import os
     # 获取数据库连接
-    conn = database.getDatabaseConn()
-    sql = database.getJ5ZCSql()
-    df_51job_salary = pd.read_sql(sql, conn)
-    df_51job_salary = df_51job_salary[df_51job_salary.salary != 'NULL']
-    df_51job_salary_deal = df_51job_salary[True ^ df_51job_salary['salary'].str.contains('天|小时|\+')]
-    df_tmp = df_51job_salary_deal.salary.apply(job51SalaryDeal)
-    return df_51job_salary_deal.combine_first(df_tmp.rename(columns={0: 'low', 1: 'high', 2: 'mean'}))
+    if os.path.exists('./salaryWE.h5'):
+        df_res = pd.read_hdf('./salaryWE.h5')
+    else:
+        conn = database.getDatabaseConn()
+        sql = database.getJ5ZCSql()
+        df_51job_salary = pd.read_sql(sql, conn)
+        df_51job_salary = df_51job_salary[df_51job_salary.salary != 'NULL']
+        df_51job_salary_deal = df_51job_salary[True ^ df_51job_salary['salary'].str.contains('天|小时|\+')]
+        df_tmp = df_51job_salary_deal.salary.apply(job51SalaryDeal)
+        df_res = df_51job_salary_deal.combine_first(df_tmp.rename(columns={0: 'low', 1: 'high', 2: 'mean'}))
+        df_res.to_hdf('./salaryWE.h5')
+    return df_res
 
 # 获取51job整体薪资中位数
 def get51jobSalaryMiddle():

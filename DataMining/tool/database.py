@@ -197,3 +197,17 @@ def getLGPositionContent():
         select position_name, content from lagou_recruit_day
     '''
     return sql
+
+# 智联职位词云
+def getZLPositionContent():
+    sql = '''
+        select position_name, content from zhilian_position
+    '''
+    return sql
+
+# 51职位词云
+def getJ5PositionContent():
+    sql = '''
+        select name position_name, content from 51job_position
+    '''
+    return sql

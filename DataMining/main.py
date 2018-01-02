@@ -70,7 +70,7 @@ if __name__ == '__main__':
     # print(lagouWorkYearSalary(2))
     # *********************************  51job薪资情况（以下分析运行时间将近15分钟）  ********************************
     # 获取51job整体薪资中位数
-    # get51jobSalaryMiddle()
+    get51jobSalaryMiddle()
 
     # 获取51job教育程度招聘数情况
     # get51jobRecruitNumByEducation()
@@ -104,4 +104,4 @@ if __name__ == '__main__':
 
     # *********************************  词云  ********************************
     #获取拉钩职位词云
-    getLagouPositionWordCloud('嵌入式')
+    # getLagouPositionWordCloud('python', type=3)
