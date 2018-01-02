@@ -126,7 +126,7 @@ def getLagouCompanyInfo():
 # 获取智联职位信息
 def getZhilianPositionSql():
     sql = '''
-        select company_md5, position_name, salary_low, salary_high, work_year, education, recruit_num from zhilian_position
+        select company_md5, position_name, position_type, salary_low, salary_high, work_year, education, recruit_num from zhilian_position
     '''
     return sql
 
@@ -165,7 +165,7 @@ def getZhilianZCSql():
 # 获取51薪水年限和教育程度
 def getJ5ZCSql():
     sql = '''
-        select salary, work_year, education from 51job_position
+        select salary, work_year, education, city, industry from 51job_position
     '''
     return sql
 
@@ -174,5 +174,26 @@ def getLagouPositionInfo():
     sql = '''
         select position_name, position_labels, salary, work_year, education, second_type, city
         from lagou_recruit_day
+    '''
+    return sql
+
+# 智联 具体职位薪资排行
+def getZLSalaryByPositionSql():
+    sql = '''
+        select city, salary_low, salary_high, work_year, education, position_type from zhilian_position
+    '''
+    return sql
+
+# 51job职位诱惑
+def getJ5Advantage():
+    sql = '''
+        select advantage from 51job_position where advantage <> 'NULL'
+    '''
+    return sql
+
+# 拉钩职位词云
+def getLGPositionContent():
+    sql = '''
+        select position_name, content from lagou_recruit_day
     '''
     return sql
