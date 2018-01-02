@@ -14,7 +14,7 @@ from jieba import posseg
 # @params font_path 字体路径
 def getWordCloud(content='', type = 1, status = 1, temple_pic_path = './cloud.jpeg' ,pic_file_path = './examples.jpg', font_path='/System/Library/Fonts/STHeiti Light.ttc'):
 
-    remove_word_compile = r'我们|其他|要求|具有|编写|完成|项目|以上|以及|常用|根据|参与|考虑|开发|技术|熟悉|熟练|产品|经验|公司|相关|优先|工作|具备|了解|需求|任职|使用|进行|岗位职责|掌握|或者|负责|良好'
+    remove_word_compile = r'我们|其他|要求|具有|编写|完成|项目|以上|以及|常用|根据|参与|考虑|开发|技术|熟悉|熟练|产品|经验|公司|相关|优先|工作|具备|了解|需求|任职|职位|职能|使用|类别|进行|岗位职责|掌握|或者|负责|良好|地址'
 
     if type == 1:
         words = content
