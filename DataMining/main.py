@@ -57,9 +57,14 @@ if __name__ == '__main__':
     # 51job
     # print(j5WorkYearNum())
 
+    # 获取51job教育程度招聘数情况
+    # print(get51jobRecruitNumByEducation())
+
+    # *********************************  拉钩薪资分布  ********************************
+
     # 拉钩
     # print(lagouWorkYearNum())
-    # *********************************  拉钩薪资分布  ********************************
+
     # 拉钩整体薪资分布
     # lagouWholeSalaryDistribution()
 
@@ -68,30 +73,26 @@ if __name__ == '__main__':
 
     # 拉钩年限 标准差 分析
     # print(lagouWorkYearSalary(2))
-    # *********************************  51job薪资情况（以下分析运行时间将近15分钟）  ********************************
-    # 获取51job整体薪资中位数
-    get51jobSalaryMiddle()
 
-    # 获取51job教育程度招聘数情况
-    # get51jobRecruitNumByEducation()
+    # *********************************  51job薪资情况（以下分析运行时间将近15分钟）  ********************************
+
+    # 获取51job整体薪资中位数
+    # print(get51jobSalaryMiddle())
 
     # 获取51job教育程度与薪资关系
-    # get51jobSalaryByEducation()
-
-    # 获取51job教育程度与薪资关系的标准差
-    # get51jobSalaryStdByEducation()
+    # print(get51jobSalaryByEducation())
 
     # 51job工作年限与薪资关系
-    # get51jobSalaryByWorkYear()
+    # print(get51jobSalaryByWorkYear())
 
     # 51job根据教育水平和工作年限分析薪资情况
-    # get51jobSalaryByWE()
+    print(get51jobSalaryByWE())
 
     # 51job行业薪资情况
-    # get51jobSalaryByIndustry()
+    # list_key,list_mean, list_std = get51jobSalaryByIndustry()
 
     # 51job行业薪资标准差情况
-    # get51jobSalaryStdByIndustry()
+    # get51jobSalaryStdByIndustry(2)
 
     # 智联 具体职位薪资排行前100
     # getZLSalaryByPosition(1)

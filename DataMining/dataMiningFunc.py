@@ -1,6 +1,7 @@
 from tool import database, helper
 import pandas as pd
 import numpy as np
+import json
 
 # ******************************** hr排行 *************************************
 # 获取公司hr数量排行
@@ -380,13 +381,26 @@ def job51SalaryPosition():
         df_51job_salary_deal = df_51job_salary[True ^ df_51job_salary['salary'].str.contains('天|小时|\+')]
         df_tmp = df_51job_salary_deal.salary.apply(job51SalaryDeal)
         df_res = df_51job_salary_deal.combine_first(df_tmp.rename(columns={0: 'low', 1: 'high', 2: 'mean'}))
-        df_res.to_hdf('./salaryWE.h5')
+        df_res.to_hdf('./salaryWE.h5', 'salary_all')
     return df_res
+
+# 返回标准函数
+def resDeal(df_res):
+    res_dict = {}
+    df = df_res[df_res.index != 'NULL']
+    res_mean_dict = df['mean'].to_dict()
+    res_std_dict = df['std'].to_dict()
+    res_count_dict = df['count'].to_dict()
+    res_dict['key_name'] = list(res_mean_dict.keys())
+    res_dict['count'] = list(res_count_dict.values())
+    res_dict['salary'] = list(map(lambda x: int(x * 1000), res_mean_dict.values()))
+    res_dict['std'] = list(map(lambda x: round(x + 20, 2), res_std_dict.values()))
+    return json.dumps(res_dict)
 
 # 获取51job整体薪资中位数
 def get51jobSalaryMiddle():
     df = job51SalaryPosition()
-    return df.describe().apply(lambda x: round(x, 2))['mean']['50%']
+    return df.describe().apply(lambda x: round(x * 1000, 2))['mean']['50%']
 
 # 获取51job教育程度招聘数情况
 def get51jobRecruitNumByEducation():
@@ -399,36 +413,33 @@ def get51jobRecruitNumByEducation():
 # 获取51job教育程度与薪资关系
 def get51jobSalaryByEducation():
     df = job51SalaryPosition()
-    df_res = df.groupby('education')['mean'].describe().sort_values(['count'], ascending=False)
-    return df_res['mean']
-
-# 获取51job教育程度与薪资关系的标准差
-def get51jobSalaryStdByEducation():
-    df = job51SalaryPosition()
-    df_res = df.groupby('education')['mean'].describe().sort_values(['count'], ascending=False)
-    return df_res['std']
+    df_res = df.groupby('education')['mean'].describe().sort_values(['mean'], ascending=False)
+    return resDeal(df_res)
 
 # 51job工作年限与薪资关系
 def get51jobSalaryByWorkYear():
     df = job51SalaryPosition()
-    df_res = df.groupby('work_year')['mean'].describe().sort_values(['count'], ascending=False)
-    return df_res['std']
+    df_res = df.groupby('work_year')['mean'].describe().sort_values(['mean'], ascending=False)
+    return resDeal(df_res)
 
 # 51job根据教育水平和工作年限分析薪资情况
 def get51jobSalaryByWE():
     df = job51SalaryPosition()
     df_rename = df.rename(columns={'work_year' : '工作年限', 'mean' : '平均薪资', 'education' : '教育程度'})
     df_res = df_rename.pivot_table(index=['工作年限'], columns='教育程度', values=['平均薪资']).rename(columns={'NULL' : '其他'}).apply(lambda x: round(x,2))
-    return df_res.to_json(orient='split', force_ascii=False)
+    return df_res.to_json(orient='index', force_ascii=False)
 
 # 51job行业薪资情况
+# @return 行业名称 平均薪资 标准差
 def get51jobSalaryByIndustry():
     df = job51SalaryPosition()
     df = df[(True ^ df.industry.isin(['1000-5000人', '5000-10000人', '500-1000人', '少于50人', '150-500人', '50-150人']))]
     df_res = df.groupby('industry')['mean'].describe()
     df_j5_industry_salary = df_res[df_res['count'] > 10].sort_values('mean', ascending=False).apply(
         lambda x: round(x, 2))
-    return pd.DataFrame(df_j5_industry_salary, columns=['mean','std']).to_json(orient='split', force_ascii=False)
+    res_mean = df_j5_industry_salary['mean'].to_dict()
+    res_std = df_j5_industry_salary['std'].to_dict()
+    return list(res_mean.keys()), list(map(lambda x: int(x * 1000), res_mean.values())), list(res_std.values())
 
 # 51job行业薪资标准差情况
 def get51jobSalaryStdByIndustry():
