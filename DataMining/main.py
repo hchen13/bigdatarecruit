@@ -66,7 +66,7 @@ if __name__ == '__main__':
     # print(lagouWorkYearNum())
 
     # 拉钩整体薪资分布
-    # lagouWholeSalaryDistribution()
+    # print(lagouWholeSalaryDistribution())
 
     # 拉钩年限薪资分析
     # lagouWorkYearSalary()
@@ -95,13 +95,17 @@ if __name__ == '__main__':
     # get51jobSalaryStdByIndustry(2)
 
     # 智联 具体职位薪资排行前100
-    # getZLSalaryByPosition(1)
+    # getZLSalaryByPosition(type = 2, sort_type=0)
 
     # 智联 具体职位薪资（年限，城市）排行前100
     # getZLSalaryByPosition(2)
 
     # 获取51job职位诱惑词云
     # getJ5PositionWordCloud()
+
+    # 城市薪资排行
+    # 1、全部 2、工作年限1-3的
+    # print(citySalaryToExcel(type=2))
 
     # *********************************  词云  ********************************
     #获取拉钩职位词云
