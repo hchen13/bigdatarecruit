@@ -77,7 +77,7 @@ if __name__ == '__main__':
     # *********************************  51job薪资情况（以下分析运行时间将近15分钟）  ********************************
 
     # 获取51job整体薪资中位数
-    # print(get51jobSalaryMiddle())
+    print(get51jobSalaryMiddle(2))
 
     # 获取51job教育程度与薪资关系
     # print(get51jobSalaryByEducation())
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     # print(get51jobSalaryByWorkYear())
 
     # 51job根据教育水平和工作年限分析薪资情况
-    print(get51jobSalaryByWE())
+    # print(get51jobSalaryByWE())
 
     # 51job行业薪资情况
     # list_key,list_mean, list_std = get51jobSalaryByIndustry()
@@ -109,4 +109,4 @@ if __name__ == '__main__':
 
     # *********************************  词云  ********************************
     #获取拉钩职位词云
-    # getLagouPositionWordCloud('python', type=3)
+    # getLagouPositionWordCloud('ui', type=3)

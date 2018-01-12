@@ -368,10 +368,11 @@ def job51SalaryDeal(line):
 
 # 51job薪资情况
 # 获取51job工作年限，教育水平，薪资 （此方法运行时间将近15分钟）
-def job51SalaryPosition():
+# @param type 1、默认使用以生成好的h5文件 2、重新生成
+def job51SalaryPosition(type=1):
     import os
     # 获取数据库连接
-    if os.path.exists('./salaryWE.h5'):
+    if type == 1 & os.path.exists('./salaryWE.h5'):
         df_res = pd.read_hdf('./salaryWE.h5')
     else:
         conn = database.getDatabaseConn()
@@ -398,8 +399,9 @@ def resDeal(df_res):
     return json.dumps(res_dict)
 
 # 获取51job整体薪资中位数
-def get51jobSalaryMiddle():
-    df = job51SalaryPosition()
+# @param type 1、从h5结果获取数据 2、重新生成数据
+def get51jobSalaryMiddle(type=1):
+    df = job51SalaryPosition(type)
     return df.describe().apply(lambda x: round(x * 1000, 2))['mean']['mean']
 
 # 获取51job教育程度招聘数情况
