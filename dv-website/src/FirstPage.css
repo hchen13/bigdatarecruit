@@ -29,18 +29,19 @@
   width: 45%;
   position: absolute;
   top: 200px;
-  left: 38%;
+  left: 25%;
   z-index: 10;
 }
 
 .cover h1 {
-  margin-left: 30px;
+  text-align: center;
   font-size: 4em;
   color: white;
   opacity: 0.8;
 }
 
 .cover p {
+  text-align: center;
   font-size: 2em;
   color: white;
   opacity: 0.8;

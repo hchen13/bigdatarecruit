@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import FirstPage from './FirstPage';
+import ColorIt from './ColorIt';
+import OldChengDu from './OldChengDu';
 import RecruitBigData from './RecruitBigData';
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 
@@ -11,13 +13,27 @@ const {Header, Content, Footer} = Layout
 const menu = (
   <Menu>
     <Menu.Item>
-      <a rel="noopener noreferrer" href="recruitBigData">招聘大数据</a>
+      <a rel="noopener noreferrer" href="/recruitBigData">招聘大数据</a>
     </Menu.Item>
     <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">Word2Vec</a>
+      <a rel="noopener noreferrer" href="http://www.taobao.com/">Word2Vec</a>
     </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">3rd menu item</a>
+    </Menu.Item>
+  </Menu>
+);
+
+const menu_c = (
+  <Menu>
+    <Menu.Item>
+      <a rel="noopener noreferrer" href="/colorit">老照片记忆</a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="/oldChengDu">老成都</a>
+    </Menu.Item>
+    <Menu.Item>
+      <a rel="noopener noreferrer" href="#">老电影</a>
     </Menu.Item>
   </Menu>
 );
@@ -31,22 +47,26 @@ class App extends Component {
           <Row>
             <Col span={6}>
               <img src={logo} className="App-logo" alt="logo" />
-              <h1 className="App-title">Minokun 数据站</h1>
+              <h1 className="App-title">   AI 空间站</h1>
             </Col>
             <Col span={11}>
               <Row>
-                <Col span={2}>
+                <Col span={3}>
                   <h2><Link to='/'>首页</Link></h2>
                 </Col>
-                <Col span={5} className='label-1'>
+                <Col span={4} className='label-1'>
                   <Dropdown overlay={menu}>
                     <Link className="ant-dropdown-link" to="recruitBigData">
                       AI大数据 <Icon type="down" />
                     </Link>
                   </Dropdown>
                 </Col>
-                <Col span={4}>
-                  <h2>最新动态</h2>
+                <Col span={4} className='label-1'>
+                  <Dropdown overlay={menu_c}>
+                    <a className="ant-dropdown-link" href="#" style={{marginLeft:'4px'}}>
+                      ColorIt <Icon type="down" />
+                    </a>
+                  </Dropdown>
                 </Col>
                 <Col span={2}>
                   <h2>相册</h2>
@@ -82,6 +102,8 @@ class App extends Component {
         <Content className='Content'>
             <div>
               <Route exact path="/" component={FirstPage}/>
+              <Route exact path="/colorit" component={ColorIt}/>
+              <Route exact path="/oldChengDu" component={OldChengDu}/>
               <Route path="/recruitBigData" component={RecruitBigData}/>
             </div>
         </Content>
