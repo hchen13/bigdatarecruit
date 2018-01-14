@@ -54,22 +54,20 @@ class App extends Component {
                 <Col span={3}>
                   <h2><Link to='/'>首页</Link></h2>
                 </Col>
-                <Col span={4} className='label-1'>
-                  <Dropdown overlay={menu}>
-                    <Link className="ant-dropdown-link" to="recruitBigData">
-                      AI大数据 <Icon type="down" />
-                    </Link>
-                  </Dropdown>
+                <Col span={3} className='label-1'>
+                  <Link className="ant-dropdown-link" to="#">
+                    AI大数据
+                  </Link>
                 </Col>
-                <Col span={4} className='label-1'>
-                  <Dropdown overlay={menu_c}>
-                    <a className="ant-dropdown-link" href="#" style={{marginLeft:'4px'}}>
-                      ColorIt <Icon type="down" />
-                    </a>
-                  </Dropdown>
+                <Col span={3} className='label-1'>
+                  <Link className="ant-dropdown-link" to="colorit">
+                    ColorIt
+                  </Link>
                 </Col>
-                <Col span={2}>
-                  <h2>相册</h2>
+                <Col span={3} className='label-1'>
+                  <Link className="ant-dropdown-link" to="oldChengDu">
+                    老成都
+                  </Link>
                 </Col>
                 <Col span={3}>
                   <h2>博客</h2>
