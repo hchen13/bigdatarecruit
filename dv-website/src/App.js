@@ -47,7 +47,7 @@ class App extends Component {
           <Row>
             <Col span={6}>
               <img src={logo} className="App-logo" alt="logo" />
-              <h1 className="App-title">   AI 空间站</h1>
+              <h1 className="App-title">   ColorIt</h1>
             </Col>
             <Col span={11}>
               <Row>
@@ -61,7 +61,7 @@ class App extends Component {
                 </Col>
                 <Col span={3} className='label-1'>
                   <Link className="ant-dropdown-link" to="colorit">
-                    ColorIt
+                    老记忆
                   </Link>
                 </Col>
                 <Col span={3} className='label-1'>

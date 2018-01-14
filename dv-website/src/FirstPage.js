@@ -12,7 +12,7 @@ class FirstPage extends Component {
 				<div className='video-div'>
 
 		            <div className='cover'>
-		            	<h1>AI 空间站</h1>
+		            	<h1>ColorIt</h1>
 						<p>从数据中发现真理 从真理中窥探未来</p>
 						<p>我们是一群探寻真理的猿猴</p>
 		            </div>
