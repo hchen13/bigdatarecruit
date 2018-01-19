@@ -77,7 +77,7 @@ if __name__ == '__main__':
     # *********************************  51job薪资情况（以下分析运行时间将近15分钟）  ********************************
 
     # 获取51job整体薪资中位数
-    print(get51jobSalaryMiddle(2))
+    # print(get51jobSalaryMiddle(2))
 
     # 获取51job教育程度与薪资关系
     # print(get51jobSalaryByEducation())
