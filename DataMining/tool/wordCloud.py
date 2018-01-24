@@ -19,7 +19,7 @@ def getWordCloud(content='', type = 1, status = 1, temple_pic_path = './cloud.jp
     if type == 1:
         words = content
     elif type == 2:
-        with codecs.open(content, encoding='gbk') as f:
+        with codecs.open(content) as f:
             words = f.read()
     # 需要去掉的字符
     del_list_compile = re.compile(r"[，|。|、|\n|”|“|的|和|<.*?>]")

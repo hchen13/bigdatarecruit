@@ -110,3 +110,4 @@ if __name__ == '__main__':
     # *********************************  词云  ********************************
     #获取拉钩职位词云
     # getLagouPositionWordCloud('ui', type=3)
+    # getWordCloud(content='/Users/monstar/Desktop/a.txt', type=2, status=1, temple_pic_path='/Users/monstar/Desktop/cube.jpg')
