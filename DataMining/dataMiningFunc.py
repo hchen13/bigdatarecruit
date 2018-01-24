@@ -1,6 +1,7 @@
 from tool import database, helper
 import pandas as pd
 import numpy as np
+import json
 
 # ******************************** hr排行 *************************************
 # 获取公司hr数量排行
@@ -367,20 +368,41 @@ def job51SalaryDeal(line):
 
 # 51job薪资情况
 # 获取51job工作年限，教育水平，薪资 （此方法运行时间将近15分钟）
-def job51SalaryPosition():
+# @param type 1、默认使用以生成好的h5文件 2、重新生成
+def job51SalaryPosition(type=1):
+    import os
     # 获取数据库连接
-    conn = database.getDatabaseConn()
-    sql = database.getJ5ZCSql()
-    df_51job_salary = pd.read_sql(sql, conn)
-    df_51job_salary = df_51job_salary[df_51job_salary.salary != 'NULL']
-    df_51job_salary_deal = df_51job_salary[True ^ df_51job_salary['salary'].str.contains('天|小时|\+')]
-    df_tmp = df_51job_salary_deal.salary.apply(job51SalaryDeal)
-    return df_51job_salary_deal.combine_first(df_tmp.rename(columns={0: 'low', 1: 'high', 2: 'mean'}))
+    if type == 1 & os.path.exists('./salaryWE.h5'):
+        df_res = pd.read_hdf('./salaryWE.h5')
+    else:
+        conn = database.getDatabaseConn()
+        sql = database.getJ5ZCSql()
+        df_51job_salary = pd.read_sql(sql, conn)
+        df_51job_salary = df_51job_salary[df_51job_salary.salary != 'NULL']
+        df_51job_salary_deal = df_51job_salary[True ^ df_51job_salary['salary'].str.contains('天|小时|\+')]
+        df_tmp = df_51job_salary_deal.salary.apply(job51SalaryDeal)
+        df_res = df_51job_salary_deal.combine_first(df_tmp.rename(columns={0: 'low', 1: 'high', 2: 'mean'}))
+        df_res.to_hdf('./salaryWE.h5', 'salary_all')
+    return df_res
+
+# 返回标准函数
+def resDeal(df_res):
+    res_dict = {}
+    df = df_res[df_res.index != 'NULL']
+    res_mean_dict = df['mean'].to_dict()
+    res_std_dict = df['std'].to_dict()
+    res_count_dict = df['count'].to_dict()
+    res_dict['key_name'] = list(res_mean_dict.keys())
+    res_dict['count'] = list(res_count_dict.values())
+    res_dict['salary'] = list(map(lambda x: int(x * 1000), res_mean_dict.values()))
+    res_dict['std'] = list(map(lambda x: round(x + 20, 2), res_std_dict.values()))
+    return json.dumps(res_dict)
 
 # 获取51job整体薪资中位数
-def get51jobSalaryMiddle():
-    df = job51SalaryPosition()
-    return df.describe().apply(lambda x: round(x, 2))['mean']['50%']
+# @param type 1、从h5结果获取数据 2、重新生成数据
+def get51jobSalaryMiddle(type=1):
+    df = job51SalaryPosition(type)
+    return df.describe().apply(lambda x: round(x * 1000, 2))['mean']['mean']
 
 # 获取51job教育程度招聘数情况
 def get51jobRecruitNumByEducation():
@@ -393,36 +415,33 @@ def get51jobRecruitNumByEducation():
 # 获取51job教育程度与薪资关系
 def get51jobSalaryByEducation():
     df = job51SalaryPosition()
-    df_res = df.groupby('education')['mean'].describe().sort_values(['count'], ascending=False)
-    return df_res['mean']
-
-# 获取51job教育程度与薪资关系的标准差
-def get51jobSalaryStdByEducation():
-    df = job51SalaryPosition()
-    df_res = df.groupby('education')['mean'].describe().sort_values(['count'], ascending=False)
-    return df_res['std']
+    df_res = df.groupby('education')['mean'].describe().sort_values(['mean'], ascending=False)
+    return resDeal(df_res)
 
 # 51job工作年限与薪资关系
 def get51jobSalaryByWorkYear():
     df = job51SalaryPosition()
-    df_res = df.groupby('work_year')['mean'].describe().sort_values(['count'], ascending=False)
-    return df_res['std']
+    df_res = df.groupby('work_year')['mean'].describe().sort_values(['mean'])
+    return resDeal(df_res)
 
 # 51job根据教育水平和工作年限分析薪资情况
 def get51jobSalaryByWE():
     df = job51SalaryPosition()
     df_rename = df.rename(columns={'work_year' : '工作年限', 'mean' : '平均薪资', 'education' : '教育程度'})
-    df_res = df_rename.pivot_table(index=['工作年限'], columns='教育程度', values=['平均薪资']).rename(columns={'NULL' : '其他'}).apply(lambda x: round(x,2))
-    return df_res.to_json(orient='split', force_ascii=False)
+    df_res = df_rename.pivot_table(index=['工作年限'], columns='教育程度', values=['平均薪资']).rename(columns={'NULL' : '其他'}).apply(lambda x: round(x * 1000,0))
+    return df_res.T.to_json(orient='split', force_ascii=False)
 
 # 51job行业薪资情况
+# @return 行业名称 平均薪资 标准差
 def get51jobSalaryByIndustry():
     df = job51SalaryPosition()
     df = df[(True ^ df.industry.isin(['1000-5000人', '5000-10000人', '500-1000人', '少于50人', '150-500人', '50-150人']))]
     df_res = df.groupby('industry')['mean'].describe()
     df_j5_industry_salary = df_res[df_res['count'] > 10].sort_values('mean', ascending=False).apply(
         lambda x: round(x, 2))
-    return pd.DataFrame(df_j5_industry_salary, columns=['mean','std']).to_json(orient='split', force_ascii=False)
+    res_mean = df_j5_industry_salary['mean'].to_dict()
+    res_std = df_j5_industry_salary['std'].to_dict()
+    return list(res_mean.keys()), list(map(lambda x: int(x * 1000), res_mean.values())), list(res_std.values())
 
 # 51job行业薪资标准差情况
 def get51jobSalaryStdByIndustry():
@@ -445,8 +464,10 @@ def getZLSalaryByPosition(type = 1, sort_type = 1):
     elif type == 2:
         condition = ['position_type', 'work_year', 'city']
     sort_status = True if sort_type == 1 else False
-    df_res = df.groupby(condition).describe().salary_high.sort_values('50%', ascending=sort_status)[:100]
-    return df_res.to_json(orient='index', force_ascii=False)
+    df_res = df.groupby(condition).describe().salary_high.sort_values('mean', ascending=sort_status)[:100]
+    res = pd.concat([df_res['std'].apply(lambda x: int(x)), df_res['mean'].apply(lambda x: int(x)), df_res['50%'].apply(lambda x: int(x))], axis=1).rename(columns={'std':'标准差','mean':'平均值','50%':'中位数'})
+    res.to_excel('output/PositionSalaryByWE.xlsx')
+    return res.to_json(orient='index', force_ascii=False)
 
 # 城市薪资排行
 # @param type 1、全部 2、工作年限1-3的
@@ -457,13 +478,40 @@ def getCitySalary(type = 1):
                              pd.DataFrame(df_lagou, columns=['city', 'salary_mean', 'work_year'])])
     if type == 1:
         g_df = city_mix_df.groupby('city')
+        g_df_res = g_df.describe().apply(lambda x: round(x, 2))
+        g_df_res[('salary_mean', 'mean')] = g_df_res[('salary_mean', 'mean')].apply(lambda x: x * 1000)
+        g_df_res[('salary_mean', '50%')] = g_df_res[('salary_mean', '50%')].apply(lambda x: x * 1000)
+        g_df_res = g_df_res[
+            (g_df_res[('salary_mean', 'std')] < 20) & (g_df_res[('salary_mean', 'count')] > 18)].sort_values(
+            ('salary_mean', 'mean'), ascending=False)
+
     else:
-        g_df = city_mix_df[city_mix_df['work_year'] == '1-3年']
-    g_df_res = g_df.describe().apply(lambda x: round(x, 2))
-    g_df_res = g_df_res[
-        (g_df_res[('salary_mean', 'std')] < 20) & (g_df_res[('salary_mean', 'count')] > 18)].sort_values(
-        ('salary_mean', 'mean'), ascending=False)
+        g_df = city_mix_df[city_mix_df['work_year'] == '1-3年'].groupby('city')
+        g_df_res = g_df.describe().apply(lambda x: round(x, 2))
+        g_df_res[('salary_mean', 'mean')] = g_df_res[('salary_mean', 'mean')].apply(lambda x: x * 1000)
+        g_df_res[('salary_mean', '50%')] = g_df_res[('salary_mean', '50%')].apply(lambda x: x * 1000)
+        g_df_res = g_df_res[
+            (g_df_res[('salary_mean', 'std')] < 20) & (g_df_res[('salary_mean', 'count')] > 5)].sort_values(
+            ('salary_mean', 'mean'), ascending=False)
+
+
     res_df = pd.DataFrame(g_df_res, columns=[('salary_mean', 'std'), ('salary_mean', 'mean'),
-                                    ('salary_mean', '50%')]).rename(
+                                             ('salary_mean', '50%')]).rename(
         columns={'salary_mean': '薪资/k', 'mean': '平均数', 'std': '标准差', '50%': '中位数', })
-    return res_df.to_json(orient='index', force_ascii=False)
+
+    return res_df
+
+# 城市薪资排行转excel
+def citySalaryToExcel(type = 1, path = "output/citySalary.xlsx"):
+    df = getCitySalary(type)
+    df.to_excel(path)
+
+# echarts地图之城市薪资展示数据处理 TODO df格式不对
+def citySalaryToEcharts(type = 1):
+    df = getCitySalary(type)
+    df_copy = pd.concat([df.index, df[('salary_mean', '50%')]], axis=1)
+    import json
+    res = str(json.loads(
+        pd.DataFrame(df_copy, columns=['city', '中位数']).rename(columns={'city': 'name', '中位数': 'value'}).to_json(
+            orient='index', force_ascii=False)).values()).replace("\'name\'", "name").replace("\'value\'", "value")
+    return res
