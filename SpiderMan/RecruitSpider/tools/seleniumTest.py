@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import  WebDriverWait
+from selenium import webdriver
 # from scrapy.selector import Selector
 import time
 import codecs
@@ -60,6 +61,66 @@ def lagouLogin(type = 'str', *args):
         # browser.close()
         cookies = cookies_str if type == "str" else cookies_dict
         with codecs.open("login.cookie",'w',encoding='utf-8') as f:
+            if type == "str":
+                f.write(cookies)
+            else:
+                f.write(json.dumps(cookies))
+
+    return cookies
+
+# boss直聘登录
+def bossLogin(type = 'str', *args):
+    # 读取登录状态
+    # login_status = os.path.exists('login.cookie')
+    boss_login_status = 0
+    if boss_login_status:
+        with codecs.open('bossLogin.cookie','r') as f:
+            cookies = json.load(f)
+    else:
+        # driver_path = platformJudge()
+
+        # 谷歌浏览器
+        # chrome_opt = Options()
+        # prefs = {"profile.managed_default_content_sttings.images":2}
+        # chrome_opt.add_experimental_option("prefs",prefs)
+        # chrome_opt.add_argument("--no-sandbox")
+        # chrome_opt.add_argument("--disable-setuid-sandbox")
+        # browser = webdriver.Chrome(driver_path,chrome_options=chrome_opt)
+        browser = args[0]
+        # 页面加载超时时间
+        # browser.set_page_load_timeout(20)
+        # browser.set_script_timeout(20)
+        login_url = "https://login.zhipin.com/"
+        browser.get(login_url)
+        elem_account = browser.find_element_by_xpath("//form/div[@class='form-row row-select']/span[@class='ipt-wrap']/input")
+        elem_password = browser.find_element_by_xpath("//form/div[@class='form-row']/span[@class='ipt-wrap']/input")
+        elem_captcha = browser.find_element_by_xpath("//form/div[@class='form-row row-code']/span[@class='cell-wrap']/input")
+        elem_account.clear()
+        elem_password.clear()
+        elem_captcha.clear()
+        elem_account.send_keys("15583305549")
+        elem_password.send_keys("hl4126011314")
+        captcha = input()
+        elem_captcha.send_keys(captcha)
+        elem_password.send_keys(Keys.ENTER)
+
+        # 找到元素就停止加载，否则刷新
+        try:
+            WebDriverWait(driver=browser, timeout=5).until(lambda x:x.find_element_by_id('boss_header'))
+        except Exception as e:
+            browser.refresh()
+
+        if browser.current_url != login_url:
+            cookie_str = [item["name"] + "=" + item["value"]  for item in browser.get_cookies()]
+
+        # cookie存入文件
+        cookies_str = ';'.join(item for item in cookie_str)
+        cookie_name = [item['name'] for item in browser.get_cookies()]
+        cookie_value = [item['value'] for item in browser.get_cookies()]
+        cookies_dict = dict(zip(cookie_name,cookie_value ))
+        # browser.close()
+        cookies = cookies_str if type == "str" else cookies_dict
+        with codecs.open("bossLogin.cookie",'w',encoding='utf-8') as f:
             if type == "str":
                 f.write(cookies)
             else:

@@ -160,3 +160,61 @@ class Job51SpiderPipeline(object):
     def do_insert_company(self, cursor, item):
         insert_sql, params = item.get_51Job_company_insert_sql()
         cursor.execute(insert_sql, params)
+
+class BossSpiderPipeline(object):
+    def __init__(self, dbpool):
+        self.dbpool = dbpool
+
+    @classmethod
+    def from_settings(cls, settings):
+        dbparms = dict(
+            host=settings['MYSQL_HOST'],
+            user=settings['MYSQL_USER'],
+            password=settings['MYSQL_PASSWORD'],
+            db=settings['MYSQL_DBNAME'],
+            charset='utf8',
+            cursorclass=MySQLdb.cursors.DictCursor,
+            use_unicode=True
+        )
+        dbpool = adbapi.ConnectionPool("MySQLdb", **dbparms)
+
+        return cls(dbpool)
+
+    # 存取Boss直聘的所有城市及其编码
+    def do_insert_findCity(self, cursor, item):
+        insert_sql = item.get_findCity_insert_sql()
+        cursor.execute(insert_sql)
+
+    # 获取职位类型
+    def do_insert_positionType(self, cursor, item):
+        insert_sql = item.get_findPositionType_insert_sql()
+        cursor.execute(insert_sql)
+
+    def do_insert_company(self, cursor, item):
+        insert_sql = item.get_boss_company_insert_sql()
+        cursor.execute(insert_sql)
+
+    def do_insert_position(self, cursor, item):
+        insert_sql = item.get_boss_position_insert_sql()
+        print(insert_sql)
+        cursor.execute(insert_sql)
+
+    def process_item(self, item, spider):
+        # 异步插入
+        # query_findCity = self.dbpool.runInteraction(self.do_insert_findCity, item)
+        # query_positionType = self.dbpool.runInteraction(self.do_insert_positionType, item)
+        query_position = self.dbpool.runInteraction(self.do_insert_position, item)
+        query_company = self.dbpool.runInteraction(self.do_insert_company, item)
+
+        # 处理异常
+        # query_positionType.addErrback(self.handle_error, item, spider)
+        # query_findCity.addErrback(self.handle_error, item, spider)
+        query_position.addErrback(self.handle_error, item, spider)
+        query_company.addErrback(self.handle_error, item, spider)
+
+    def handle_error(self, failure, item, spider):
+        print(failure)
+        import codecs
+        fw = codecs.open('boss_errLog.txt', 'a', 'utf-8')
+        fw.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + "\r\n" + str(failure))
+        fw.close()

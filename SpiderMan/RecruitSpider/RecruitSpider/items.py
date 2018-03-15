@@ -437,3 +437,107 @@ class Job51CompanyItem(scrapy.Item):
         1,
         int(time.time()))
         return insert_sql, params
+
+class FindCityItem(scrapy.Item):
+    # 城市信息 item
+    cityName = scrapy.Field()
+    dataVal = scrapy.Field()
+
+    def get_findCity_insert_sql(self):
+        insert_sql = """
+                 INSERT INTO boss_city(
+                 city_name,
+                 data_val,
+                 created_at)
+                 VALUES('%s', '%s', '%s')ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                 """ %(self['cityName'], self['dataVal'], int(time.time()))
+        return insert_sql
+
+class FindPositionTypeItem(scrapy.Item):
+    # 职位类型 item
+    positionType = scrapy.Field()
+    positionTag = scrapy.Field()
+    parentTag = scrapy.Field()
+
+    def get_findPositionType_insert_sql(self):
+        insert_sql = """
+                 INSERT INTO boss_position_type(
+                 position_type,
+                 position_tag,
+                 parent_tag,
+                 created_at)
+                 VALUES('%s', '%s', '%s', '%s')ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                 """ %(self['positionType'], self['positionTag'], self['parentTag'], int(time.time()))
+        return insert_sql
+
+class BossItemLoader(ItemLoader):
+        default_output_processor = TakeFirst()
+
+class BossItem(scrapy.Item):
+    # 公司信息 item
+    companyShortName = scrapy.Field()
+    companyFullName = scrapy.Field()
+    companySize = scrapy.Field()
+    companyLogo = scrapy.Field()
+    companyFinanceStage = scrapy.Field()
+    companyWebsite = scrapy.Field()
+    companyType = scrapy.Field()
+    companyResTime = scrapy.Field()
+    companyIndustry = scrapy.Field()
+    companyUrl = scrapy.Field()
+    companyIntro = scrapy.Field()
+
+    # 招聘职位的信息 item
+    positionName = scrapy.Field()
+    publishTime = scrapy.Field()
+    salary = scrapy.Field()
+    workYear = scrapy.Field()
+    education = scrapy.Field()
+    jobTags = scrapy.Field()
+    content = scrapy.Field()
+    city = scrapy.Field()
+    location = scrapy.Field()
+    positionUrl = scrapy.Field()
+
+    def get_boss_company_insert_sql(self):
+        insert_sql = """
+                    INSERT INTO boss_company(
+                    short_name,
+                    full_name,
+                    size,
+                    logo,
+                    finance_stage,
+                    website,
+                    company_type,
+                    res_time,
+                    created_at,
+                    industry,
+                    company_url,
+                    intro
+                    )
+                    VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                """ % (self['companyShortName'], self['companyFullName'], self['companySize'], self['companyLogo'],
+                       self['companyFinanceStage'], self['companyWebsite'], self['companyType'], self['companyResTime'],
+                       int(time.time()), self['companyIndustry'], self['companyUrl'], self['companyIntro'])
+        return insert_sql
+
+    def get_boss_position_insert_sql(self):
+        insert_sql = """
+                    insert into boss_position(
+                    position_name,
+                    publish_time,
+                    salary,
+                    work_year,
+                    education,
+                    job_tags,
+                    content,
+                    city,
+                    location,
+                    position_url,
+                    created_at
+                    )
+                    VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                """ % (self['positionName'], self['publishTime'], self['salary'], self['workYear'], self['education'],
+                       self['jobTags'], self['content'], self['city'], self['location'], self['positionUrl'],
+                       int(time.time()))
+        return insert_sql
