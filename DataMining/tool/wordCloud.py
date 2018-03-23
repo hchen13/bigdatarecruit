@@ -4,7 +4,7 @@ from wordcloud import WordCloud
 from scipy.misc import imread
 import matplotlib.pyplot as plt
 import codecs
-from jieba import posseg
+import jieba.posseg as pseg
 # Read the whole text.
 # @params content 具体内容 (依据type分别传入文字，地址，sql语句)
 # @params type 1、文字 2、文件
@@ -34,5 +34,5 @@ def getWordCloud(content='', type = 1, status = 1, temple_pic_path = './cloud.jp
     plt.figure(figsize=(15,8))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
-    plt.show()
-    # plt.savefig(pic_file_path)
+    # plt.show()
+    plt.savefig(pic_file_path)
