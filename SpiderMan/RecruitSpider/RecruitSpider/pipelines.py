@@ -187,7 +187,7 @@ class BossSpiderPipeline(object):
 
     # 获取职位类型
     def do_insert_positionType(self, cursor, item):
-        insert_sql = item.get_findPositionType_insert_sql()
+        insert_sql = item.get_findPositionType_insert_sql
         cursor.execute(insert_sql)
 
     def do_insert_company(self, cursor, item):
@@ -216,5 +216,101 @@ class BossSpiderPipeline(object):
         print(failure)
         import codecs
         fw = codecs.open('boss_errLog.txt', 'a', 'utf-8')
+        fw.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + "\r\n" + str(failure))
+        fw.close()
+
+class InternsSpiderPipeline(object):
+    def __init__(self, dbpool):
+        self.dbpool = dbpool
+
+    @classmethod
+    def from_settings(cls, settings):
+        dbparms = dict(
+            host=settings['MYSQL_HOST'],
+            user=settings['MYSQL_USER'],
+            password=settings['MYSQL_PASSWORD'],
+            db=settings['MYSQL_DBNAME'],
+            charset='utf8',
+            cursorclass=MySQLdb.cursors.DictCursor,
+            use_unicode=True
+        )
+        dbpool = adbapi.ConnectionPool("MySQLdb", **dbparms)
+        return cls(dbpool)
+
+        # 存取实习僧的所有城市及其编码
+    def do_insert_findIntensCity(self, cursor, item):
+        insert_sql = item.get_findInternsCity_insert_sql()
+        cursor.execute(insert_sql)
+
+    def process_item(self, item, spider):
+        # 异步插入
+        # query_findInternsCity = self.dbpool.runInteraction(self.do_insert_findIntensCity, item)
+        query = self.dbpool.runInteraction(self.do_insert_intern , item)
+        # 处理异常
+        # query_findInternsCity.addErrback(self.handle_error, item, spider)
+        query.addErrback(self.handle_error, item, spider)
+        return item
+
+    def handle_error(self, failure, item, spider):
+        print(failure)
+
+        import codecs
+        fw = codecs.open('interns_errLog.txt', 'a', 'utf-8')
+        fw.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + "\r\n" + str(failure))
+        fw.close()
+
+    def do_insert_intern(self, cursor, item):
+        if len(item) == 25:
+            insert_sql = item.get_intern_position_insert_sql()
+            cursor.execute(insert_sql)
+        else:
+            insert_sql = item.get_intern_company_insert_sql()
+            return cursor.execute(insert_sql)
+
+class stateSpiderPipeline(object):
+    def __init__(self, dbpool):
+        self.dbpool = dbpool
+
+    @classmethod
+    def from_settings(cls, settings):
+        dbparms = dict(
+            host=settings['MYSQL_HOST'],
+            user=settings['MYSQL_USER'],
+            password=settings['MYSQL_PASSWORD'],
+            db=settings['MYSQL_DBNAME'],
+            charset='utf8',
+            cursorclass=MySQLdb.cursors.DictCursor,
+            use_unicode=True
+        )
+        dbpool = adbapi.ConnectionPool("MySQLdb", **dbparms)
+        return cls(dbpool)
+
+
+    def do_update_position(self, cursor, item):
+        url = item['url']
+        if 'lagou' in url:
+            update_sql = item.get_recruit_day_update_sql()
+            cursor.execute(update_sql)
+        elif 'jobs.zhaopin.com' in url:
+            update_sql = item.get_zhilian_position_update_sql()
+            cursor.execute(update_sql)
+        elif '51job' in url and len(item) == 3:
+            update_sql = item.get_51Job_position_update_sql()
+            cursor.execute(update_sql)
+        elif len(item) == 4:
+            update_sql = item.get_51Job2017_position_update_sql()
+            cursor.execute(update_sql)
+
+    def process_item(self, item, spider):
+        # 异步插入
+        query = self.dbpool.runInteraction(self.do_update_position, item)
+        # 处理异常
+        query.addErrback(self.handle_error, item, spider)
+        return item
+
+    def handle_error(self, failure, item, spider):
+        print(failure)
+        import codecs
+        fw = codecs.open('state_errLog.txt', 'a', 'utf-8')
         fw.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + "\r\n" + str(failure))
         fw.close()

@@ -22,7 +22,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
-
+HTTPERROR_ALLOWED_CODES = [404]
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 16
 

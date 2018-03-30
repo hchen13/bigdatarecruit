@@ -54,7 +54,7 @@ class ZhilianSpider(scrapy.Spider):
 
     # 过滤错误拼音
     total_city_pinyin.append('chongqing')
-    total_city_pinyin.remove('zhongqing')
+    # total_city_pinyin.remove('zhongqing')
     total_city_num = len(total_city_pinyin)
     err_num = 0
 
@@ -119,7 +119,7 @@ class ZhilianSpider(scrapy.Spider):
             else:
                 page_num = int(page_num) + 1
                 next_url = re.sub(r'\d+', str(page_num), response.url)
-                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, meta={'err_num': err_num}, callback=self.parse)
+                yield Request(url=ps.urljoin(response.url, next_url), headers=self.headers, meta={'err_num': self.err_num}, callback=self.parse)
         else:
             self.headers['Referer'] = response.url
             # 获取职位列表

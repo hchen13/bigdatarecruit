@@ -12,6 +12,11 @@ sys.path.append(file_path)
 # execute(["scrapy", "crawl", "zhilian"])
 # execute(["scrapy", "crawl", "job51"])
 # execute(["scrapy", "crawl", "findCity"])
-execute(["scrapy", "crawl", "boss"])
+# execute(["scrapy", "crawl", "boss"])
 # execute(["scrapy", "crawl", "positionType"])
+# execute(["scrapy", "crawl", "findInternsCity"])
+# execute(["scrapy", "crawl", "interns"])
+execute(["scrapy", "crawl", "state"])
+
+
 

@@ -10,6 +10,9 @@ class FindCitySpider(scrapy.Spider):
 
     custom_settings = {
         'DOWNLOAD_DELAY': 3,
+        'ITEM_PIPELINES': {
+            'RecruitSpider.pipelines.BossSpiderPipeline': 300,
+        },
     }
 
     headers = {

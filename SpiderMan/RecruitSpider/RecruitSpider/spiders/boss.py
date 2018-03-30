@@ -184,7 +184,6 @@ class BossSpider(scrapy.Spider):
         if url:
             print("出现验证码页，休息一下！")
             time.sleep(10)
-
         item_loader = response.meta.get('item_loader')
         jobTags = response.xpath('//div[@class="job-tags"]/span/text()').extract()
         content = response.xpath('//div[@class="job-sec"]/div[@class="text"]/text()').extract()
