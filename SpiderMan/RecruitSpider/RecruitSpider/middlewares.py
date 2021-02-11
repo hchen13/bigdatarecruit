@@ -81,11 +81,11 @@ class RandomUserAgentMiddleware(object):
 
         request.headers.setdefault('User-Agent',get_ua())
 
-class MyProxiesSpiderMiddleware(object):
-    def process_request(self, request, spider):
-        key = random.randint(1,2)
-        if key:
-            request.meta["proxy"] = "http://47.52.89.72:3128"
+# class MyProxiesSpiderMiddleware(object):
+#     def process_request(self, request, spider):
+#         key = random.randint(1,2)
+#         if key:
+#             request.meta["proxy"] = "http://47.52.89.72:3128"
 
 class JsPageMiddleware(object):
     def __init__(self):
@@ -96,7 +96,6 @@ class JsPageMiddleware(object):
         # chrome_opt.add_experimental_option("prefs", prefs)
         # driver_path = platformJudge()
         # self.browser = webdriver.Chrome(driver_path, chrome_options=chrome_opt)
-
 
     def process_request(self, request, spider):
         regx = re.compile(r'\d+.html')
@@ -122,6 +121,20 @@ class JsPageMiddleware(object):
                 # 找到元素就停止加载，否则刷新
                 try:
                     WebDriverWait(driver=spider.browser, timeout=5).until(lambda x: x.find_element_by_xpath("//div[contains(@class,'details_container')]"))
+                except Exception as e:
+                    spider.browser.refresh()
+                # 不经过downloader 直接返回结果
+                return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding="utf-8")
+        elif spider.name == 'boss':
+            # boss 直聘招聘处理
+            url = request.url
+            res = re.match(r'https://www.zhipin.com/job_detail/?query=&scity=(.*?)&industry=&position=', url)
+            if not res:
+                spider.browser.get(request.url)
+                # 找到元素就停止加载，否则刷新
+                try:
+                    WebDriverWait(driver=spider.browser, timeout=5).until(
+                        lambda x: x.find_element_by_id("//div[contains(@class,'main')]"))
                 except Exception as e:
                     spider.browser.refresh()
                 # 不经过downloader 直接返回结果

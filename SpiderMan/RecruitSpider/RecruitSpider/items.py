@@ -74,6 +74,9 @@ class LagouItem(scrapy.Item):
     hrConnectionLagou = scrapy.Field()
     hrPositionName = scrapy.Field()
 
+    state = scrapy.Field()
+    endTime = scrapy.Field()
+
     def get_company_insert_sql(self):
 
         insert_sql = """
@@ -116,6 +119,12 @@ class LagouItem(scrapy.Item):
         """
         params = (self['publisherId'], self['hrPositionName'], self['hrPortrait'], self['hrRealName'], self['positionId'],hrActiveTime, self['hrConnectionLagou'], int(time.time()),1)
         return insert_sql, params
+
+    def  get_recruit_day_update_sql(self):
+        update_sql = """
+                update lagou_recruit_day set state = %d, end_time = '%s' where url = '%s'  
+        """ %(self['state'], self['endTime'], self['url'])
+        return update_sql
 
     def get_recruit_day_insert_sql(self):
 
@@ -238,6 +247,9 @@ class ZhilianItem(scrapy.Item):
     content =scrapy.Field()
     url = scrapy.Field()
 
+    state = scrapy.Field()
+    endTime = scrapy.Field()
+
     def get_zhilian_company_insert_sql(self):
 
         insert_sql = """
@@ -257,6 +269,12 @@ class ZhilianItem(scrapy.Item):
         """
         params = (self['company_md5'], self['full_name'], self['size'], self['company_nature'], self['logo'], self['website'], self['industry'], self['address'], int(time.time()), self['company_url'])
         return insert_sql, params
+
+    def get_zhilian_position_update_sql(self):
+        update_sql = """
+                        update zhilian_position set state = %d, end_time = '%s' where url = '%s'  
+                """ % (self['state'], self['endTime'], self['url'])
+        return update_sql
 
     def get_zhilian_position_insert_sql(self):
 
@@ -329,6 +347,21 @@ class Job51PositionItem(scrapy.Item):
         input_processor=MapCompose(md5),
     )
 
+    state = scrapy.Field()
+    endTime = scrapy.Field()
+    year = scrapy.Field()
+
+    def get_51Job_position_update_sql(self):
+        update_sql = """
+                update 51job_position set state = %d, end_time = '%s' where url = '%s'
+        """%(self['state'], self['endTime'], self['url'])
+        return update_sql
+
+    def get_51Job2017_position_update_sql(self):
+        update_sql = """
+                  update 51job_position_2017 set state = %d, end_time = '%s' where url = '%s'
+          """ % (self['state'], self['endTime'], self['url'])
+        return update_sql
     def get_51Job_city_insert_sql(self):
 
         insert_sql = """
@@ -407,7 +440,6 @@ class Job51CompanyItem(scrapy.Item):
     )
     company_url = scrapy.Field()
     post_code = scrapy.Field()
-    company_url = scrapy.Field()
 
     def get_51Job_company_insert_sql(self):
         insert_sql = """
@@ -437,3 +469,255 @@ class Job51CompanyItem(scrapy.Item):
         1,
         int(time.time()))
         return insert_sql, params
+
+class FindCityItem(scrapy.Item):
+    # 城市信息 item
+    cityName = scrapy.Field()
+    dataVal = scrapy.Field()
+
+    def get_findCity_insert_sql(self):
+        insert_sql = """
+                 INSERT INTO boss_city(
+                 city_name,
+                 data_val,
+                 created_at)
+                 VALUES('%s', '%s', '%s')ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                 """ %(self['cityName'], self['dataVal'], int(time.time()))
+        return insert_sql
+
+class FindPositionTypeItem(scrapy.Item):
+    # 职位类型 item
+    positionType = scrapy.Field()
+    positionTag = scrapy.Field()
+    parentTag = scrapy.Field()
+
+    @property
+    def get_findPositionType_insert_sql(self):
+        insert_sql = """
+                 INSERT INTO boss_position_type(
+                 position_type,
+                 position_tag,
+                 parent_tag,
+                 created_at)
+                 VALUES('%s', '%s', '%s', '%s')ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                 """ %(self['positionType'], self['positionTag'], self['parentTag'], int(time.time()))
+        return insert_sql
+
+class BossItemLoader(ItemLoader):
+        default_output_processor = TakeFirst()
+
+class BossItem(scrapy.Item):
+    # 公司信息 item
+    companyShortName = scrapy.Field()
+    companyFullName = scrapy.Field()
+    companySize = scrapy.Field()
+    companyLogo = scrapy.Field()
+    companyFinanceStage = scrapy.Field()
+    companyWebsite = scrapy.Field()
+    companyType = scrapy.Field()
+    companyResTime = scrapy.Field()
+    companyIndustry = scrapy.Field()
+    companyUrl = scrapy.Field()
+    companyIntro = scrapy.Field()
+
+    # 招聘职位的信息 item
+    positionName = scrapy.Field()
+    publishTime = scrapy.Field()
+    salary = scrapy.Field()
+    workYear = scrapy.Field()
+    education = scrapy.Field()
+    jobTags = scrapy.Field()
+    content = scrapy.Field()
+    city = scrapy.Field()
+    location = scrapy.Field()
+    positionUrl = scrapy.Field()
+
+    def get_boss_company_insert_sql(self):
+        insert_sql = """
+                    INSERT INTO boss_company(
+                    short_name,
+                    full_name,
+                    size,
+                    logo,
+                    finance_stage,
+                    website,
+                    company_type,
+                    res_time,
+                    created_at,
+                    industry,
+                    company_url,
+                    intro
+                    )
+                    VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                """ % (self['companyShortName'], self['companyFullName'], self['companySize'], self['companyLogo'],
+                       self['companyFinanceStage'], self['companyWebsite'], self['companyType'], self['companyResTime'],
+                       int(time.time()), self['companyIndustry'], self['companyUrl'], self['companyIntro'])
+        return insert_sql
+
+    def get_boss_position_insert_sql(self):
+        insert_sql = """
+                    insert into boss_position(
+                    position_name,
+                    publish_time,
+                    salary,
+                    work_year,
+                    education,
+                    job_tags,
+                    content,
+                    city,
+                    location,
+                    position_url,
+                    created_at
+                    )
+                    VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                """ % (self['positionName'], self['publishTime'], self['salary'], self['workYear'], self['education'],
+                       self['jobTags'], self['content'], self['city'], self['location'], self['positionUrl'],
+                       int(time.time()))
+        return insert_sql
+
+class FindInternsCityItem(scrapy.Item):
+    # 城市信息 item
+    cityName = scrapy.Field()
+    dataVal = scrapy.Field()
+
+    def get_findInternsCity_insert_sql(self):
+        insert_sql = """
+                 INSERT INTO interns_city(
+                 city_name,
+                 data_val,
+                 created_at)
+                 VALUES('%s', '%s', '%s')ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                 """ %(self['cityName'], self['dataVal'], int(time.time()))
+        return insert_sql
+
+#     实习僧的Item
+
+class InternItemLoader(ItemLoader):
+    default_output_processor = TakeFirst()
+
+class InternPositionItem(scrapy.Item):
+
+    # 招聘职位
+    positionName = scrapy.Field()
+    month = scrapy.Field()
+    maxsal = scrapy.Field()
+    com_logo = scrapy.Field()
+    minsal = scrapy.Field()
+    city = scrapy.Field()
+    com_scale = scrapy.Field()
+    reslan = scrapy.Field()
+    attraction = scrapy.Field()
+    ftype = scrapy.Field()
+    collected = scrapy.Field()
+    cuuid = scrapy.Field()
+    degree = scrapy.Field()
+    delivered = scrapy.Field()
+    chance = scrapy.Field()
+    work_address = scrapy.Field()
+    endtime = scrapy.Field()
+    day = scrapy.Field()
+    work_info = scrapy.Field()
+    positionUrl = scrapy.Field()
+    com_industry = scrapy.Field()
+    refresh = scrapy.Field()
+    com_name = scrapy.Field()
+    invited = scrapy.Field()
+    overdue = scrapy.Field()
+    def get_intern_position_insert_sql(self):
+        # print('进入职位信息')
+        insert_sql = """
+                    insert into interns_position(
+                    position_name,     
+                    work_month,
+                    maxsal,
+                    logo,
+                    minsal,
+                    city,
+                    scale,
+                    reslan,
+                    attraction,
+                    ftype,
+                    collected,
+                    cuuid,
+                    degree,
+                    delivered,
+                    chance,
+                    address,
+                    endtime,
+                    work_day,
+                    work_info,
+                    positionUrl,
+                    industry,
+                    refresh,
+                    cname,
+                    invited,
+                    overdue,
+                    created_at
+                    )
+                    VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') 
+                    ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                """ % (self['positionName'], self['month'], self['maxsal'], self['com_logo'], self['minsal'], self['city'], self['com_scale'], self['reslan'], self['attraction'],
+                       self['ftype'],self['collected'], self['cuuid'], self['degree'], self['delivered'], self['chance'], self['work_address'], self['endtime'], self['day'],
+                       self['work_info'], self['positionUrl'], self['com_industry'], self['refresh'],self['com_name'], self['invited'], self['overdue'], int(time.time()))
+        print(insert_sql)
+        return insert_sql
+
+class InternCompanyItem(scrapy.Item):
+    #公司信息
+    company_info = scrapy.Field()
+    reg_num = scrapy.Field()
+    scale = scrapy.Field()
+    company_name = scrapy.Field()
+    tags = scrapy.Field()
+    url = scrapy.Field()
+    industry = scrapy.Field()
+    pranum = scrapy.Field()
+    reg_name = scrapy.Field()
+    wurl = scrapy.Field()
+    is_collect = scrapy.Field()
+    cname = scrapy.Field()
+    vote_url = scrapy.Field()
+    address = scrapy.Field()
+    com_url = scrapy.Field()
+    logo = scrapy.Field()
+    com_type = scrapy.Field()
+    reg_capi = scrapy.Field()
+    start_time = scrapy.Field()
+    types = scrapy.Field()
+    description = scrapy.Field()
+
+    def get_intern_company_insert_sql(self):
+        # print("进入公司信息")
+        insert_sql = """
+                       INSERT INTO interns_company(
+                       company_info,
+                       reg_num,
+                       scale,
+                       com_name,
+                       url,
+                       industry,
+                       pranum,
+                       reg_name,
+                       wurl,
+                       is_collect,
+                       cname,
+                       vote_url,
+                       address,
+                       com_url,
+                       logo,
+                       com_type,
+                       reg_capi,
+                       start_time,
+                       description,   
+                       created_at
+                       )
+                       VALUES('%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s',  '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s') 
+                       ON DUPLICATE KEY UPDATE created_at=unix_timestamp(now())
+                   """ % (self['company_info'], self['reg_num'], self['scale'], self['company_name'], self['url'], self['industry'],
+                            self['pranum'], self['reg_name'],self['wurl'], self['is_collect'], self['cname'], self['vote_url'], self['address'], self['com_url'], self['logo'],
+                            self['com_type'], self['reg_capi'],self['start_time'], self['description'], int(time.time()))
+        return insert_sql
+
+
+
+

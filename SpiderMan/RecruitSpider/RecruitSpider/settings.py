@@ -22,7 +22,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
-
+HTTPERROR_ALLOWED_CODES = [404]
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 16
 
@@ -101,7 +101,8 @@ AUTOTHROTTLE_MAX_DELAY = 60
 MYSQL_HOST = "localhost"
 MYSQL_DBNAME = "spider"
 MYSQL_USER = "root"
-MYSQL_PASSWORD = ""
+MYSQL_PASSWORD = "123456"
+MYSQL_PORT = 3306
 
 # 宽度优先
 # SCHEDULER_ORDER = 'BFO'

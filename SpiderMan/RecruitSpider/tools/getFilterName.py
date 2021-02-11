@@ -28,9 +28,9 @@ def getPositionId():
 def sqlExecute(sql_str):
     # 判断系统平台, windows平台需加入编码设置
     if 'win32' in sys.platform:
-        engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
+        engine = create_engine('mysql://root:123456@localhost:3306/spider', echo=False)
     else:
-        engine = create_engine('mysql://root:@localhost:3306/spider?charset=utf8', echo=False)
+        engine = create_engine('mysql://root:123456@localhost:3306/spider', echo=False)
     conn = engine.connect()
     res = conn.execute(sql_str)
     res_arr = res.fetchall()
@@ -66,6 +66,49 @@ def getConfigureValue(spider_name, key_name):
     res = sqlExecute(sql_str)
     return res[0]
 
+#获取Boss直聘的所有城市和编码
+#获取boss直聘的所有城市名字
+def getAllCityName():
+    sql_str = "SELECT city_name FROM spider.boss_city"
+    res = sqlExecute(sql_str)
+    return res
+
+#获取boss直聘的所有城市编码
+def getAllCityDataVal(city_name):
+    sql_str = "SELECT data_val FROM boss_city WHERE city_name = '%s' " %(city_name)
+    res = sqlExecute(sql_str)
+    return res
+
+def getAllPositionType():
+    sql_str = "SELECT position_type FROM spider.boss_position_type"
+    res = sqlExecute(sql_str)
+    return res
+
+#获取实习僧的所有城市编码
+def getInternsAllCityDataVal():
+    sql_str = "SELECT data_val FROM interns_city"
+    res = sqlExecute(sql_str)
+    return res
+
+#获取lagou招聘职位信息的url
+def getLagouPositionUrl():
+    sql_str = "SELECT url FROM spider.lagou_recruit_day"
+    res = sqlExecute(sql_str)
+    return res
+#获取zhilian招聘信息的url
+def getZhiLianPositionUrl():
+    sql_str = "SELECT url FROM spider.zhilian_position"
+    res = sqlExecute(sql_str)
+    return res
+#获取51job招聘新的的url
+def get51jobPositionUrl():
+    sql_str = "SELECT url FROM spider.51job_position"
+    res = sqlExecute(sql_str)
+    return res
+def get51job2017PositionUrl():
+    sql_str = "SELECT url FROM spider.51job_position_2017"
+    res = sqlExecute(sql_str)
+    return res
 if __name__ == "__main__":
     res = getConfigureValue('full_city_status')
     print(res)
